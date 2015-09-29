@@ -12,6 +12,10 @@ To use these tools you will need:
 - DX Sync (used for theme support) you need Portal 8.5.
 - For Script Portlet "push" you will need to have the Script Portlet command line client installed, and your server must have Script Portlet installed.
 
+## Known issues
+
+The Dashboard tool uses the nw.js package to implement the user interface, and on some versions of Linux there are issues with some of the dependency packages for nw.js.
+
 # Installation
 You must first install Node.js.  Node.js version 0.12 is the tested and recommended version.
 
