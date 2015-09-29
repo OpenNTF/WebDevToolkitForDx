@@ -1,0 +1,48 @@
+{
+  "name": "digexp-dashboard",
+  "description": "Web Developer Dashboard for IBM Digital Experience",
+  "version": "0.0.1",
+  "main": "dashboard_index.html",
+  "bin": {
+    "digexp_dashboard": "bin/digexp_dashboard"
+  },
+  "window": {
+    "show": true,
+    "toolbar": true,
+    "frame": true,
+    "position": "center",
+    "title": "Web Developer Dashboard for IBM Digital Experience",
+    "width": 990,
+    "height": 729,
+    "min_width": 960,
+    "min_height": 220,
+    "single-instance": false
+  },
+  "dependencies": {
+    "ScriptAppServer": "file:../sp-server.tar.gz",
+    "adm-zip": "^0.4.7",
+    "anymatch": "^1.3.0",
+    "async": "^1.3.0",
+    "chokidar": "^1.0.3",
+    "diff": "^1.4.0",
+    "digexp-wcm-design": "file:../wcm-design.tar.gz",
+    "findit": "",
+    "map-stream": "0.0.6",
+    "mkdirp": "^0.5.1",
+    "node-notifier": "^4.2.3",
+    "open": "^0.0.5",
+    "request": "^2.58.0",
+    "splint": "https://github.com/OpenNTF/Script-Portlet-Node-Samples/raw/master/splint.tgz",
+    "tracer": "0.7.4",
+    "vinyl": "^0.5.0",
+    "vinyl-fs": "^1.0.0"
+  },
+  "scripts": {
+    "preinstall": "node preinstall.js",
+    "postinstall": "node postinstall.js"
+  },
+  "engines": {
+    "node": ">=0.12"
+  },
+  "engine-strict": true
+}

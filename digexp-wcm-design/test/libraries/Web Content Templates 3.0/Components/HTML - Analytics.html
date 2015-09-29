@@ -1,0 +1,39 @@
+[Plugin:Comment compute="once"]
+  Some common microformats for active site analytics of web content 
+[/Plugin:Comment]
+
+
+[Plugin:Comment compute="once"]
+  Write the path of the content using the AnalyticsData plugin
+[/Plugin:Comment]
+[Plugin:AnalyticsData property="path" compute="once"]
+
+[Plugin:Comment compute="once"]
+  Write the ID of the content using the AnalyticsData plugin
+[/Plugin:Comment]
+[Plugin:AnalyticsData property="id" compute="once"]
+
+[Plugin:Comment compute="once"]
+  Write the title of the content using the AnalyticsData plugin
+  together with a nested [Property] tag to retrieve the title.
+[/Plugin:Comment]
+[Plugin:AnalyticsData css-class="asa.wcm.content_item.title" compute="once" value="[Property context='current' type='content' field='title']"]
+
+[Plugin:Comment compute="once"]
+  Write the date of the last modification of the content using 
+  the AnalyticsData plugin together with a nested [Property] tag 
+  to retrieve the last modification date. The date is formatted 
+  to the W3 date specification using the format attribute of the 
+  [Property] tag.
+[/Plugin:Comment]
+[Plugin:AnalyticsData css-class="asa.wcm.content_item.lastmodified" compute="once" value="[Property context='current' type='content' format='yyyy-MM-dd' field='lastmodifieddate']"]
+
+[Plugin:Comment compute="once"]
+  Write the common names of all authors of the content as an 
+  unordered list using a [Property] tag. For example:
+  <ul style="display:none">
+    <li class="asa.wcm.content_item.authors">Author 1</li>
+    <li class="asa.wcm.content_item.authors">Author 2</li>
+  </ul>
+[/Plugin:Comment]
+[Property context="current" type="content" separator="&lt;/li&gt;&lt;li class=&quot;asa.wcm.content_item.authors&quot;&gt;" field="authors" start="<ul style="display:none"><li class="asa.wcm.content_item.authors">" end="</li></ul>"]

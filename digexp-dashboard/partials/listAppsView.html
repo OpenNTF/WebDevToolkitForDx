@@ -1,0 +1,325 @@
+<div class="container">
+    <h3 style="margin-top: 5px;">Script Applications</h3>
+    <h4 ng-if="configInfo.spAppPath" style="color: gray">
+        ({{configInfo.spAppPath}})</h4>
+    <h5 ng-if="spAppPathNotFound">
+        <span style="color: firebrick" class="glyphicon glyphicon-exclamation-sign"></span> Error:
+        Path <code>{{configInfo.spAppPath}}</code> not found.
+    </h5>
+    <h4 ng-if="!configInfo.spAppPath" style="color: gray">Please set an app
+        folder in settings</h4>
+
+    <div style="width: 100%; float: left; margin-bottom: 10px;"
+         class="form-inline">
+        <div style="float: left; width: 50%;">
+            <div class="form-group">
+                <label for="angular_search_input">Filter:</label> <input
+                    ng-model="query" type="search" class="form-control"
+                    id="angular_search_input"/>
+            </div>
+        </div>
+        <div style="float: right;">
+            <button type="button" ng-click="pushUpdated()"
+                    class="btn btn-default">Push Updated
+            </button>
+            <button type="button" ng-click="watchAll()" class="btn btn-default">
+                Watch All
+            </button>
+            <button type="button" ng-click="stopWatchingAll()"
+                    class="btn btn-default">
+                Stop Watching
+            </button>
+            <button type="button" ng-click="refresh()" class="btn btn-default">
+                Refresh
+            </button>
+        </div>
+    </div>
+    <div>
+        <div ng-if="numOfApps()===0&&configInfo.spAppPath.length>0&&!spAppPathNotFound">
+            No Script Portlet apps found in <code>{{configInfo.spAppPath}}</code>.
+        </div>
+        <div ng-repeat="item in appList() | filter: query | orderBy:orderApps "
+             class="row item-row">
+            <div class="col-sm-10 col-md-9 col-lg-9">
+                <div style="float: left; width: 60%">
+                    <div>
+                        <h4 class="list-group-item-heading" style="position:relative">
+                            {{item.name || item.folder}}
+                            <span class="glyphicon glyphicon-repeat loading-spinner"
+                                  ng-if="item.loading"
+                                  style="position: absolute; margin-left: 10px; top:-2px"></span>
+                        </h4>
+
+                        <div class="list-group-item-text">
+                            {{item.folder}}
+                        </div>
+                    </div>
+                </div>
+                <div style="float: left; width: 40%">
+                    <div class="btn btn-success btn-sm"
+                         data-toggle="modal"
+                         data-target="#sp-cmdln-modal"
+                         aria-haspopup="true"
+                         aria-expanded="false"
+                         ng-click="showPushLog(item.folder)"
+                         ng-if="item.pushStatus"
+                         ng-class="{'btn-success': item.pushStatus==='success',
+                                             'btn-warning': item.pushStatus=='fail'}">
+                            <span class="glyphicon"
+                                  ng-class="{'glyphicon-ok': item.pushStatus==='success',
+                                             'glyphicon-warning-sign': item.pushStatus=='fail'}"></span>
+                        View Log
+                    </div>
+                    <div  ng-if="item.spCommandFailed"
+                          class="btn btn-danger btn-sm"
+                          data-toggle="modal"
+                          data-target="#sp-cmdln-modal"
+                          aria-haspopup="true"
+                          aria-expanded="false">
+                        <span class="glyphicon glyphicon-warning-sign"></span>
+                        `sp push` Is not a valid shell command
+                    </div>
+                    <div class="list-group-item-text" ng-if="item.datePushed">
+                        Pushed: {{item.datePushed}}
+                    </div>
+                </div>
+                <div style="padding-top: 20px; clear: both;">
+                    <div class="btn-group">
+                        <button type="button" ng-click="push(item.folder)"
+                                class="btn btn-default"
+                                ng-disabled="item.loading">Push
+                        </button>
+                        <button type="button"
+                                class="btn btn-default"
+                                data-toggle="modal"
+                                data-target="#sp-config-modal"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                                title="Configure Script Portlet Settings"
+                                ng-click="setModal(item.folder)">
+                            <span class="glyphicon glyphicon-cog"></span>
+                            <!-- See modal below -->
+                        </button>
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="button"
+                                ng-click="run(item.folder)"
+                                class="btn btn-default">Run
+                        </button>
+                        <!-- <input id="input-modal-main-html-file" type="text" class="form-control" placeholder="index.html">-->
+                    </div>
+
+                    <div class="btn-group dropdown">
+                        <button type="button" class="btn btn-default"
+                                ng-if="!item.watching"
+                                ng-click="watch(item.folder)">
+                            Watch
+                        </button>
+                        <button type="button" class="btn btn-default"
+                                ng-if="item.watching"
+                                ng-click="stopWatching(item.folder)">
+                            <span class="glyphicon glyphicon-stop"></span>
+                            Watching
+                        </button>
+                        <div class="btn-group">
+                            <button class="btn btn-default dropdown-toggle"
+                                    data-toggle="dropdown"
+                                    type="button">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" onclick="event.stopPropagation()">
+                                <li class="no-a-tag">
+                                    <strong>Files to Ignore</strong>
+                                    <input type="text" ng-model="item.watchIgnore"
+                                           placeholder="eg: test/*.js;test/*.css">
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="button"
+                                ng-click="lint(item.folder)"
+                                class="btn btn-default"
+                                ng-disabled="item.loading">SP Lint
+                        </button>
+                        <div class="btn-group">
+                            <button class="btn btn-default dropdown-toggle"
+                                    data-toggle="dropdown" >
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" onclick="event.stopPropagation()">
+                                <li class="no-a-tag">
+                                    <strong>Files to Ignore</strong>
+                                    <input type="text" ng-model="item.splintIgnore">
+                                </li>
+                            </ul>
+                        </div>
+
+                        <button class="btn btn-default"
+                                ng-if="item.lintOutput"
+                                data-toggle="modal"
+                                data-target="#lint-modal"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                                ng-disabled="item.loading"
+                                ng-click="showLintLog(item.folder)">
+                            View Results
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2 col-md-3 col-lg-3" ng-if="item.imgUrl">
+                <img ng-click="showDetails(item.folder)"
+                     style="width: 100px;" class="img-thumbnail"
+                     ng-src="{{item.imgUrl}}"/>
+            </div>
+        </div>
+
+        </table>
+
+        <!-- <pre>{{contacts | filter:query | orderBy: 'lastName' | json}}</pre> -->
+    </div>
+
+</div>
+<div class="modal fade" id="sp-config-modal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog" role="document" ng-controller="spConfigController">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Configure sp-config for {{$parent.configApp.name}}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="input-modal-wcm-content-name">WCM Content
+                        Name:</label>
+                    <input id="input-modal-wcm-content-name" type="text"
+                           class="form-control"
+                           aria-describedby="basic-addon1"
+                           ng-model="$parent.configApp.config.wcmContentName">
+                </div>
+                <div class="form-group">
+                    <label for="input-modal-wcm-site-area">WCM Site
+                        Area:</label>
+                    <input id="input-modal-wcm-site-area" type="text"
+                           class="form-control"
+                           aria-describedby="basic-addon1"
+                           ng-model="$parent.configApp.config.wcmSiteArea">
+                </div>
+                <div class="form-group">
+                    <label for="input-modal-main-html-file">
+                        Main HTML File:
+                    </label>
+                    <input id="input-modal-main-html-file" type="text"
+                           class="form-control" placeholder="index.html"
+                           ng-model="$parent.configApp.config.mainHtmlFile">
+                </div>
+                <div class="form-group">
+                    <label for="input-modal-wcm-content-title">WCM Content
+                        Title:</label>
+                    <input id="input-modal-wcm-content-title" type="text"
+                           class="form-control"
+                           aria-describedby="basic-addon1"
+                           ng-model="$parent.configApp.config.wcmContentTitle">
+                </div>
+                <div class="form-group">
+                    <label for="input-modal-wcm-content-path">WCM Content
+                        Path:</label>
+                    <input id="input-modal-wcm-content-path" type="text"
+                           class="form-control"
+                           ng-model="$parent.configApp.config.wcmContentPath">
+                </div>
+                <!--<hr style="margin-bottom:10px;">-->
+                <dash-collapsible dash-title="Build Command">
+                    <input id="input-modal-pre-push-command" type="text"
+                           class="form-control"
+                           aria-describedby="basic-addon1"
+                           placeholder="e.g. `gulp --gulpfile path/to/gulpfile"
+                           ng-model="configApp.buildCommand">
+                </dash-collapsible>
+                <br>
+                <dash-collapsible dash-title="Server Settings">
+                    <strong>Host: </strong> {{server.host}}<br>
+                    <strong>Port: </strong> {{server.port}}<br>
+                    <strong>User: </strong> {{server.userName}}<br>
+                    <strong>Pass: </strong> ********<br>
+                </dash-collapsible>
+                <br>
+                <strong>NOTE:</strong> Pressing save will overwrite the
+                app's sp-config.json file.
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-click="save()"
+                        class="btn btn-primary" data-dismiss="modal">
+                    Save changes
+                </button>
+                <button type="button" ng-click="saveAndPush()"
+                        class="btn btn-primary" data-dismiss="modal">
+                    Save & Push
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Lint modal -->
+<div class="modal fade" id="lint-modal" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Lint Results</h4>
+            </div>
+            <div class="modal-body" id="lint-modal-body"
+                 style="max-height: 80vh; overflow-y: scroll">
+
+                <div ng-repeat="file in lintResultsJson | filter" >
+                    <div ng-show="file.messages.length">
+                        <dash-collapsible dash-title="{{file.path}}">
+                            <div ng-repeat="msg in file.messages">
+                                <div><strong>line: {{msg.line}}: </strong></div>
+                                <div style="padding-left: 20px;">{{msg.message}}</div>
+                            </div>
+                        </dash-collapsible>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- sp-log modal -->
+<div class="modal fade" id="sp-cmdln-modal" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">SP Push Log</h4>
+            </div>
+            <div class="modal-body"
+                 style="max-height: 80vh; overflow-y: scroll; white-space: pre">
+                {{spCmdlnLog}}
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

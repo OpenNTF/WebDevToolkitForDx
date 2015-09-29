@@ -1,0 +1,152 @@
+<div class="modal-dialog" role="document"
+     ng-controller="ThemeModulesController">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"
+                    ng-click="addingNewModule=false" aria-label="Close"><span
+                    aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">
+                {{$parent.themes[$parent.modules.theme].theme}} Modules</h4>
+        </div>
+        <div ng-show="!addingNewModule" class="modal-body">
+            <div ng-if="!($parent.modulesByLocation || {}).length">
+                No theme modules found.
+            </div>
+            <div ng-repeat="location in $parent.modulesByLocation">
+                <dash-large-collapsible dash-title="{{location.location}}">
+
+                    <div ng-repeat="module in location.modules | filter: moduleFilter | orderBy: 'name'"
+                         ng-init="module.expanded=false;module.edit=false"
+                         class="module-item">
+                        <div ng-click="module.expanded=!module.expanded"
+                             ng-class="{ dropup: module.expanded }">
+                                <span style="font-weight: bold;">
+                                    {{module.title || module.name}}</span>
+                            <span style="color: #999; margin: 0px">| id: {{module.name}}</span>
+                            <span class="caret"></span>
+                        </div>
+
+                        <div ng-if="module.expanded">
+                            <span ng-if="module.isSimple">Simple Modules are a WIP</span>
+                            <!-- DESCRIPTION -->
+                            <dash-collapsible dash-title="description"
+                                              dash-small="true"
+                                              ng-if="module.description||module.edit">
+                                    <span ng-if="!module.edit"
+                                          class="tree-branch-offset">{{module.description}}</span>
+                                <input ng-if="module.edit" type="text"
+                                       class="tree-branch-offset"
+                                       ng-model="module.description">
+                            </dash-collapsible>
+
+                            <!-- CONTRIBUTIONS for non-simple modules -->
+                            <dash-collapsible dash-title="Contributions"
+                                              dash-small="true"
+                                              ng-if="module.contributions&&!module.isSimple">
+                                <div ng-repeat="contribution in module.contributions"
+                                     class="tree-branch-offset">
+                                    <dash-collapsible dash-small="true"
+                                                      dash-title="{{contribution.type + ' Contributions'}}">
+                                        <!-- SUB-CONTRIBUTIONS -->
+                                        <div ng-repeat="sub in contribution['sub-contributions']">
+                                            <div class="tree-branch-offset"
+                                                 ng-repeat="uri in sub.uris">
+                                                {{uri.value}}
+                                                <span style="color:gray" ng-if="uri.type">
+                                                       - {{uri.type}}
+                                                </span>
+                                                <span style="color:gray" ng-if="uri.deviceClass">
+                                                       - {{uri.deviceClass}}
+                                                </span>
+                                                <span ng-if="uri.type||uri.deviceClass" style="color:gray">
+                                                    alternate
+                                                </span>
+                                            </div>
+                                            <!-- </dash-collapsible>-->
+                                        </div>
+                                        <div ng-repeat="uri in contribution.uris"
+                                             class="tree-branch-offset">
+                                            {{uri}}
+                                        </div>
+                                </div>
+                            </dash-collapsible>
+                            <!-- Simple Module Contributions -->
+                            <dash-collapsible dash-title="Contributions"
+                                              dash-small="true"
+                                              ng-if="module.contributions&&module.isSimple">
+                                <div ng-repeat="contribution in module.contributions"
+                                     class="tree-branch-offset">
+                                    <dash-collapsible dash-small="true"
+                                                      dash-title="{{contribution.type + ' Contributions'}}">
+
+                                        <div ng-repeat="uri in contribution.uris"
+                                             class="tree-branch-offset">
+                                            {{uri.value}}
+                                        </div>
+
+                                    </dash-collapsible>
+                                </div>
+                            </dash-collapsible>
+                            <!-- PRE-REQS -->
+                            <dash-collapsible dash-title="Prerequisites"
+                                              dash-small="true"
+                                              ng-if="module.prereqs">
+                                    <span ng-repeat="prereq in module.prereqs"
+                                          class="tree-branch-offset">
+                                {{prereq.id}}<br>
+                            </span>
+                            </dash-collapsible>
+                        </div>
+
+                        <div ng-if="module.expanded&&false"
+                             class="animate-if"
+                             style="border: 1px solid #ccc; border-radius:5px">
+                            <span style="display:block">{{module.description}}</span>
+                        </div>
+                    </div>
+                </dash-large-collapsible>
+                <hr>
+            </div>
+
+        </div>
+        <div ng-if="addingNewModule">
+            <div ng-include="'partials/modals/addModuleModal.html'">
+            </div>
+        </div>
+        <div class="modal-footer" ng-show="!addingNewModule">
+            <div class="input-group pull-left col-sm-6" style="padding-left:0px">
+                <input type="text" class="form-control"
+                       placeholder="filter modules" ng-model="moduleFilter">
+
+            </div>
+
+            <!-- NEW MODULE BUTTON -->
+           <div class="dropup">
+                <button type="button" class="btn btn-primary dropdown-toggle"
+                        ng-click="addingNewModule=true;newModuleIsPredefined=false"
+                        data-toggle="dropdown">
+                    New Module
+                </button>
+              <!--  <ul class="dropdown-menu dropdown-menu-right"
+                    aria-labelledby="dropdownMenu1">
+                    <li>
+                        <a href=""
+                           ng-click="addingNewModule=true;newModuleIsPredefined=true"
+                           onclick="$('#new-module-next-button').html('Add Predefined Module')">
+                            Predefined Module
+                        </a>
+                    </li>
+                    <li>
+                        <a href=""
+                           ng-click="addingNewModule=true;newModuleIsPredefined=false"
+                           onclick="$('#new-module-next-button').html('Next')">
+                            Custom Module
+                        </a>
+                    </li>
+                </ul>-->
+            </div>
+
+        </div>
+    </div>
+</div>

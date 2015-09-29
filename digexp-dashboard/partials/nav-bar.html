@@ -1,0 +1,30 @@
+<div class="navbar navbar-default" role="navigation" id="dash-nav-bar">
+    <div class="container-fluid">
+        <div style="width: 100%;" class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <h1>Web Developer Dashboard for IBM Digital Experience</h1>
+        </div>
+        <div style="padding: 0px" class="collapse navbar-collapse">
+            <ul class="nav nav-tabs">
+                <li ng-class="{active: controller == 'AppsListController'}">
+                    <a href="#/listApps">Script Applications</a></li>
+                <li ng-class="{active: controller == 'ThemeListController'}" role="presentation">
+                    <a href="#/listThemes">Themes</a></li>
+                <li ng-class="{active: controller == 'WcmDesignListController'}" role="presentation">
+                    <a href="#/listWcmDesigns">WCM Design Libraries</a></li>
+                <li ng-class="{active: controller == 'SettingsController'}" role="presentation">
+                    <a href="#/settings">Settings</a></li>
+            </ul>
+        </div>
+    </div>
+    <button class="btn btn-danger"
+            style="display: none; position: fixed; top: 5px; right: 5px; padding:10px; padding-bottom:5px; padding-top:5px"
+            onclick="closeWindow()">
+    <span class="glyphicon glyphicon-remove"></span>
+    </button>
+</div>

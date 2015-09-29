@@ -1,0 +1,237 @@
+<div class="modal-dialog" role="document" ng-controller="ThemeProfilesController">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                    ng-click="resetOnClose(true);showModulePicker=false;searchQuery=''">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">{{profiles.theme}} Profiles</h4>
+        </div>
+        <div class="modal-body">
+            <!-- LIST OF PROFILES -->
+            <div id="theme-profiles-container"
+                 ng-show="!showModulePicker&&!addingNewProfile" class="slide-left">
+                <div ng-if="!($parent.profiles || {}).length">
+                    No theme profiles found.
+                </div>
+                <div ng-repeat="profile in $parent.profiles | filter: showProfile | orderBy:'name' track by $index"
+                     class="theme-profile">
+                    <strong ng-click="profile.expanded=!profile.expanded">
+                        {{profile.name}}
+                    </strong>
+
+                    <div class="pull-right">
+                    <span class="glyphicon glyphicon-pencil" style="margin-right:5px"
+                          ng-click="toggleEditMode(profile)" ng-init="profile.edit=false"
+                          ng-style="{ color: profile.edit ? 'green' : 'black' }"></span>
+                    <span class="glyphicon glyphicon-duplicate" style="margin-right: 4px;"
+                          ng-click="showCloneProfileDialog(profile)"></span>
+
+                    <span ng-if="!profile.expanded" class="glyphicon glyphicon-menu-up"
+                          ng-click="profile.expanded=true"></span>
+                    <span ng-if="profile.expanded" class="glyphicon glyphicon-menu-down"
+                          ng-click="profile.expanded=false;"></span>
+                    </div>
+                    <br>
+                    <p style="color: #999">{{profile.relative}}</p>
+                    <div ng-show="profile.expanded">
+                        <!-- DESCRIPTION -->
+                        <dash-collapsible dash-title="Description"
+                                          ng-show="profile.description||profile.edit">
+                            <div ng-show="!profile.edit">
+                                {{profile.description}}
+                            </div>
+                            <textarea elastic style="width:100%"
+                                      ng-model="profile.description"
+                                      ng-show="profile.edit" rows="3">
+                            </textarea>
+                        </dash-collapsible>
+
+                        <!-- NON DEFERRED MODULES -->
+                        <dash-collapsible dash-title="Non-Deferred-Modules"
+                                          ng-show="profile.moduleIDs||profile.edit">
+                            <!-- NORMAL MODE -->
+                            <div ng-if="!profile.edit">
+                                <div ng-repeat="module in profile.moduleIDs track by $index"
+                                     class="theme-profile-row"
+                                     style="margin-left:25px">
+                                    {{module}}
+                                </div>
+                            </div>
+                            <!-- EDIT MODE -->
+                            <div ng-if="profile.edit">
+                                <div ng-repeat="module in profile.editModuleIDs"
+                                     ng-click="module.remove=!module.remove">
+                                <span class="glyphicon glyphicon-check"
+                                      ng-show="!module.remove"
+                                      style="color:#999; margin-left:10px"></span>
+                                <span class="glyphicon glyphicon-unchecked"
+                                      ng-show="module.remove"
+                                      style="color:#999; margin-left:10px"></span>
+                                    {{module.id}}
+                                </div>
+                                <span class="glyphicon glyphicon-plus" style="color:#999; font-size:10px; margin-left:10px"></span>
+                                <button class="btn btn-default" style="padding: 5px"
+                                        ng-click="newModuleIDs(profile, false)">
+                                    Choose Modules
+                                </button>
+                            </div>
+                        </dash-collapsible>
+                        <!-- DEFERRED MODULES -->
+                        <dash-collapsible dash-title="Deferred-Modules"
+                                          ng-show="profile.deferredModuleIDs||profile.edit">
+                            <!-- NORMAL MODE -->
+                            <div ng-if="!profile.edit">
+                                <div ng-repeat="module in profile.deferredModuleIDs track by $index"
+                                     class="theme-profile-row"
+                                     style="margin-left:25px">
+                                    {{module}}
+                                </div>
+                            </div>
+                            <!-- EDIT MODE -->
+                            <div ng-if="profile.edit">
+                                <div ng-repeat="module in profile.editDeferredModuleIDs"
+                                     ng-click="module.remove=!module.remove">
+                                <span class="glyphicon glyphicon-check"
+                                      ng-show="!module.remove"
+                                      style="color:#999; margin-left:10px"></span>
+                                <span class="glyphicon glyphicon-unchecked"
+                                      ng-show="module.remove"
+                                      style="color:#999; margin-left:10px"></span>
+                                    {{module.id}}
+                                </div>
+                                <span class="glyphicon glyphicon-plus" style="color:#999; font-size:10px; margin-left:10px"></span>
+                                <button class="btn btn-default" style="padding: 5px"
+                                        ng-click="newModuleIDs(profile, true)">
+                                    Choose Modules
+                                </button>
+                            </div>
+                        </dash-collapsible>
+
+                    </div>
+                    <hr>
+                </div>
+            </div>
+
+            <!-- ADD NEW PROFILE -->
+            <div ng-if="addingNewProfile&&!showModulePicker" id="new-theme-profile-dialog">
+                <strong><small style="letter-spacing:1px; color:gray">NEW PROFILE</small></strong>
+                <form class="form-inline">
+                    <strong>Name</strong>
+                    <input class="form-control" ng-model="newProfile.name">
+                </form>
+                <form class="form-inline">
+                    <strong style="margin-right: 8px;">Title </strong>
+                    <input class="form-control" ng-model="newProfile.title" placeholder="optional">
+                </form>
+                <form class="">
+                    <strong>Description</strong>
+                    <textarea class="form-control" ng-model="newProfile.description" placeholder="optional">
+                    </textarea>
+                </form><br>
+
+                <strong>Non-Deferred Modules</strong><br>
+                <div ng-repeat="module in newProfile.editModuleIDs"
+                     ng-click="module.remove=!module.remove">
+                     <span class="glyphicon glyphicon-check"
+                           ng-show="!module.remove"
+                           style="color:#999; margin-left:10px"></span>
+                     <span class="glyphicon glyphicon-unchecked"
+                           ng-show="module.remove"
+                           style="color:#999; margin-left:10px"></span>
+                    {{module.id}}
+                </div>
+                <span class="glyphicon glyphicon-plus" style="color:#999; font-size:10px; margin-left:10px"></span>
+                <button class="btn btn-default" style="padding: 5px"
+                        ng-click="newModuleIDs(newProfile, false)">
+                    Choose Modules
+                </button><br>
+
+                <strong>Deferred Modules</strong><br>
+                <div ng-repeat="module in newProfile.editDeferredModuleIDs"
+                     ng-click="module.remove=!module.remove">
+                     <span class="glyphicon glyphicon-check"
+                           ng-show="!module.remove"
+                           style="color:#999; margin-left:10px"></span>
+                     <span class="glyphicon glyphicon-unchecked"
+                           ng-show="module.remove"
+                           style="color:#999; margin-left:10px"></span>
+                    {{module.id}}
+                </div>
+                <span class="glyphicon glyphicon-plus" style="color:#999; font-size:10px; margin-left:10px"></span>
+                <button class="btn btn-default" style="padding: 5px"
+                        ng-click="newModuleIDs(newProfile, true)">
+                    Choose Modules
+                </button><br>
+            </div>
+
+            <!-- MODULE PICKER -->
+            <div ng-show="showModulePicker" class="slide-left" style="min-height: 45vh">
+                <div class="dropdown pull-right">
+                    <button class="btn btn-default dropdown-toggle" type="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
+                            ng-click="scrollToActiveCategory()">
+                        {{activeCategory}}
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" id="edit-profile-module-categories-dropdown" aria-labelledby="dropdownMenu1"
+                            style="max-height: 300px; overflow-y: auto;;">
+                        <li ng-repeat="category in moduleCategories | orderBy: category"
+                            ng-click="$parent.activeCategory=category"
+                            ng-class="{'active-module-category':activeCategory===category}">
+                            <a href="">{{category}}</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- The list of modules -->
+                Portal 8.5 system modules can be added by selecting a different category from
+                    the dropdown on the right.
+                <br>
+                Choose modules to add to the {{pickerProfile.title || pickerProfile.name}} profile.
+                <div ng-repeat="module in pickerModules | filter: pickerFilter | filter: showActiveCategory | orderBy: 'id'"
+                     ng-click="module.toAdd=!module.toAdd">
+                   <span ng-if="!module.toAdd"
+                         class="glyphicon glyphicon-unchecked"></span>
+                    <span ng-if="module.toAdd"
+                          class="glyphicon glyphicon-check"></span>
+                    {{module.id}}
+                </div>
+
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div ng-show="!showModulePicker">
+                <div class="input-group pull-left col-sm-5" style="padding-left:0px">
+                    <input type="text" class="form-control col-sm-6" style="left: 0px;"
+                           placeholder="filter profiles"
+                           ng-model="__filterQuery" ng-change="filterQuery=__filterQuery.toLowerCase()"
+                           ng-show="!editing&&!addingNewProfile">
+                </div>
+                <button type="button" class="btn btn-primary" ng-show="!(editing||addingNewProfile)"
+                        ng-click="showNewProfileDialog()">
+                    New Profile</button>
+                <div ng-show="editing||addingNewProfile" class="btn-group">
+                    <button type="button" class="btn-sm btn btn-default"
+                            ng-click="addingNewProfile?(addingNewProfile=resetNewProfile()||false):toggleEditMode(editingProfile)">
+                        Discard</button>
+                    <button type="button" class="btn-sm btn btn-success"
+                            ng-click="addingNewProfile?addNewProfile():saveProfile(editingProfile);"
+                            ng-disabled="addingNewProfile&&!newProfile.name">
+                        Save Changes</button>
+                </div>
+            </div>
+            <div ng-show="showModulePicker" >
+                <div class="input-group pull-left col-sm-5" style="padding-left:0px">
+                    <input type="text" class="form-control col-sm-6" style="left: 0px;"
+                           ng-model="pickerFilter">
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-default" ng-click="showModulePicker=false">
+                        Go Back</button>
+                    <button class="btn btn-success" ng-click="addModulesFromPicker();">
+                        Add Modules to Profile</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

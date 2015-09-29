@@ -1,0 +1,12 @@
+{
+  "servers": [
+    {
+      "name": "Dashboard",
+      "userName": "",
+      "password": "",
+      "port": "10039",
+      "contenthandlerPath": "/wps/mycontenthandler",
+      "host": ""
+    }
+  ]
+}

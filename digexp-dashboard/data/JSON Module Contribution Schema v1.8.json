@@ -1,0 +1,319 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "IBM WebSphere Portal JSON Module Contribution schema",
+	"description": "A schema for use in a validator tool, to validate the syntax of WebSphere Portal Theme Optimization Framework module contributions",
+	"type": "object",
+	"properties": {
+		"modules": {
+			"$ref": "#/definitions/nonEmptyArrayOfModules"
+		}
+	},
+	"additionalProperties": false,
+	"definitions": {
+		"nonEmptyArrayOfModules": {
+			"type": "array",
+			"minItems": 1,
+			"items": {
+				"$ref": "#/definitions/moduleObject"
+			},
+			"additionalItems": false,
+			"uniqueItems": true
+		},
+		"moduleObject": {
+			"oneOf": [{
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"version": {
+						"type": "string",
+						"pattern": "^[0-9]*([.]?[0-9]+)*$"
+					},
+					"prereqs": {
+						"$ref": "#/definitions/nonEmptyArrayOfPrereqs"
+					},
+					"contributions": {
+						"$ref": "#/definitions/nonEmptyArrayOfContributions"
+					},
+					"capabilities": {
+					    "type" : "array", 
+					    "minItems" : 1,
+					    "items" : {
+							"type": "object",
+							"properties": {
+								"id": {
+									"type": "string"
+								},
+								"value": {
+									"type": "string",
+									"pattern": "^[0-9]*([.]?[0-9]+)*$"
+								}
+							},
+							"additionalProperties": false,
+							"required": ["id",
+							"value"]
+						},
+						"additionalItems" : false,
+						"uniqueItems" : true
+					}
+				},
+				"required": ["id",
+				"contributions"],
+				"additionalProperties": false
+			},
+			{
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"version": {
+						"type": "string",
+						"pattern": "^[0-9]*([.]?[0-9]+)*$"
+					},
+					"prereqs": {
+						"$ref": "#/definitions/nonEmptyArrayOfPrereqs"
+					},
+					"capabilities": {
+					    "type" : "array", 
+					    "minItems" : 1,
+					    "items" : {
+							"type": "object",
+							"properties": {
+								"id": {
+									"type": "string"
+								},
+								"value": {
+									"type": "string",
+									"pattern": "^[0-9]*([.]?[0-9]+)*$"
+								}
+							},
+							"additionalProperties": false,
+							"required": ["id",
+							"value"]
+						},
+						"additionalItems" : false,
+						"uniqueItems" : true
+					}
+				},
+				"required": ["id",
+				"prereqs"],
+				"additionalProperties": false
+			}]
+		},
+		"nonEmptyArrayOfPrereqs": {
+			"type": "array",
+			"minItems": 1,
+			"items": {
+				"$ref": "#/definitions/modulePrereq"
+			},
+			"additionalItems": false,
+			"uniqueItems": true
+		},
+		"nonEmptyArrayOfContributions": {
+			"type": "array",
+			"minItems": 1,
+			"items": {
+				"$ref": "#/definitions/contribution"
+			},
+			"additionalItems": false,
+			"uniqueItems": true
+		},
+		"modulePrereq": {
+			"type": "object",
+			"minProperties": 1,
+			"maxProperties": 3,
+			"properties": {
+				"id": {
+					"type": "string"
+				},
+				"minVersion": {
+					"type": "string",
+					"pattern": "^[0-9]*([.]?[0-9]+)*$"
+				},
+				"type": {
+					"enum": ["optional",
+					"required"]
+				}
+			},
+			"required": ["id"],
+			"additionalProperties": false
+		},
+		"contribution": {
+			"type": "object",
+			"oneOf": [{
+				"properties": {
+					"type": {
+						"enum": ["menu"]
+					},
+					"sub-contributions": {
+						"type": "array",
+						"minItems": 1,
+						"additionalItems": false,
+						"uniqueItems": true,
+						"items": {
+							"type": "object",
+							"properties": {
+								"type": {
+									"enum": ["json"]
+								},
+								"ref-id": {
+									"type": "string"
+								},
+								"uris": {
+									"$ref": "#/definitions/arrayOfUriTypesAndValues"
+								}
+							},
+							"required": ["type", "uris"],
+							"additionalProperties" : false,
+							"minProperties" : 2,
+							"maxProperties" : 3
+						}
+					}
+				},
+				"required": ["type",
+				"sub-contributions"],
+				"additionalProperties": false,
+				"uniqueItems": true
+			},
+			{
+				"properties": {
+					"type": {
+						"enum": ["xslt"]
+					},
+					"sub-contributions": {
+						"type": "array",
+						"minItems": 1,
+						"additionalItems": false,
+						"uniqueItems": true,
+						"items": {
+							"type": "object",
+							"properties": {
+								"type": {
+									"enum": ["xslt"]
+								},
+								"ref-id": {
+									"type": "string"
+								},
+								"uris": {
+									"$ref": "#/definitions/arrayOfUriTypesAndValues"
+								}
+							},
+							"required": ["type", "uris"],
+							"additionalProperties" : false,
+							"minProperties" : 2,
+							"maxProperties" : 3
+						}
+					}
+				},
+				"required": ["type",
+				"sub-contributions"],
+				"additionalProperties": false,
+				"uniqueItems": true
+			},
+			{
+				"properties": {
+					"type": {
+						"enum": ["head"]
+					},
+					"sub-contributions": {
+						"type": "array",
+						"minItems": 1,
+						"additionalItems": false,
+						"uniqueItems": true,
+						"items": {
+							"type": "object",
+							"properties": {
+								"type": {
+									"enum": ["css",
+									"js"]
+								},
+								"ref-id": {
+									"type": "string"
+								},
+								"uris": {
+									"$ref": "#/definitions/arrayOfUriTypesAndValues"
+								}
+							},
+							"required": ["type", "uris"],
+							"additionalProperties" : false,
+							"minProperties" : 2,
+							"maxProperties" : 3
+						}
+					}
+				},
+				"required": ["type",
+				"sub-contributions"],
+				"additionalProperties": false,
+				"uniqueItems": true
+			},
+			{
+				"properties": {
+					"type": {
+						"enum": ["config"]
+					},
+					"sub-contributions": {
+						"type": "array",
+						"minItems": 1,
+						"additionalItems": false,
+						"uniqueItems": true,
+						"items": {
+							"type": "object",
+							"properties": {
+								"type": {
+									"enum": ["js",
+									"markup",
+									"config_static",
+									"config_dynamic"]
+								},
+								"ref-id": {
+									"type": "string"
+								},
+								"uris": {
+									"$ref": "#/definitions/arrayOfUriTypesAndValues"
+								}
+							},
+							"required": ["type", "uris"],
+							"additionalProperties" : false,
+							"minProperties" : 2,
+							"maxProperties" : 3
+						}
+					}
+				},
+				"required": ["type", "sub-contributions"],
+				"additionalProperties": false,
+				"uniqueItems": true
+			}]
+		},
+		"arrayOfUriTypesAndValues": {
+			"type": "array",
+			"minItems": 1,
+			"additionalItems": false,
+			"uniqueItems": true,
+			"items": {
+				"type": "object",
+				"properties": {
+					"value": {
+						"type": "string",
+						"format": "uri"
+					},
+					"deviceClass": {
+						"type": "string"
+					},
+					"type": {
+						"enum": ["debug",
+						"rtl",
+						"rtl,debug",
+						"debug,rtl"]
+					},
+					"lang": {
+						"type": "string"
+					}
+				},
+				"additionalProperties": false,
+				"required": ["value"]
+			}
+		}
+	}
+}

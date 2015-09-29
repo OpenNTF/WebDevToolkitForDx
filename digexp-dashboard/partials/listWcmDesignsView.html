@@ -1,0 +1,111 @@
+<div class="container">
+    <h3 style="margin-top: 5px;">WCM Design Libraries
+    <span class="glyphicon glyphicon-repeat loading-spinner"
+            ng-show="loadingNewLibraries"></span>
+    </h3>
+    <div ng-show="loadingNewLibraries">{{status}}</div>
+    <h4 ng-if="configInfo.wcmDesignsPath" style="color: gray">({{configInfo.wcmDesignsPath}})</h4>
+    <h5 ng-if="wcmPathNotFound">
+        <span style="color: firebrick" class="glyphicon glyphicon-exclamation-sign"></span> Error:
+        Path <code>{{configInfo.wcmDesignsPath}}</code> not found.
+    </h5>
+    <h4 ng-if="!configInfo.wcmDesignsPath" style="color: gray">Please set a WCM Design Libraries folder in settings</h4>
+    <div class="form-inline">
+        <div class="form-group">
+            <label for="angular_search_input">Filter:</label>
+            <input ng-model="query" type="search" class="form-control" id="angular_search_input">
+        </div>
+        <div style="float: right;">
+            <button type="button" ng-click="reload()" class="btn btn-default" title="Use to refresh any libraries that have been added or removed at the command line.">Refresh</button>
+            <button type="button"
+                    class="btn btn-default"
+                    data-toggle="modal"
+                    data-target="#list-libraries-modal"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    ng-disabled="!configInfo.wcmDesignsPath" title="Download new libraries">
+                <span class="glyphicon glyphicon-cloud-download"></span> Get Libraries
+            </button>
+        </div>
+    </div>
+    <div>
+        <div ng-if="numOfLibs()===0&&configInfo.wcmDesignsPath.length>0&&!wcmPathNotFound">
+            No WCM libraries found in <code>{{configInfo.wcmDesignsPath}}</code>.
+        </div>
+        <div ng-repeat="wcmDesign in getWcmDesignList() | filter: query | orderBy:'name' " class="row item-row">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <div style="float: left; width: 60%">
+                    <div ng-click="showDetails(wcmDesign.title)">
+                        <h4 class="list-group-item-heading">{{wcmDesign.title}}
+                        	<span class="glyphicon glyphicon-repeat loading-spinner"
+                                  ng-if="wcmDesign.syncing"
+                                  style="position: absolute; margin-left: 10px; top:-2px"></span>
+                        </h4>
+					    <div ng-if="wcmDesign.syncing">{{status}}</div>
+                        <div class="list-group-item-text">{{wcmDesign.summary}}</div>
+                        <div class="list-group-item-text" ng-if="wcmDesign.dateUpdated">
+                            <label>Last modified: </label> {{wcmDesign.dateUpdated}}
+                        </div>
+                    </div>
+                </div>
+                <div style="float: left; width: 40%">
+                    <button ng-show="wcmDesign.error" class="btn btn-sm btn-danger"
+                            data-toggle="modal"
+                            data-target="#wcm-error-modal" ng-click="handleError(wcmDesign.err, wcmDesign, true);">
+                        <span class="glyphicon glyphicon-exclamation-sign"></span>
+                        Library Error
+                    </button>
+
+                    <div class="list-group-item-text" ng-if="wcmDesign.datePushed"  title='{{wcmDesign.serverPushed}}'>
+                        Pushed: {{wcmDesign.datePushed}}</div>
+                    <div class="list-group-item-text" ng-if="wcmDesign.datePulled" title='{{wcmDesign.serverPulled}}'>
+                        Pulled: {{wcmDesign.datePulled}}</div>
+                </div>
+                <div style="padding-top: 20px; clear: both;">
+                    <button type="button" ng-click="push(wcmDesign)" ng-disabled="wcmDesign.syncing"
+                            class="btn btn-default" title="Push only items that have been changed since the last push or pull.">
+                        Push Updated</button>
+                    <button type="button" ng-click="pushAll(wcmDesign)" ng-disabled="wcmDesign.syncing"
+                            class="btn btn-default" title="Push all items to library {{wcmDesign.title}}.">
+                        Push All</button>
+                    <button type="button" ng-click="pull(wcmDesign)" ng-disabled="wcmDesign.syncing"
+                            class="btn btn-default" title="Pull all items from library {{wcmDesign.title}}.">
+                        Pull</button>
+                    <div class="btn-group dropdown" ng-show="!watching[wcmDesign.title]">
+                        <button type="button" ng-click="watch(wcmDesign)"
+                                class="btn btn-default">
+                            Watch</button>
+                        <div class="btn-group">
+                            <ul class="dropdown-menu" onclick="event.stopPropagation()">
+                                <li class="no-a-tag">
+                                    <strong>Files to Ignore</strong>
+                                    <input type="text" ng-model="watchIgnore[wcmDesign.title]"
+                                           placeholder="eg: test/*.js;test/*.css">
+                                </li>
+                             </ul>
+                            <button type="button dropdown-toggle"
+                                    data-toggle="dropdown" ng-click=""
+                                    class="btn btn-default">
+                                <span class="caret"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="button" ng-click="stopWatching(wcmDesign)"
+                            class="btn btn-default"
+                            ng-show="watching[wcmDesign.title]"><span class="glyphicon glyphicon-stop"></span>
+                        Watching</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- It's faster to just have a different div for each -->
+<div ng-include="modals['listWcmDesigns']" id="list-libraries-modal" class="modal fade" tabindex="-1"
+     data-keyboard="false" data-backdrop="static"
+     role="dialog" aria-labelledby="myModalLabel">
+</div>
+
+<div ng-include="'partials/modals/wcmErrorModal.html'"
+     id="wcm-error-modal" class="modal fade" tabindex="-1"
+     role="dialog" aria-labelledby="myModalLabel">
+</div>

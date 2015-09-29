@@ -1,0 +1,133 @@
+Web Developer Toolkit for IBM Digital Experience
+(C)Copyright 2015 IBM Corporation
+
+This product includes software contributed to
+OpenNTF Alliance (http://www.OpenNTF.org/)
+
+This product is licensed under the terms of the Apache 2.0 license.
+
+Third party code that the user must acquire:
+Angular version 1.3.0
+http://angularjs.org
+License: MIT
+
+Bootstrap version 3.2.0
+http://getbootstrap.com
+License: MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+
+nwjs version 0.12.3
+Link: https://www.npmjs.com/package/nwjs
+License: MIT (https://www.npmjs.com/package/nwjs)
+
+Referenced Dependencies:
+adm-zip version 0.4.7
+Link: https://www.npmjs.com/package/adm-zip
+License: MIT (https://github.com/cthackers/adm-zip/blob/master/MIT-LICENSE.txt)
+Used in Dashboard
+
+anymatch version 1.3.0
+https://www.npmjs.com/package/anymatch
+License: ISC (https://github.com/es128/anymatch/blob/master/LICENSE)
+Used in Dashboard
+
+Async.js version 1.3.0
+https://www.npmjs.com/package/async
+License: MIT (https://github.com/caolan/async/blob/master/LICENSE)
+Used in: Dashboard
+
+Chokidar version 1.0.3
+https://www.npmjs.com/package/chokidar
+License: MIT (https://github.com/paulmillr/chokidar#license)
+Used in Dashboard
+
+Diff version 1.4.0
+https://www.npmjs.com/package/diff
+License: BSD-3-clause (https://github.com/kpdecker/jsdiff/blob/master/LICENSE)
+Used in Dashboard
+
+Dxsync (by IBM)
+https://github.com/digexp/dxsync
+License: Apache (https://github.com/digexp/dxsync/blob/master/LICENSE)
+Used in dashboard
+
+Express version 3.0.0 or greater
+https://www.npmjs.com/package/express
+License: MIT (https://github.com/strongloop/express)
+Used in SP-server
+
+Findit version 2.0.0
+https://www.npmjs.com/package/findit
+License: MIT (https://github.com/substack/node-findit/blob/master/package.json)
+Used in dashboard, WCM designs
+
+Graceful-fs version 3.0.6
+https://www.npmjs.com/package/graceful-fs
+License: ISC (https://github.com/isaacs/node-graceful-fs/blob/master/LICENSE)
+Used in WCM designs
+
+Hashmap version 2.0.3
+https://www.npmjs.com/package/hashmap
+License: MIT (https://github.com/flesler/hashmap/blob/master/LICENSE)
+Used in WCM designs
+
+MapStream version 0.0.6
+https://www.npmjs.com/package/map-stream
+License: MIT (https://github.com/dominictarr/map-stream/blob/master/LICENCE)
+Used in dashboard
+
+mkdirp version 0.5.1
+https://www.npmjs.com/package/mkdirp
+License: MIT (https://github.com/substack/node-mkdirp/blob/master/LICENSE)
+Used in dashboard
+
+Node-notifier v4.2.3
+https://www.npmjs.com/package/node-notifier
+License: MIT (https://github.com/mikaelbr/node-notifier#license)
+Used in dashboard
+
+Open v.0.0.5
+https://www.npmjs.com/package/open
+License: MIT (https://github.com/pwnall/node-open/blob/master/LICENSE)
+Used in dashboard
+
+q version 1.2.0
+https://www.npmjs.com/package/q
+License: MIT (https://github.com/kriskowal/q/blob/version 1/LICENSE)
+Used in WCM designs
+
+prompt 0.2.14  https://www.npmjs.com/package/prompt
+License: MIT
+https://github.com/flatiron/prompt/blob/master/LICENSE
+Used in WCM designs
+
+Request version 2.58.0
+https://www.npmjs.com/package/request
+License: Apache 2.0 (https://github.com/request/request/blob/master/LICENSE)
+Used in dashboard
+
+splint version 0.1.0
+https://github.com/OpenNTF/Script-Portlet-Node-Samples
+License: Apache License (https://github.com/OpenNTF/Script-Portlet-Node-Samples/blob/master/LICENSE)
+Used in dashboard
+
+Tracer version 0.7.4
+https://www.npmjs.com/package/tracer
+License: MIT (https://github.com/baryon/tracer#license)
+Used in dashboard, WCM designs
+
+Vinyl version 0.5.0
+https://www.npmjs.com/package/vinyl
+License: MIT (https://github.com/wearefractal/vinyl/blob/master/LICENSE)
+Used in dashboard
+
+Vinyl-fs version 1.0.0
+https://www.npmjs.com/package/vinyl-fs
+License: MIT (https://github.com/wearefractal/vinyl-fs/blob/master/LICENSE)
+Used in dashboard
+
+Yargs version 3.18.0
+https://www.npmjs.com/package/yargs
+License: MIT (https://github.com/bcoe/yargs/blob/master/LICENSE)
+Used in WCM designs
+
+ 

@@ -1,0 +1,20 @@
+{
+  "fix": false,
+
+  "checks" : {
+    "css-selectors": true,
+    "css-widths": true,
+    "css-positions": true,
+    "css-fonts": true,
+    "html-jquery": true,
+    "js-selectors": true,
+    "js-urls": true
+  },
+
+  "raw": false,
+  "silent": true,
+  "verbose": true,
+
+  "src": ["./**", "!**/node_modules/**", "!node_modules", "!**/sp-build/**", "!.", "!sp-build"],
+  "dest": "sp-build"
+}

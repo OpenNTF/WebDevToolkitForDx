@@ -1,0 +1,28 @@
+{
+  "name": "digexp-wcm-design",
+  "version": "0.0.1",
+  "description": "WCM Designs",
+  "main": "wcmHelper",
+  "bin": {
+    "wcmdesigns": "bin/wcmdesigns"
+  },
+  "dependencies": {
+    "findit": "2.0.0",
+    "graceful-fs": "3.0.6",
+    "hashmap": "2.0.3",
+    "prompt": "^0.2.14",
+    "q": "1.2.0",
+    "tracer": "0.7.4",
+    "yargs": "^3.18.0"
+  },
+  "devDependencies": {
+    "chai": "^3.2.0"
+  },
+  "gitHead": "05c3bbb6af4a45ada3e819ca010cc985a6bea343",
+  "readme": "# Node.js tool prototypes for working with WCM design elements\r\n\r\n## Next prototyping tasks\r\n\r\n### GS - Initial \"push\" functionality\r\nPush files from wcm-staging area into WCM, using filenames and folder names as the WCM names, and getting component type from the JSON metadata file for the component.\r\n\r\n### JS - Initial \"list\" and \"pull\" functionality\r\nThe target is to be able to pull Components and Presentation Templates from WCM and generate files in a folder structure under wcm-staging. There would be supporting API layers below that I assume.\r\n\r\n## Notes on Lifeco designs\r\n\r\n### Test server and Lifeco example files\r\nThere is a sandbox test server provided by Arthur Lin that contains some of the Lifeco WCM code. Arthur is with ISSW working with Lifeco, and he's available for questions regarding WCM and these Lifeco scenarios.\r\n\r\nTo view the site -->  http://al-ff-wp85cf5.rtp.raleigh.ibm.com/dsms/portal/ff/web/en/\r\n\r\nTo login to the backend --> http://al-ff-wp85cf5.rtp.raleigh.ibm.com/dsms/myportal/ff/web/en/\r\n\r\nCredentials: wpsadmin/wpsadmin\r\n\r\nThe files we got from Lifeco are under lifeco-files.  WCM content is under sample-wcm-project/wcm-staging/ff_design (ff_design is the WCM library).\r\n\r\n\r\n",
+  "readmeFilename": "readme.md",
+  "_id": "digexp-wcm-design@0.0.1",
+  "_shasum": "4353ed0538b453d193a37636d4d164607fbd3f00",
+  "_from": "..\\..\\..\\AppData\\Local\\Temp\\npm-3600-7cfa8208\\git-cache-67a0b9c6345b\\05c3bbb6af4a45ada3e819ca010cc985a6bea343",
+  "_resolved": "git+ssh://git@git.design.ibm.com:dxnode/digexp-wcm-design.git#05c3bbb6af4a45ada3e819ca010cc985a6bea343"
+}

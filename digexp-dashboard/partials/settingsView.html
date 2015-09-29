@@ -1,0 +1,124 @@
+<form name="settingsForm" class="container form-inline">
+    <h3 style="margin-top: 5px;" >Settings</h3>
+    <p>
+        Server configuration and folder locations can be managed here.
+        The folders specified here will be used as the parent folders for each type. Under the parent folder there will be child folders for each application/theme/library.
+    </p>
+    <table class="table">
+        <tr  class="row">
+            <td class=""><label>Script Applications Folder</label></td>
+            <td class="wideInput">
+                <input id="appPath" ng-change="changed=true" ng-model="configInfo.spAppPath" size="75"/>
+                <button ng-click="setPath('spAppPath');">...</button>
+            </td>
+        </tr>
+        <tr class="row">
+            <td class=""><label>Themes Folder</label></td>
+            <td class="wideInput">
+                <input id="themePath" ng-change="changed=true" ng-model="configInfo.dxThemePath" size="75"/>
+                <button ng-click="setPath('dxThemePath');">...</button>
+            </td>
+        </tr>
+        <tr class="row">
+            <td class=""><label>WCM Design Libraries Folder</label></td>
+            <td class="wideInput">
+                <input id="wcmPath" ng-change="changed=true" ng-model="configInfo.wcmDesignsPath" size="75"/>
+                <button type="button" ng-click="setPath('wcmDesignsPath');">...</button>
+            </td>
+        </tr>
+    </table>
+
+    <div><h4>Servers</h4></div>
+    <label>Active Server</label>
+    <select id="activeServer" ng-model="activeServer"  ng-change="changed=true"
+            ng-options="server.ServerId as server.ServerName for server in selectServers"></select>
+
+    <table>
+        <tr>
+            <th class="settingSmall">Name</th>
+            <th class="settingSmall">User Name</th>
+            <th class="settingSmall">Password</th>
+            <th class="settingWide">Host</th>
+            <th class="settingSmall">Port</th>
+            <th class="settingWide">Content Handler</th>
+            <th class="settingSmall" colspan="2">Secure</th>
+        </tr>
+        <tr ng-repeat="server in servers track by $index">
+            <td class="settingSmall">
+                <input id="{{'serverName' + $index}}" ng-model="server.name" size="10"
+                       required ng-change="$parent.changed=true;" ng-blur="updateServerName($index, server.name);"/>
+            </td>
+            <td class="settingSmall">
+                <input id="{{'userName' + $index}}" ng-model="server.userName" size="10"
+                       placeholder="required"
+                       required ng-change="$parent.changed=true"/>
+            </td>
+            <td class="settingSmall">
+                <input type="password" id="{{'password' + $index}}" ng-model="server.password"
+                       placeholder="required"
+                       required size="10" ng-change="$parent.changed=true"/>
+            </td>
+            <td class="settingWide">
+                <input id="{{'host'+$index}}" ng-model="server.host" size="30" required
+                       placeholder="required"
+                       ng-pattern="/^\w[\w\d\.-]*$/" ng-change="$parent.changed=true">
+            </td>
+            <td class="settingSmall">
+                <input id="{{'port' + $index}}" ng-model="server.port" size="5" required
+                       ng-pattern="/^\d{1,5}$/" ng-change="$parent.changed=true"/>
+            </td>
+            <td class="settingWide">
+                <input id="{{'contenthandlerPath' + $index}}" ng-model="server.contenthandlerPath" size="20"
+                       required ng-pattern="/^\//" ng-change="$parent.changed=true"/>
+            </td>
+            <td class="settingSmall" style="padding-right: 20px;">
+                <input id="{{'secure' + $index}}" type="checkbox" ng-model="server.secure" ng-change="$parent.changed=true">
+            </td>
+            <td>
+                <button type="button" ng-click="addServer($index);$parent.changed=true" class="btn btn-default"
+                        ng-disabled="disableAddButton($index)">+</button>
+            </td>
+            <td>
+                <button type="button" ng-click="removeServer(server.name);$parent.changed=true" class="btn btn-default"
+                        ng-disabled="disableDeleteButton($index);">-</button>
+            </td>
+        </tr>
+    </table>
+    </table>
+    <div>
+        <button type="button" ng-click="update();changed=false" class="btn"
+                ng-class="{ 'btn-default': !changed, 'btn-primary': changed }"
+                ng-disabled="settingsForm.$error.pattern||settingsForm.$error.required">
+            Save
+        </button>
+        <span ng-show="settingsForm.$error.required">
+            <span class="glyphicon glyphicon-exclamation-sign"> </span>
+            Please enter the required fields</span>
+    </div>
+    <input style="display:none;" id="fileDialog" type="file" webkitdirectory />
+</form>
+
+<div class="modal" tabindex="-1" role="dialog" id="unsaved-settings-modal"
+     aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm" style="min-width:434px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4>Warning!</h4>
+            </div>
+            <div class="modal-body" style="min-height: 0px;overflow-y: hidden;">
+                You have unsaved changes. Are you sure you want to continue?
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-default"
+                        id="continue-without-saving-btn">Continue Without Saving</button>
+                <button class="btn btn-primary"
+                        ng-disabled="settingsForm.$error.pattern||settingsForm.$error.required"
+                        id="save-and-continue-btn">Save & Continue</button>
+            </div>
+        </div>
+    </div>
+</div>

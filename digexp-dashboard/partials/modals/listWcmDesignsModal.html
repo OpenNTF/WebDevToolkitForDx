@@ -1,0 +1,69 @@
+<div class="modal-dialog" role="document" ng-controller="ListWcmDesignsController">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel">Choose Libraries to Add</h4>
+        </div>
+        <div class="modal-body">
+            <div ng-if="!submitted">
+                <strong>Username: </strong> {{portalConfig.username}}
+                <br>
+                <strong>Password: </strong> ********
+                <br>
+                <strong>Protocol: </strong><span ng-if="portalConfig.secure">https</span><span ng-if="!portalConfig.secure">http</span>
+                <br>
+                <strong>Host: </strong> {{portalConfig.host}}
+                <br>
+                <strong>Port: </strong> {{portalConfig.port}}
+                <br>
+                <strong>Content Handler Path: </strong> {{portalConfig.contenthandlerPath}}
+                <br>
+
+            </div>
+            <div ng-if="submitted&&!error.exists">
+                <div ng-repeat="library in serverLibraries | orderBy: 'title'">
+                    <div class="form-group">
+                        <input type="checkbox" ng-model="string" id="{{library.nm}}-path"  ng-disabled="libraryExists[library.title]">
+                        <label for="{{library.nm}}-path">{{library.title}} <span ng-if="libraryExists[library.title]" style="color: green" class="glyphicon glyphicon-ok"></span></label>
+                    </div>
+                </div>
+            </div>
+            <div ng-show="submitted&&error.exists&&!serverLibraries.length">
+                <div ng-switch="error.code">
+                    <div ng-switch-when="ECONNRESET">
+                        Error connection reset. Please verify that the server's port number {{server.port}} is accurate.
+                    </div>
+                    <div ng-switch-when="ECONNREFUSED">
+                        Error: connection refused
+                    </div>
+                    <div ng-switch-when="ENOTFOUND">
+                        Error: cannot connect to host: {{server.host}}
+                    </div>
+                    <div ng-switch-default>
+                        <strong>Error: </strong>
+                        <br>
+                        Error code: {{error.code}}
+                        <br>
+                        Status code: {{error.statusCode}}
+                        <br>
+                        Response Headers: {{error.responseHeaders}}
+                        <br>
+                        Response Text: {{error.responseText}}
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="sync-init-go-btn" class="btn btn-default" data-dismiss="modal">
+                Close
+            </button>
+            <button type="button" class="btn btn-primary" ng-click="getAndSync()" ng-if="!error.exists">
+                <span ng-if="!submitted" id="list-libraries-first-button">View Libraries</span>
+                <span ng-if="submitted">Download Selected Libraries</span>
+            </button>
+        </div>
+    </div>
+</div>

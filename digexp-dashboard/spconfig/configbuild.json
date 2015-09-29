@@ -1,0 +1,20 @@
+{
+  "mainPortletClass": "__SPNS__sp-wrapper",
+  "cwd": "./",
+
+  "fix": true,
+  "fixes": {
+    "css-selectors": true,
+    "css-positions": true,
+    "html-jquery": true
+  },
+
+  "raw": false,
+  "logFile": "",
+  
+  "silent": true,
+  "verbose": true,
+
+  "src": ["./**", "!**/node_modules/**", "!node_modules", "!**/sp-build/**", "!.", "!sp-build"],
+  "dest": "release"
+}

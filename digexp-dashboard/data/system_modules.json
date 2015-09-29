@@ -1,0 +1,1498 @@
+{
+  "wp_theme_portal_85": {
+    "description": "The Portal 85 theme CSS. Location: dav:fs-type1:/themes/portal8.5/css ",
+    "category": "85 Theme"
+  },
+  "wp_theme_edit": {
+    "description": "Adds the ability to go into page edit mode. Location: dav:fs-type1:/themes/portal8.5/js ",
+    "category": "85 Theme"
+  },
+  "wp_theme_menus": {
+    "description": "The menu framework that was introduced in 7002. Location: dav:fs-type1:/themes/portal8.5/js ",
+    "category": "85 Theme"
+  },
+  "wp_portlet_css": {
+    "description": "Earlier portlet CSS support. Location: dav:fs-type1:/common-resources/ibm/css/portal ",
+    "category": "85 Theme"
+  },
+  "wp_legacy_layouts": {
+    "description": "Earlier 7.0 static page layout CSS. Location: dav:fs-type1:/common-resources/ibm/css/portal ",
+    "category": "85 Theme"
+  },
+  "wp_layout_windowstates": {
+    "description": "Maximize or Minimize portlet support that is implemented as a server-side data source.  ",
+    "category": "85 Theme"
+  },
+  "wp_portal": {
+    "description": "Supplies JavaScript global configuration objects for use by other features; URLs, locale information, and user information.  Implemented as a server-side data source. ",
+    "category": "85 Theme"
+  },
+  "wp_liveobject_framework": {
+    "description": "Live object framework provides the feature of adding a special handler to any class selector on a tag. For example, if you have a span tag and its class contains vCard, then this framework makes this markup live. Then, when you hover on the designated text, the following hover text is shown, click here for person card. When you click the hover text, it shows the person card. The person card feature is available out-of-box, along with other requirements. Developers can extend this framework and add their own handlers. Location: PortalServer_root/theme/wp.theme.modules/webapp/installedApps/ThemeModules.ear/ThemeModules.war/WEB-INF/plugin.xml ",
+    "category": "85 Theme"
+  },
+  "wp_oob_sample_styles": {
+    "description": "Styles for default web content samples. Location: PortalServer_root/pzn.ext/wp.templating.wcm/shared/app/wp.wcm.templating.jar ",
+    "category": "85 Theme"
+  },
+  "wp_theme_skin_region": {
+    "description": "Provides accessibility supportLocation: dav:fs-type1:/themes/portal8.5/js ",
+    "category": "85 Theme"
+  },
+  "wp_theme_high_contrast": {
+    "description": "Provides accessibility support when you use high contrast.Location: dav:fs-type1:/themes/portal8.5/js ",
+    "category": "85 Theme"
+  },
+  "wp_custom_page_style": {
+    "description": "The view counterpart of the Edit toolbar shelf that sets the style for a specific page. This module reads the style for a page and makes sure that the corresponding CSS is loaded into the page.",
+    "category": "85 Theme"
+  },
+  "getting_started_module": {
+    "description": "The getting started module is a pre-defined module that you can use as starting place to quickly inject your own resources into the current theme. For more information, see Simple modules.Location: dav:fs-type1:/themes/Portal8.5/modules/getting_started_module ",
+    "category": "85 Theme"
+  },
+  "wp_liveobject_framework_core": {
+    "description": "Live Text Framework core part that provides parsing capability. It parses page for a class selector and returns the retrieved nodes to class handler.Location: PortalServer_root/ui/wp.tagging.liveobject/semTagEar/Live_Object_Framework.ear/liveobjects.war/WEB-INF/plugin.xml ",
+    "category": "85 Theme"
+  },
+  "wp_openajaxhub": {
+    "description": "The key feature of OpenAjax Hub 2.0 is its publish/subscribe engine that includes a Managed Hub mechanism that allows a host application to isolate untrusted components into secure sandboxes. Location: PortalServer_root/theme/wp.theme.modules/webapp/installedApps/ThemeModules.ear/ThemeModules.war/WEB-INF/lib/openajaxhub.jar ",
+    "category": "85 Theme"
+  },
+  "wp_simple_contextmenu_main": {
+    "description": "Gathers all the modules that are required to make up the simple menus. Location: dav:fs-type1:/themes/Portal8.5/contributions/simple_contextmenu.json ",
+    "category": "Simple menus"
+  },
+  "wp_simple_contextmenu_css": {
+    "description": "Provides CSS styling for the simple menus Location: dav:fs-type1/themes/Portal8.5/contributions/simple_contextmenu.json ",
+    "category": "Simple menus"
+  },
+  "wp_simple_contextmenu_js": {
+    "description": "Provides support to display a simple pop-up menu. Location: PortalServer_root/theme/wp.theme.modules/webapp/installedApps/ThemeModules.ear/ThemeModules.war/WEB-INF/lib/simple_contextmenu.jar ",
+    "category": "Simple menus"
+  },
+  "wp_simple_contextmenu_ext": {
+    "description": "Provides extensions that plug into the simple menu, such as badge support. Location: PortalServer_root/theme/wp.theme.modules/webapp/installedApps/ThemeModules.ear/ThemeModules.war/WEB-INF/lib/simple_contextmenu.jar ",
+    "category": "Simple menus"
+  },
+  "wp_simple_contextmenu_templates": {
+    "description": "Provides templates that are used to render the simple menu. Location: dav:fs-type1/themes/Portal8.5/contributions/simple_contextmenu.json ",
+    "category": "Simple menus"
+  },
+  "wp_contextmenu_main": {
+    "description": "Gathers all the modules that are required to make up the complete Component Action menu.Location: dav:fs-type1:/themes/Portal8.5/contributions/contextmenu.json ",
+    "category": "Menus"
+  },
+  "wp_contextmenu_css": {
+    "description": "Provides CSS styling for the Component Action menu.Location: dav:fs-type1/themes/Portal8.5/contributions/contextmenu.json ",
+    "category": "Menus"
+  },
+  "wp_contextmenu_js": {
+    "description": "Provides support to display an open action menu for page components, for example a portlet or content item.Location: PortalServer_root/theme/wp.theme.modules/webapp/installedApps/ThemeModules.ear/ThemeModules.war/WEB-INF/lib/contextmenu.jar ",
+    "category": "Menus"
+  },
+  "wp_contextmenu_templates": {
+    "description": "Provides templates that are used to render the Component Action menu in specific contexts, for example, a menu for a component or an inline edit menu.Location: dav:fs-type1/themes/Portal8.5/contributions/contextmenu.json ",
+    "category": "Menus"
+  },
+  "wp_contextmenu_config_lof": {
+    "description": "Provides the configuration for the Live Object Framework service to handle Component Action menu instances on a page.Location: PortalServer_root/theme/wp.theme.modules/webapp/installedApps/ThemeModules.ear/ThemeModules.war/WEB-INF/lib/contextmenu.jar ",
+    "category": "Menus"
+  },
+  "wp_contextmenu_live_object": {
+    "description": "Provides Live Object Framework service to handle Component Action menu instances on a page.Location: PortalServer_root/theme/wp.theme.modules/webapp/installedApps/ThemeModules.ear/ThemeModules.war/WEB-INF/lib/contextmenu.jar ",
+    "category": "Menus"
+  },
+  "wp_skin_cam": {
+    "description": "Allows the Component Action Menu to be opened by clicking an icon in the portlet skin. Location: PortalServer_root/theme/wp.theme.modules/webapp/installedApps/ThemeModules.ear/ThemeModules.war/WEB-INF/lib/skincomponentactionmenu.jar ",
+    "category": "Menus"
+  },
+  "wp_dynamicContentSpots_85": {
+    "description": "Defines all dynamic content spots for the 8.5 theme. You can overlay any dynamic content spots through other modules.Location: PortalServer_root/theme/wp.theme.themes/default85/installedApps/DefaultTheme85.ear/DefaultTheme85.war/WEB-INF/plugin.xml ",
+    "category": "Dynamic Content Spots"
+  },
+  "wp_dynamicContentSpots_toolbar85": {
+    "description": "Defines all dynamic content spots for the 8.5 toolbar theme. You can overlay any dynamic content spot through other modules.Location: PortalServer_root/toolbar/wp.toolbar.themes/toolbar85/installedApps/ToolbarTheme85.ear/ToolbarTheme85.war/WEB-INF/plugin.xml ",
+    "category": "Dynamic Content Spots"
+  },
+  "wp_a11y": {
+    "description": "Accessibility utility functions APIs. Location: PortalServer_root/theme/wp.theme.modules/webapp/installedApps/ThemeModules.ear/ThemeModules.war/WEB-INF/lib/a11y.jar ",
+    "category": "Toolbar"
+  },
+  "wp_admin_edit": {
+    "description": "Module providing theme artifacts that are related to the admin area.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/plugin.xml ",
+    "category": "Toolbar"
+  },
+  "wp_hiddencontent": {
+    "description": "Module defining CSS to show or hide the hidden content items in the hidden layout container.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/hiddencontent.jar ",
+    "category": "Toolbar"
+  },
+  "wp_movecontrols": {
+    "description": "This module provides a JavaScript API, which allows for moving layout controls from one layout container to another within a page layout.Location: PortalServer_root/theme/wp.theme.modules/webapp/installedApps/ThemeModules.ear/ThemeModules.war/WEB-INF/lib/movecontrols.jar ",
+    "category": "Toolbar"
+  },
+  "wp_portlet_applications": {
+    "description": "Support module for Applications portlets.Location: wp_profile_root/installedApps/cell/PA_Applications.ear/wp.portlet.applic.war/WEB-INF/plugin.xml ",
+    "category": "Toolbar"
+  },
+  "wp_portlet_changelayout": {
+    "description": "Support module for Change Layout portlet. This support module shows the orphaned portlets section.Location: wp_profile_root/installedApps/cell/PA_Orphaned.ear/wp.portlet.change.war/WEB-INF/plugin.xml ",
+    "category": "Toolbar"
+  },
+  "wp_portlet_newcontent": {
+    "description": "Support module for New Content portlet. Location: wp_profile_root/installedApps/cell/PA_com.ibm.wps.portle.ear/wp.portlet.conten.war/WEB-INF/plugin.xml ",
+    "category": "Toolbar"
+  },
+  "wp_portlet_newpage": {
+    "description": "Support module for New Page portlet. Location: wp_profile_root/installedApps/cell/PA_New_Page.ear/wp.portlet.newpag.war/WEB-INF/plugin.xml ",
+    "category": "Toolbar"
+  },
+  "wp_portlet_overview": {
+    "description": "Support module for Overview portlet. Location: wp_profile_root/installedApps/cell/PA_com.ibm.wps.portle.ear/wp.portlet.conten.war/WEB-INF/plugin.xml ",
+    "category": "Toolbar"
+  },
+  "wp_portlet_projects": {
+    "description": "Support module for Project portlet. Location: wp_profile_root/installedApps/cell/PA_com.ibm.wps.portle.ear/wp.portlet.conten.war/WEB-INF/plugin.xml ",
+    "category": "Toolbar"
+  },
+  "wp_portlet_sitemap": {
+    "description": "Support module for Sitemap portlet. Location: wp_profile_root/installedApps/cell/PA_com.ibm.wps.portle.ear/wp.portlet.conten.war/WEB-INF/plugin.xml ",
+    "category": "Toolbar"
+  },
+  "wp_portlet_style": {
+    "description": "Support for mode styles portlet. Location: wp_profile_root/installedApps/cell/PA_Styles.ear/wp.portlet.styles.war/WEB-INF/plugin.xml ",
+    "category": "Toolbar"
+  },
+  "wp_portlet_vanityurl": {
+    "description": "Support for the Vanity URL portlet. Location: wp_profile_root/installedApps/cell/PA_VanityUrl.ear/wp.portlet.vanity.war/WEB-INF/plugin.xml ",
+    "category": "Toolbar"
+  },
+  "wp_portlet_wiring": {
+    "description": "Dependencies of the wiring portletLocation: wp_profile_root/installedApps/cell/PA_Wiring.ear/wp.portlet.wiring.war/WEB-INF/plugin.xml ",
+    "category": "Toolbar"
+  },
+  "wp_portlet_wiring_resources": {
+    "description": "Resources that are provided by the portlet.Location: wp_profile_root/installedApps/cell/PA_Wiring.ear/wp.portlet.wiring.war/WEB-INF/plugin.xml ",
+    "category": "Toolbar"
+  },
+  "wp_state_page": {
+    "description": "Module that shows the page-specific public render parameters to the client and also provides JavaScript APIs that allow for reading and writing these parameters.Location: PortalServer_root/theme/wp.theme.modules/webapp/installedApps/ThemeModules.ear/ThemeModules.war/WEB-INF/lib/state.jar!/plugin.xml ",
+    "category": "Toolbar"
+  },
+  "wp_state_page_modes": {
+    "description": "Module that annotates the HTML body element of the DOM with microformats that reflect the page modes that are currently active. The supported page modes are page edit mode, or microformat edit-mode, page information mode, or microformat info-mode,\" and page help mode or microformat \"help-mode\". Unlike portlet modes, multiple page modes can be active at the same time.Location: PortalServer_root/theme/wp.theme.modules/webapp/installedApps/ThemeModules.ear/ThemeModules.war/WEB-INF/lib/state.jar!/plugin.xml ",
+    "category": "Toolbar"
+  },
+  "wp_theme_utils": {
+    "description": "Module providing a set of JavaScript utility APIs, which can be used to work with the DOM of the different page parts, which are potentially running in different iframes.Location: PortalServer_root/theme/wp.theme.modules/webapp/installedApps/ThemeModules.ear/ThemeModules.war/WEB-INF/lib/themeutils.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar85": {
+    "description": " Module providing a dynamic content spot that allows for embedding the main window of the site toolbar into a theme. The id for the dynamic content spot is 85toolbar.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/toolbar.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar85_dynamic": {
+    "description": "Module that displays the main control panel of the site toolbar without relying on a dynamic content spot.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/toolbar.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar_actionbar": {
+    "description": "Module providing a dynamic content spot that renders the main action bar of the site toolbar in the 8.5 theme. The action bar provides access to the site toolbar navigation, project menu, and more menu and also allows for activating page edit mode and page information mode. The id for the dynamic content spot is 85toolbar_actionbar.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/actionbar.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar_changepagelayout": {
+    "description": "Module providing the Change Page Layout function for menus.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/menuactions.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar_common": {
+    "description": "Module providing common resources such as CSS styles, images, and JavaScript for the site toolbar. The resources are supposed to be used in the toolbar theme or by portlets that run in the site toolbar.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/common.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar_common_wcm": {
+    "description": "Module providing common WCM-related resources such as CSS styles, images, and JavaScript for the site toolbar. The resources are supposed to be used in the toolbar theme or by portlets that run in the site toolbar.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/common.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar_contextmenu_js": {
+    "description": "A theme module that defines a simple JavaScript API for creating menus and managing their lifecycle.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/contextmenu.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar_controlactions": {
+    "description": "Module providing the resources that are common to all layout control and portlet-specific menu contributions.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/menuactions.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar_createpage": {
+    "description": "Module providing the \"Create Page\" function for menus.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/menuactions.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar_deletecontrol": {
+    "description": "Module providing the \"Delete Control\" function for portlet menus.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/menuactions.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar_deletepage": {
+    "description": "Module providing the Delete Page function for menus.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/menuactions.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar_editpageproperties": {
+    "description": "Module providing the \"Edit Page Properties\" function for menus.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/menuactions.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar_hiddencontent": {
+    "description": "Module providing the functions for showing and hiding the layout container that contains the portlets and content items that are currently hidden.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/menuactions.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar_hidecontrol": {
+    "description": "Module providing the functions for moving portlets or content items into the hidden layout container of the page.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/menuactions.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar_host": {
+    "description": "Meta module that groups all theme modules that are needed to make a page interoperable with the site toolbar. Add this module to the theme profile of your page if you want to edit the page by using the site toolbar. This module contains all contributions for both, view mode and edit mode. This module must be added to the non-deferred section of the theme profile.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/toolbar.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar_host_dynamic": {
+    "description": "Meta module that groups all theme modules that are needed to make a page interoperable with the site toolbar. Add this module to the theme profile of your page if you want to edit the page by using the site toolbar. This module contains all contributions for both, view mode and edit mode. This module must be added to the non-deferred section of the theme profile.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/toolbar.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar_host_dynamic_view": {
+    "description": "Module that groups all theme modules that are needed to make a page interoperable with the site toolbar. Add this module to the theme profile of your page if you want to edit the page by using the site toolbar. This module contains all contributions that are needed for view mode. This module must be added to the non-deferred section of the theme profile.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/toolbar.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar_host_edit": {
+    "description": "Module that groups all theme modules that are needed to make a page interoperable with the site toolbar. Add this module to the theme profile of your page if you want to edit the page by using the site toolbar. This module contains all contributions that are needed for edit mode. This module can be added to the deferred section of the theme profile.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/toolbar.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar_host_view": {
+    "description": "Module that groups all theme modules that are needed to make a page interoperable with the site toolbar. Add this module to the theme profile of your page if you want to edit the page by using the site toolbar. This module contains all contributions that are needed for view mode. This module must be added to the non-deferred section of the theme profile.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/toolbar.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar_logo": {
+    "description": "Module providing a dynamic content spot to embed the toolbar logo into a theme. The identifier of the dynamic content spot is 85toolbar_logo.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/logo.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar_menuactions": {
+    "description": "Module providing the resources that are common to all toolbar-specific menu contributions.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/menuactions.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar_moremenu": {
+    "description": "Module defining the more menu of the toolbar. This module provides a content spot to embed the more menu into a theme. The ID of the dynamic content spot is 85toolbar_moremenu.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/moremenu.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar_movecontrol": {
+    "description": "Module providing the Move Control functions for portlet menus.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/menuactions.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar_movepage": {
+    "description": "Module providing the Move Page function for menus.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/menuactions.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar_pageactions": {
+    "description": "Module providing the resources that are common to all page-specific menu contributions.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/menuactions.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar_projectmenu": {
+    "description": "Module for integrating the project menu into the toolbar. This module provides a content spot to embed the project menu into a theme. The ID of the dynamic content spot is 85toolbar_projectmenu.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/projectmenu.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar_sitepreview": {
+    "description": "Module providing the \"Preview as User\" and \"Preview as Unauthenticated\" functions for menus.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/menuactions.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar_sitepreview_contentspot": {
+    "description": "Module providing the dynamic content spot to embed the site preview function into the theme. The ID of the dynamic content spot is 85toolbar_preview.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/preview.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar_tab": {
+    "description": "Meta module that groups all theme modules that are needed to add a page to the site toolbar. Add this module to the theme profile of your page if your page is to run in the site toolbar.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/toolbar.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar_utils": {
+    "description": "Module providing toolbar utility functions for opening or closing the toolbar, engaging edit mode, or opening a toolbar tab.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/toolbar.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar_validator": {
+    "description": "Module to validate the state of the toolbar tab frame. This module is needed for handling context switches, such as session timeouts, correctly.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/toolbar.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar_viewframe_validator": {
+    "description": "Module to validate the state of the view frame. This module is needed for handling context switches, such as session timeouts, correctly.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/toolbar.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar_wiring": {
+    "description": "Module providing the functions for managing communication endpoints and portlet wires.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/menuactions.jar ",
+    "category": "Toolbar"
+  },
+  "wp_photon_iframe": {
+    "description": "XSLT transformation for iFrame transport.Location: PortalServer_root/theme/wp.theme.modules/webapp/installedApps/ThemeModules.ear/ThemeModules.war/WEB-INF/lib/photon.jar ",
+    "category": "Toolbar"
+  },
+  "wp_photon_promisor": {
+    "description": "A promiser implementation.Location: PortalServer_root/theme/wp.theme.modules/webapp/installedApps/ThemeModules.ear/ThemeModules.war/WEB-INF/lib/photon.jar ",
+    "category": "Toolbar"
+  },
+  "wp_photon_xslt": {
+    "description": "XML and XLST utility functionsLocation: PortalServer_root/theme/wp.theme.modules/webapp/installedApps/ThemeModules.ear/ThemeModules.war/WEB-INF/lib/photon.jar ",
+    "category": "Toolbar"
+  },
+  "wp_toolbar_ghost": {
+    "description": "Module that groups all theme modules that are needed to make a page interoperable with the site toolbar without rendering it. This module must be added to the non-deferred section of the theme profile.Location: PortalServer_root/toolbar/wp.toolbar.modules/webapp/installedApps/ToolbarModules.ear/ToolbarModules.war/WEB-INF/lib/toolbar.jar ",
+    "category": "Toolbar"
+  },
+  "wp_draft_page_ribbon": {
+    "description": "Adds Draft Page in text that appears along the sides of a page that has a draft in the current project.  Location: PortalServer_root/theme/wp.theme.modules/webapp/installedApps/ThemeModules.ear/ThemeModules.war/WEB-INF/lib/draftribbon.jar ",
+    "category": "Toolbar"
+  },
+  "wp_dnd_css": {
+    "description": "This module provides the CSS that is used to show drag sources and drop zones.",
+    "category": "Drag-and-drop"
+  },
+  "wp_dnd_main": {
+    "description": "This module parses the markup of a page layout to convert the layout containers into valid HTML 5 drop zones.",
+    "category": "Drag-and-drop"
+  },
+  "wp_dnd_util": {
+    "description": "This module provides JavaScript utility APIs for implementing drag-and-drop features.",
+    "category": "Drag-and-drop"
+  },
+  "wcm_config": {
+    "description": "Web Content Manager Config is a resource that is intended to be used by Web Content Manager theme modules.Location: PortalServer_root/wcm/prereq.wcm/wcm/shared/app/ilwwcm-services-impl.jar ",
+    "category": "IBM Web ContentManager"
+  },
+  "wcm_inplaceEdit": {
+    "description": "In-place editing enables users with edit access to a content item to edit fields of that item from within the web page itself instead of using the authoring portlet. This feature is available when you display content with a web content viewer portlet.Location: wp_profile_root/installedApps/cell/wcm.ear/wcm-inplaceEdit.war/WEB-INF/plugin.xml ",
+    "category": "IBM Web Content Manager"
+  },
+  "wp_content_mapping_picker": {
+    "description": "Provides the Content Mapping Picker dialog that allows one to select a piece of content from Web Content Manager.",
+    "category": "Content Mapping"
+  },
+  "wp_content_targeting_cam": {
+    "description": "Provides resources that are required for the Content Targeting dialog that is started from the Component Action menu.Location: wp_profile_root/installedApps/cell/PA_wp.pzn.ui.actions.ear/wp.pzn.ui.actions.war/WEB-INF/plugin.xml ",
+    "category": "Content Mapping"
+  },
+  "wp_federated_documents_picker": {
+    "description": "wp_federated_documents_picker",
+    "category": "Federation"
+  },
+  "wp_search": {
+    "description": "Search widget",
+    "category": "Search"
+  },
+  "wp_searchbar": {
+    "description": "Lightweight inline search bar that redirects to the search page to show results.Location: PortalServer_root/theme/wp.theme.modules/webapp/installedApps/ThemeModules.ear/ThemeModules.war/WEB-INF/lib/search.jar ",
+    "category": "Search"
+  },
+  "wp_analytics": {
+    "description": "Meta module that provides all analytics features. Use this module if you want to enable all analytics features including the aggregator, analytics tags and site promotions, and the overlay reports. ",
+    "category": "Analytics"
+  },
+  "wp_analytics_aggregator": {
+    "description": "Inserts the reference to the analytics aggregator and its dependencies into the page. ",
+    "category": "Analytics"
+  },
+  "wp_analytics_bootstrap": {
+    "description": "Internal module that contains the bootstrap code that is needed for analytics. Must not be directly referenced in theme profiles.",
+    "category": "Analytics"
+  },
+  "wp_analytics_overlay_reports": {
+    "description": "Public module that provides the analytics overlay reports for portlets and pages.",
+    "category": "Analytics"
+  },
+  "wp_analytics_tags": {
+    "description": "Public module that provides the analytics tag and site promotion functions. This module also provides the dynamic content spots that produce the analytics micro-formats.",
+    "category": "Analytics"
+  },
+  "wp_analytics_tags_dialog": {
+    "description": "Public module that provides the dialog for working with analytics tags and site promotions.",
+    "category": "Analytics"
+  },
+  "wp_pzn_geolocation": {
+    "description": "Provides resources that are required for Geolocation Personalization.",
+    "category": "Personalization"
+  },
+  "wp_webdock": {
+    "description": "This module provides resources that are required by web dock application.",
+    "category": "Web Dock"
+  },
+  "wp_worklight": {
+    "description": "Mapping module to Worklight integration extension",
+    "category": "IBM Worklight Integration"
+  },
+  "wp_worklight_android": {
+    "description": "Mapping module to Worklight integration extension for Android",
+    "category": "IBM Worklight Integration"
+  },
+  "wp_worklight_css": {
+    "description": "Mapping module to Worklight CSS",
+    "category": "IBM Worklight Integration"
+  },
+  "wp_worklight_css_android": {
+    "description": "Mapping module to Worklight CSS for Android",
+    "category": "IBM Worklight Integration"
+  },
+  "wp_worklight_css_ios": {
+    "description": "Mapping module to Worklight CSS for iOS",
+    "category": "IBM Worklight Integration"
+  },
+  "wp_worklight_ios": {
+    "description": "Mapping module to Worklight integration extension for iOS",
+    "category": "IBM Worklight Integration"
+  },
+  "wp_worklight_jsonstore": {
+    "description": "Mapping module to Worklight client JSONStore",
+    "category": "IBM Worklight Integration"
+  },
+  "wp_worklight_plugins": {
+    "description": "Mapping module to Worklight integration extension",
+    "category": "IBM Worklight Integration"
+  },
+  "wp_worklight_plugins_android": {
+    "description": "Mapping module to Worklight integration extension for Android",
+    "category": "IBM Worklight Integration"
+  },
+  "wp_worklight_plugins_ios": {
+    "description": "Mapping module to Worklight integration extension for iOS",
+    "category": "IBM Worklight Integration"
+  },
+  "wl_android_6": {
+    "description": "Provides Worklight client and Cordova JavaScript resources for Android devices",
+    "category": "IBM Worklight Integration"
+  },
+  "wl_android_61": {
+    "description": "Provides Worklight client and Cordova JavaScript resources for Android devices",
+    "category": "IBM Worklight Integration"
+  },
+  "wl_client_css_android_6": {
+    "description": "Provides Worklight client CSS for Android devices, specifically for the diagnostic window, and modal dialog",
+    "category": "IBM Worklight Integration"
+  },
+  "wl_client_css_android_61": {
+    "description": "Provides Worklight client CSS for Android devices, specifically for the diagnostic window, and modal dialog",
+    "category": "IBM Worklight Integration"
+  },
+  "wl_client_css_ios_6": {
+    "description": "Provides Worklight client CSS for iOS devices, specifically for the diagnostic window, and modal dialog",
+    "category": "IBM Worklight Integration"
+  },
+  "wl_client_css_ios_61": {
+    "description": "Provides Worklight client CSS for iOS devices, specifically for the diagnostic window, and modal dialog",
+    "category": "IBM Worklight Integration"
+  },
+  "wl_client_jsonstore_android_6": {
+    "description": "Provides Worklight client JSONStore for Android devices",
+    "category": "IBM Worklight Integration"
+  },
+  "wl_client_jsonstore_android_61": {
+    "description": "Provides Worklight client JSONStore for Android devices",
+    "category": "IBM Worklight Integration"
+  },
+  "wl_client_jsonstore_ios_6": {
+    "description": "Provides Worklight client JSONStore for iOS devices",
+    "category": "IBM Worklight Integration"
+  },
+  "wl_client_jsonstore_ios_61": {
+    "description": "Provides Worklight client JSONStore for iOS devices",
+    "category": "IBM Worklight Integration"
+  },
+  "wl_config": {
+    "description": "Data source that injects the initialization for client and Cordova API",
+    "category": "IBM Worklight Integration"
+  },
+  "wl_cordova_css_android_6": {
+    "description": "Provides Cordova client CSS, specifically for the tab bar component",
+    "category": "IBM Worklight Integration"
+  },
+  "wl_ios_6": {
+    "description": "Provides Worklight client and Cordova JavaScript resources for iOS devices",
+    "category": "IBM Worklight Integration"
+  },
+  "wl_ios_61": {
+    "description": "Provides Worklight client and Cordova JavaScript resources for iOS devices",
+    "category": "IBM Worklight Integration"
+  },
+  "wl_plugins_android_61": {
+    "description": "Provides Worklight plug-in JavaScript resources for Android devices",
+    "category": "IBM Worklight Integration"
+  },
+  "wl_plugins_ios_61": {
+    "description": "Provides Worklight plug-in JavaScript resources for iOS devices",
+    "category": "IBM Worklight Integration"
+  },
+  "wp_sametime_links": {
+    "description": "Earlier STlinks support.",
+    "category": "Sametime"
+  },
+  "wp_sametime_proxy": {
+    "description": "New Sametime proxy support.",
+    "category": "Sametime"
+  },
+  "wp_ic4_wai_resources": {
+    "description": "Provides resources to enable Connections integration with WAI.",
+    "category": "Web Application Integrator"
+  },
+  "wp_client_main": {
+    "description": "Contains basic utilities.",
+    "category": "Client Utils"
+  },
+  "wp_client_ext": {
+    "description": "Contains advanced utilities like Promises, IO, DOM helpers, events, and the deferred module loading code.",
+    "category": "Client Utils"
+  },
+  "wp_client_dnd": {
+    "description": "Contains drag-and-drop capabilities. Location: PortalServer_root/theme/wp.theme.modules/webapp/installedApps/ThemeModules.ear/ThemeModules.war/WEB-INF/lib/ibmc.jar ",
+    "category": "Client Utils"
+  },
+  "wp_client_logging": {
+    "description": "Contains logging capabilities for error, warning, and information messages.Location: PortalServer_root/theme/wp.theme.modules/webapp/installedApps/ThemeModules.ear/ThemeModules.war/WEB-INF/lib/ibmc.jar ",
+    "category": "Client Utils"
+  },
+  "wp_client_selector": {
+    "description": "Contains a JavaScript CSS selector engine. Location: PortalServer_root/theme/wp.theme.modules/webapp/installedApps/ThemeModules.ear/ThemeModules.war/WEB-INF/lib/ibmc.jar ",
+    "category": "Client Utils"
+  },
+  "wp_client_tracing": {
+    "description": "Contains tracing capabilities.Location: PortalServer_root/theme/wp.theme.modules/webapp/installedApps/ThemeModules.ear/ThemeModules.war/WEB-INF/lib/ibmc.jar ",
+    "category": "Client Utils"
+  },
+  "wp_portlet_client_model": {
+    "description": "Public client programming model. Includes REST service and state handling. Used as a base prerequisite to other functional modules.",
+    "category": "Portal Client"
+  },
+  "wp_portal_client_utils": {
+    "description": "Common utilities for other modules to use (XML handling, authentication), used as base prerequisite to other functional modules.",
+    "category": "Portal Client"
+  },
+  "wp_portal_client_rest_utils": {
+    "description": "Client-side data stores used by other Portal features, such as Tagging and Rating, to access the Portal REST modules on the server.",
+    "category": "Portal Client"
+  },
+  "wp_portal_ui_utils": {
+    "description": "Common UI elements. Used as a base prerequisite for some theme dialogs, such as the Content Mapping Picker and Tagging and Rating",
+    "category": "Portal Client"
+  },
+  "wp_tagging_rating": {
+    "description": "Tagging and Rating widgets",
+    "category": "Portal Client"
+  },
+  "wp_tagging_rating_opensearch": {
+    "description": "Open Search plug-in for Tagging and Rating ",
+    "category": "Portal Client"
+  },
+  "wp_tagging_rating_light": {
+    "description": "Provides all lightweight inline tagging and rating widgets.",
+    "category": "Portal Client"
+  },
+  "wp_tagging_rating_menu": {
+    "description": "Provides tagging and rating  menu items in the actions menu.",
+    "category": "Portal Client"
+  },
+  "wp_tagging_rating_tagcloud": {
+    "description": "Provides tag cloud in Tag center page.",
+    "category": "Portal Client"
+  },
+  "wp_template_select_dialog": {
+    "description": "A dialog that is started from the New Page dialog.  A user can pick a page template and base a newly created page on that template.",
+    "category": "Page Builder"
+  },
+  "wp_dialog_css": {
+    "description": "Provides the CSS styling for dialogs that are displayed by the dialog API.",
+    "category": "Dialog API"
+  },
+  "wp_dialog_draggable": {
+    "description": "Provides support to allow dialogs that are created with the dialog API to create dialogs to display page content.",
+    "category": "Dialog API"
+  },
+  "wp_dialog_main": {
+    "description": "Provides an API to create dialogs to display page content",
+    "category": "Dialog API"
+  },
+  "wp_dialog_util": {
+    "description": "Provides utilities to support the dialog API.",
+    "category": "Dialog API"
+  },
+  "wp_one_ui_21": {
+    "description": "Provides OneUI v2.1 CSS.",
+    "category": "OneUI"
+  },
+  "wp_one_ui_30": {
+    "description": "Provides OneUI v3.0 CSS.",
+    "category": "OneUI"
+  },
+  "wp_one_ui_dijit_30": {
+    "description": "Provides dijit support for OneUI.",
+    "category": "OneUI"
+  },
+  "wp_one_ui_303": {
+    "description": "Provides OneUI v3.03 CSS.",
+    "category": "OneUI"
+  },
+  "wp_one_ui_dijit_303": {
+    "description": "Provides dijit support for OneUI v3.03.",
+    "category": "OneUI"
+  },
+  "wp_one_ui": {
+    "description": "wp_one_ui",
+    "category": "OneUI"
+  },
+  "wp_one_ui_dijit": {
+    "description": "wp_one_ui_dijit",
+    "category": "OneUI"
+  },
+  "dojo": {
+    "description": "dojo",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojo_app": {
+    "description": "dojo_app",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojo_data": {
+    "description": "dojo_data",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojo_data_ext": {
+    "description": "dojo_data_ext",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojo_dnd_basic": {
+    "description": "dojo_dnd_basic",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojo_dnd_ext": {
+    "description": "dojo_dnd_ext",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojo_dom": {
+    "description": "dojo_dom",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojo_fmt": {
+    "description": "dojo_fmt",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojo_fx": {
+    "description": "dojo_fx",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojo_node_list": {
+    "description": "dojo_node_list",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojo_promise": {
+    "description": "dojo_promise",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojo_request": {
+    "description": "dojo_request",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojo_selector_lite": {
+    "description": " dojo_selector_lite",
+    "category": "Dojo 1.9 modules"
+  },
+  "dijit": {
+    "description": "dijit",
+    "category": "Dojo Meta-Modules"
+  },
+  "dijit_app": {
+    "description": "dijit_app",
+    "category": "Dojo Meta-Modules"
+  },
+  "dijit_editor": {
+    "description": "dijit_editor",
+    "category": "Dojo Meta-Modules"
+  },
+  "dijit_editor_plugins": {
+    "description": "dijit_editor_plugins",
+    "category": "Dojo Meta-Modules"
+  },
+  "dijit_form": {
+    "description": "dijit_form",
+    "category": "Dojo Meta-Modules"
+  },
+  "dijit_layout_basic": {
+    "description": "dijit_layout_basic",
+    "category": "Dojo Meta-Modules"
+  },
+  "dijit_layout_ext": {
+    "description": "dijit_layout_ext",
+    "category": "Dojo Meta-Modules"
+  },
+  "dijit_menu": {
+    "description": "dijit_menu",
+    "category": "Dojo Meta-Modules"
+  },
+  "dijit_tree": {
+    "description": "dijit_tree",
+    "category": "Dojo Meta-Modules"
+  },
+  "dijit_all": {
+    "description": "dijit_all",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojox_all": {
+    "description": "dojox_all",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojox_app": {
+    "description": "dojox_app",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojox_aspect": {
+    "description": "dojox_aspect",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojox_calendar": {
+    "description": "dojox_calendar",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojox_charting": {
+    "description": "dojox_charting",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojox_charting_all": {
+    "description": "dojox_charting_all",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojox_collections": {
+    "description": "dojox_collections",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojox_data_all": {
+    "description": "dojox_data_all",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojox_data_basic": {
+    "description": "dojox_data_basic",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojox_dgauges": {
+    "description": "dojox_dgauges",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojox_fx": {
+    "description": "dojox_fx",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojox_gfx": {
+    "description": "dojox_gfx",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojox_gfx3d": {
+    "description": "dojox_gfx3d",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojox_grid_all": {
+    "description": "dojox_grid_all",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojox_html_basic": {
+    "description": "dojox_html_basic",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojox_images": {
+    "description": "dojox_images",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojox_io": {
+    "description": "dojox_io",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojox_layout_ext": {
+    "description": "dojox_layout_ext",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojox_layout_basic": {
+    "description": "dojox_layout_basic",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojox_mobile": {
+    "description": "dojox_mobile",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojox_mobile_app": {
+    "description": "dojox_mobile_app",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojox_mobile_compat": {
+    "description": "dojox_mobile_compat",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojox_mobile_app_compat": {
+    "description": "dojox_mobile_app_compat",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojox_string": {
+    "description": "dojox_string",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojox_uuid": {
+    "description": "dojox_uuid",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojox_widget_standby": {
+    "description": "dojox_widget_standby",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojox_xml": {
+    "description": "dojox_xml",
+    "category": "Dojo Meta-Modules"
+  },
+  "dojo_19": {
+    "description": "dojo_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojo_app_19": {
+    "description": "dojo_app_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojo_data_19": {
+    "description": "dojo_data_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojo_data_ext_19": {
+    "description": "dojo_data_ext_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojo_dnd_basic_19": {
+    "description": "dojo_dnd_basic_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojo_dnd_ext_19": {
+    "description": "dojo_dnd_ext_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojo_dom_19": {
+    "description": "dojo_dom_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojo_fmt_19": {
+    "description": "dojo_fmt_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojo_fx_19": {
+    "description": "dojo_fx_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojo_node_list_19": {
+    "description": "dojo_node_list_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojo_promise_19": {
+    "description": "dojo_promise_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojo_request_19": {
+    "description": "dojo_request_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dijit_19": {
+    "description": "dijit_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dijit_app_19": {
+    "description": "dijit_app_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dijit_editor_19": {
+    "description": "dijit_editor_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dijit_editor_plugins_19": {
+    "description": "dijit_editor_plugins_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dijit_form_19": {
+    "description": "dijit_form_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dijit_layout_basic_19": {
+    "description": "dijit_layout_basic_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dijit_layout_ext_19": {
+    "description": "dijit_layout_ext_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dijit_menu_19": {
+    "description": "dijit_menu_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dijit_tree_19": {
+    "description": "dijit_tree_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dijit_all_19": {
+    "description": "dijit_all_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojox_app_19": {
+    "description": "dojox_app_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojox_aspect_19": {
+    "description": "dojox_aspect_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojox_calendar_19": {
+    "description": "dojox_calendar_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojox_collections_19": {
+    "description": "dojox_collections_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojox_data_basic_19": {
+    "description": "dojox_data_basic_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojox_dgauges_19": {
+    "description": "dojox_dgauges_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojox_fx_19": {
+    "description": "dojox_fx_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojox_gfx_19": {
+    "description": "dojox_gfx_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojox_gfx3d_19": {
+    "description": "dojox_gfx3d_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojox_html_basic_19": {
+    "description": "dojox_html_basic_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojox_images_19": {
+    "description": "dojox_images_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojox_io_19": {
+    "description": "dojox_io_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojox_layout_basic_19": {
+    "description": "dojox_layout_basic_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojox_layout_ext_19": {
+    "description": "dojox_layout_ext_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojox_string_19": {
+    "description": "dojox_string_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojox_uuid_19": {
+    "description": "dojox_uuid_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojox_xml_19": {
+    "description": "dojox_xml_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojox_mobile_19": {
+    "description": "dojox_mobile_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojox_mobile_app_19": {
+    "description": "dojox_mobile_app_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojox_mobile_compat_19": {
+    "description": "dojox_mobile_compat_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojox_mobile_app_compat_19": {
+    "description": "dojox_mobile_app_compat_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojox_charting_19": {
+    "description": "dojox_charting_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojox_charting_all_19": {
+    "description": "dojox_charting_all_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojox_data_all_19": {
+    "description": "dojox_data_all_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojox_grid_all_19": {
+    "description": "dojox_grid_all_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojox_all_19": {
+    "description": "dojox_all_19",
+    "category": "Dojo 1.9 modules"
+  },
+  "dojo_17": {
+    "description": "dojo_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dojo_app_17": {
+    "description": "dojo_app_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dojo_data_17": {
+    "description": "dojo_data_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dojo_dnd_basic_17": {
+    "description": "dojo_dnd_basic_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dojo_dnd_ext_17": {
+    "description": "dojo_dnd_ext_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dojo_dom_17": {
+    "description": "dojo_dom_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dojo_fmt_17": {
+    "description": "dojo_fmt_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dojo_fx_17": {
+    "description": "dojo_fx_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dojo_node_list_17": {
+    "description": "dojo_node_list_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dijit_17": {
+    "description": "dijit_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dijit_app_17": {
+    "description": "dijit_app_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dijit_editor_17": {
+    "description": "dijit_editor_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dijit_editor_plugins_17": {
+    "description": "dijit_editor_plugins_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dijit_form_17": {
+    "description": "dijit_form_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dijit_layout_basic_17": {
+    "description": "dijit_layout_basic_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dijit_layout_ext_17": {
+    "description": "dijit_layout_ext_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dijit_menu_17": {
+    "description": "dijit_menu_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dijit_tree_17": {
+    "description": "dijit_tree_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dijit_all_17": {
+    "description": "dijit_all_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dojox_aspect_17": {
+    "description": "dojox_aspect_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dojox_collections_17": {
+    "description": "dojox_collections_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dojox_data_basic_17": {
+    "description": "dojox_data_basic_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dojox_fx_17": {
+    "description": "dojox_fx_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dojox_gfx_17": {
+    "description": "dojox_gfx_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dojox_gfx3d_17": {
+    "description": "dojox_gfx3d_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dojox_html_basic_17": {
+    "description": "dojox_html_basic_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dojox_io_17": {
+    "description": "dojox_io_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dojox_layout_basic_17": {
+    "description": "dojox_layout_basic_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dojox_string_17": {
+    "description": "dojox_string_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dojox_uuid_17": {
+    "description": "dojox_uuid_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dojox_xml_17": {
+    "description": "dojox_xml_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dojox_mobile_17": {
+    "description": "dojox_mobile_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dojox_mobile_app_17": {
+    "description": "dojox_mobile_app_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dojox_mobile_compat_17": {
+    "description": "dojox_mobile_compat_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dojox_mobile_app_compat_17": {
+    "description": "dojox_mobile_app_compat_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dojox_charting_17": {
+    "description": "dojox_charting_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dojox_charting_all_17": {
+    "description": "dojox_charting_all_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dojox_data_all_17": {
+    "description": "dojox_data_all_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dojox_grid_all_17": {
+    "description": "dojox_grid_all_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dojox_all_17": {
+    "description": "dojox_all_17",
+    "category": "Dojo 1.7 modules"
+  },
+  "dojo_16": {
+    "description": "dojo_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dojo_app_16": {
+    "description": "dojo_app_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dojo_data_16": {
+    "description": "dojo_data_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dojo_dnd_basic_16": {
+    "description": "dojo_dnd_basic_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dojo_dnd_ext_16": {
+    "description": "dojo_dnd_ext_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dojo_dom_16": {
+    "description": "dojo_dom_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dojo_fmt_16": {
+    "description": "dojo_fmt_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dojo_fx_16": {
+    "description": "dojo_fx_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dojo_node_list_16": {
+    "description": "dojo_node_list_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dijit_16": {
+    "description": "dijit_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dijit_app_16": {
+    "description": "dijit_app_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dijit_editor_16": {
+    "description": "dijit_editor_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dijit_editor_plugins_16": {
+    "description": "dijit_editor_plugins_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dijit_form_16": {
+    "description": "dijit_form_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dijit_layout_basic_16": {
+    "description": "dijit_layout_basic_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dijit_layout_ext_16": {
+    "description": "dijit_layout_ext_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dijit_menu_16": {
+    "description": "dijit_menu_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dijit_theme_tundra_16": {
+    "description": "dijit_theme_tundra_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dijit_tree_16": {
+    "description": "dijit_tree_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dojox_aspect_16": {
+    "description": "dojox_aspect_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dojox_charting_16": {
+    "description": "dojox_charting_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dojox_collections_16": {
+    "description": "dojox_collections_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dojox_data_basic_16": {
+    "description": "dojox_data_basic_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dojox_fx_16": {
+    "description": "dojox_fx_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dojox_gfx_16": {
+    "description": "dojox_gfx_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dojox_gfx3d_16": {
+    "description": "dojox_gfx3d_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dojox_html_basic_16": {
+    "description": "dojox_html_basic_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dojox_io_16": {
+    "description": "dojox_io_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dojox_layout_basic_16": {
+    "description": "dojox_layout_basic_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dojox_string_16": {
+    "description": "dojox_string_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dojox_uuid_16": {
+    "description": "dojox_uuid_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dojox_xml_16": {
+    "description": "dojox_xml_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dojox_mobile_16": {
+    "description": "dojox_mobile_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dojox_mobile_app_16": {
+    "description": "dojox_mobile_app_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dojox_mobile_compat_16": {
+    "description": "dojox_mobile_compat_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "dojox_mobile_app_compat_16": {
+    "description": "dojox_mobile_app_compat_16",
+    "category": "Dojo 1.6 modules"
+  },
+  "jquery_1_10_2": {
+    "description": "Provides jQuery v1.10.2 core resources.",
+    "category": "JQuery"
+  },
+  "mm_template_layout": {
+    "description": "Widget that handles layout refreshing, this module is only used for Modularized Page Builder themes from 7.0",
+    "category": "Modularized Page Builder"
+  },
+  "mm_customize_shelf": {
+    "description": "Base widget for the site toolbar, this module is only used for Modularized Page Builder themes from 7.0",
+    "category": "Modularized Page Builder"
+  },
+  "mm_page_toolbar": {
+    "description": "Widget for the Customize, Hidden Content, Save & Exit, and Cancel. This module is only used for Modularized Page Builder themes from 7.0",
+    "category": "Modularized Page Builder"
+  },
+  "mm_content_set_list": {
+    "description": "Menu framework list widget from 7.0. This module is only used for Modularized Page Builder themes from 7.0",
+    "category": "Modularized Page Builder"
+  },
+  "mm_content_set_menu": {
+    "description": "Menu framework widget from 7.0. This module is only used for Modularized Page Builder themes from 7.0",
+    "category": "Modularized Page Builder"
+  },
+  "mm_controlled_nav_widget": {
+    "description": "Navigation widget from 7.0. This module is only used for Modularized Page Builder themes from 7.0",
+    "category": "Modularized Page Builder"
+  },
+  "wp_pagebuilder_standard_skin_70": {
+    "description": "Earlier 7.0 standard skin Location: dav:fs-type1/skins/Standard/ ",
+    "category": "Theme"
+  },
+  "wp_pagebuilder_noskin_skin_70": {
+    "description": "Earlier 7.0 no skin Location: dav:fs-type1/skins/NoSkin/ ",
+    "category": "Theme"
+  },
+  "mm_open_ajax_hub": {
+    "description": "Open Ajax Hub",
+    "category": "Mashups Enabler"
+  },
+  "mm_enabler": {
+    "description": "Full enabler",
+    "category": "Mashups Enabler"
+  },
+  "mm_enabler_core": {
+    "description": "Enabler core; provides only iWidget container support but no model APIs",
+    "category": "Mashups Enabler"
+  },
+  "mm_enabler_ext": {
+    "description": "Enabler support is not included in the mm_enabler",
+    "category": "Mashups Enabler"
+  },
+  "mm_builder": {
+    "description": "Builder base",
+    "category": "Mashups Builder"
+  },
+  "mm_builder_ext": {
+    "description": "Builder support",
+    "category": "Mashups Builder"
+  },
+  "mm_builder_dialogs": {
+    "description": "Builder dialog base widget",
+    "category": "Mashups Builder"
+  },
+  "wp_theme_widget": {
+    "description": "Menu support for iWidgets",
+    "category": "Mashups Builder"
+  },
+  "mm_move_page": {
+    "description": "Move Page widget",
+    "category": "User Interface"
+  },
+  "mm_new_page_dialog": {
+    "description": "New Page dialog widget",
+    "category": "User Interface"
+  },
+  "mm_delete_page": {
+    "description": "Menu contribution for deleting a page",
+    "category": "User Interface"
+  },
+  "mm_builder_wiring": {
+    "description": "Wiring widget",
+    "category": "User Interface"
+  },
+  "mm_delete_control": {
+    "description": "Menu contribution for deleting a portlet",
+    "category": "User Interface"
+  },
+  "wp_pagebuilder_base": {
+    "description": "Base code and utilities that are used by the other modules in this section.",
+    "category": "Page Builder"
+  },
+  "wp_pagebuilder_ui": {
+    "description": "Initialization code and base widgets (such as dialogs) used by other Page Builder modules.",
+    "category": "Page Builder"
+  },
+  "wp_pagebuilder_controls": {
+    "description": "Code to add the Move portlet menu actions (Move Up/Left/Right/Down).",
+    "category": "Page Builder"
+  },
+  "wp_pagebuilder_debug": {
+    "description": "Client-side debugging and tracing code, this module is turned off by default.",
+    "category": "Page Builder"
+  },
+  "wp_pagebuilder_data": {
+    "description": "Data stores used by Page Builder editing tools, and that follow the Dojo read/write API.",
+    "category": "Page Builder"
+  },
+  "wp_pagebuilder_dnd": {
+    "description": "Support for portlet drag-and-drop in the page layout.",
+    "category": "Page Builder"
+  },
+  "wp_pagebuilder_shelf": {
+    "description": "The site toolbar code, this module is used for modularized Page Builder themes from 7.0 only.",
+    "category": "Page Builder"
+  },
+  "wp_pagebuilder_csa": {
+    "description": "Earlier CSA-only Page builder code, this module is used for modularized Page Builder themes from 7.0 only.",
+    "category": "Page Builder"
+  },
+  "wp_pagebuilder_widget_css": {
+    "description": "Earlier CSA widget CSS, this module is used for modularized Page Builder themes from 7.0 only.",
+    "category": "Page Builder"
+  },
+  "wp_pagebuilder_shelf_base": {
+    "description": "Contains the base code for the tabs in the theme toolbar, used a prerequisite for other modules that implement tabs in the toolbar.",
+    "category": "Page Builder"
+  },
+  "wp_wcm_modal_dialog": {
+    "description": "Contains a framework that displays a page in an iframe inside a modal dialog Used as a prerequisite to other modules that use this dialog framework.",
+    "category": "Page Builder"
+  },
+  "wp_managed_pages_support": {
+    "description": "Contains a JavaScript configuration object that is used by all of the managed pages theme modules.",
+    "category": "Page Builder"
+  },
+  "wp_managed_pages_support_edit": {
+    "description": "Contains base JavaScript code that is shared by the project menu and preview managed pages modules.",
+    "category": "Page Builder"
+  },
+  "wp_toolbar": {
+    "description": "A managed pages theme module for the toolbar.",
+    "category": "Page Builder"
+  },
+  "wp_status_bar": {
+    "description": "The theme status bar that relays information, warning, and error messages to the user.",
+    "category": "Page Builder"
+  },
+  "wp_project_menu": {
+    "description": "A dojo-less managed pages theme module for the view mode display of project menu.",
+    "category": "Page Builder"
+  },
+  "wp_project_menu_edit": {
+    "description": "A managed pages theme module for the edit mode function of the project menu.",
+    "category": "Page Builder"
+  },
+  "wp_preview": {
+    "description": "CSS for the managed pages Preview controls seen in page view mode.",
+    "category": "Page Builder"
+  },
+  "wp_preview_menu": {
+    "description": "A managed pages theme module for the Preview function that is seen in the More menu",
+    "category": "Page Builder"
+  }
+}

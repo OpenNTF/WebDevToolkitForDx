@@ -1,0 +1,12 @@
+
+#################
+## node_modules
+#################
+
+node_modules
+.project
+user-settings.json
+**/*.log
+**/*.*~
+.idea/**
+predefined_modules/**

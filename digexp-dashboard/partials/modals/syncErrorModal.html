@@ -1,0 +1,90 @@
+<div class="modal-dialog" role="document"
+     ng-controller="SyncErrorController">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"
+                    aria-label="Close"
+                    ng-click="reset()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">Resolve error for {{theme.name}}</h4>
+        </div>
+        <div class="modal-body" ng-if="modalStatus==='conflict_recognized'">
+            <!--<strong>Local File Contents</strong><br>
+            <pre style="white-space: pre-line">{{localFileContents}}</pre>
+            <hr>
+            <strong>Remote File Contents</strong><br>
+            <pre style="white-space: pre-line">{{remoteFileContents}}</pre>-->
+
+            <div ng-repeat="(id, conflict) in theme.conflicts">
+                <strong>{{id}}</strong>
+                <pre><span ng-repeat="part in conflict.diff"
+                           ng-style="{'background-color':(part.added?'lightgreen':part.removed?'lightcoral':'')}"
+                           style="padding: 2px">{{part.value}}</span></pre>
+                Manually merge the files to handle the conflict.<br>
+                <button type="button" class="btn btn-sm btn-primary"
+                        ng-click="resolveWithRemote(id)">
+                    Resolve with Remote
+                </button>
+                <button type="button" class="btn btn-sm btn-primary"
+                        ng-click="resolveWithLocal(id)">
+                    Resolve with Local
+                </button>
+            </div>
+
+        </div>
+        <div class="modal-body" ng-if="modalStatus==='error'">
+            <div ng-switch="error.code">
+                <div ng-switch-when="EPROTO">
+                    <strong> Error: Wrong protocol</strong><br>
+                    This usually happens if the protocol is used (http vs. https) or
+                    if the wrong port is used. A few possible fixes are below.<br><br>
+
+                    Change protocol:<br>
+                    <!-- In case secure is undefined -->
+                    <button class="btn btn-primary"
+                            ng-show="theme.settings.secure===true||theme.settings.secure===undefined"
+                            ng-click="updateThemeSettings('secure', false)"
+                            data-dismiss="modal">Use http</button>
+                    <button class="btn btn-primary" ng-show="theme.settings.secure===false"
+                            ng-click="updateThemeSettings('secure', true)"
+                            data-dismiss="modal">Use https</button><br><br>
+                    or<br><br>
+
+                    Change Port:<br>
+                    <div class="input-group" style="max-width: 170px">
+                        <input type="text" class="form-control" ng-model="theme.settings.port">
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary" type="button"
+                                ng-click="updateThemeSettings('port', theme.settings.port)"
+                                data-dismiss="modal">Update</button>
+                    </span>
+                    </div>
+                </div>
+                <div ng-switch-when="ECONNRESET">
+                    Error connection reset. Please verify that the server's protocol (http/https)
+                    and port number are accurate.
+                </div>
+                <div ng-switch-when="ECONNREFUSED">
+                    Error: connection refused
+                </div>
+                <div ng-switch-when="ENOTFOUND">
+                    Error: cannot connect to host: {{theme.settings.host}}
+                </div>
+                <div ng-switch-default>
+                    Error code: {{error.code}}<br>
+                    Status code: {{substatus.statusCode}}
+
+                    <span ng-if="substatus.statusCode===401">
+                        Unauthorized. Incorrect username and/or password.
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+                Close
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,54 @@
+<div>
+  <div class="oobSampleContentContainer" tabindex="0" role="toolbar" aria-label="Authoring Tools" onfocus="if(ec = document.getElementById('EditControl_[Property context="current" type="content" field="id"]')){ec.style.display ='block';}">
+    [Plugin:PageMode pageMode="edit" compute="once"]
+      [Plugin:Matches pattern="^true;.*wcm_inplaceEdit.*" negative-match="true" compute="once" text="[Plugin:RequestAttribute key='ct.cam.enabled' compute='once'];[Plugin:ThemeCapability compute='once']"]
+        <div class="ibmPortalPortletIcons" style="float: right; textalign: right;">
+          [Component id="e68e1624-1258-4c46-8d0d-17f5332eaa4e:NC93ZWIgY29udGVudCB0ZW1wbGF0ZXMgMy4wL2VkaXQgZGVsZXRl" name="web content templates 3.0/edit delete"]
+        </div>
+      [/Plugin:Matches]
+    [/Plugin:PageMode]
+  </div>
+  <h2 style="display:block;">
+    <div>
+      <div style="float: left; textalign: left;"> 
+        [EditableProperty context="current" type="content" format="div" field="title"]
+          [Property context="current" type="content" field="title"]
+        [/EditableProperty]
+      </div>
+    </div>
+  </h2>
+  <div style="clear: both;"></div>
+  <div style="font-size: .9em; color: #222;">
+    <div>
+      <span style="float: left; textalign: left;">[Property context="current" type="content" awareness="true" field="creator"]</span>
+      <span style="float: left; textalign: left">&nbsp;-&nbsp;</span>
+      <span style="float: left; textalign: left" dir="ltr">[Property context="current" type="content" format="relative" field="lastmodifieddate"]&nbsp;&nbsp;</span>
+    </div>
+    <div style="clear: both;">
+      <table role="presentation" style="border: 0; width: 100%;">
+         <tr>
+            <td style="vertical-align: top;">
+                <div style="float:left;">
+                   [Plugin:tags compute="once"]
+                </div>
+            </td>
+            <td style="vertical-align: top;">
+                <div class="ibmPortalPortletIcons" style="white-space: nowrap; float: right; textalign: right;">
+                   [Plugin:ratings compute="once"]
+                </div>
+            </td>
+         </tr>
+      </table>
+    </div>
+  </div>
+  <div style="white-space: normal; clear: both;">
+   [EditableElement context="current" type="content" key="body"]
+     [Element context="current" type="content" key="body"]
+   [/EditableElement]
+  </div>
+</div>
+[Plugin:AnalyticsData property="id" compute="once"]
+[Plugin:AnalyticsData property="title" compute="once"]
+[Plugin:AnalyticsData property="path" compute="once"]
+[Plugin:AnalyticsData property="lastmodified" compute="once"]
+[Plugin:AnalyticsData property="authors" compute="once"]

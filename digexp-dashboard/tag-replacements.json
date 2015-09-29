@@ -1,0 +1,52 @@
+[{
+    "tagName": "[Plugin:EvaluateEL value=\"${wp.user[wp.themeConfig['user.displaynameattribute']]}\"]",
+    "tagMockValue": "John Doe"
+}, {
+    "tagName": "[Plugin:EvaluateEL value=\"${wp.user.cn}\"]",
+    "tagMockValue": "jdoe"
+}, {
+    "tagName": "[Plugin:EvaluateEL value=\"${wp.user.sn}\"]",
+    "tagMockValue": "doe"
+}, {
+    "tagName": "[Plugin:EvaluateEL value=\"${wp.user.uid}\"]",
+    "tagMockValue": "jdoe"
+}, {
+    "tagName": "[Plugin:EvaluateEL value=\"${wp.user.preferredLanguage}\"]",
+    "tagMockValue": "en"
+}, {
+    "tagName": "[Property context=\"current\" type=\"auto\" format=\"cn\" field=\"authors\"]",
+    "tagMockValue": "jdoe"
+}, {
+    "tagName": "[Property context=\"current\" type=\"auto\" field=\"title\"]",
+    "tagMockValue": "Dummy Title"
+}, {
+    "tagName": "[Property context=\"current\" type=\"parent\" field=\"title\"]",
+    "tagMockValue": "Dummy Parent Title"
+}, {
+    "tagName": "[Plugin:Portlet key=\"namespace\"]",
+    "tagMockValue": "ns123"
+}, {
+    "tagName": "[Plugin:Locale]",
+    "tagMockValue": "en_US"
+}, {
+    "tagName": "[Plugin:PageMode pageMode=\"EDIT\"]",
+    "tagMockValue": ""
+}, {
+    "tagName": "[Plugin:ifDevice class=\"\"]",
+    "tagMockValue": ""
+}, {
+    "tagName": "[Plugin:ifDeviceclass=\"smartphone\"]",
+    "tagMockValue": ""
+}, {
+    "tagName": "[Plugin:ifDevice class=\"tablet\"]",
+    "tagMockValue": ""
+}, {
+    "tagName": "[Plugin:ifDevice class=\"iOS\"]",
+    "tagMockValue": ""
+}, {
+    "tagName": "[/Plugin:PageMode]",
+    "tagMockValue": ""
+}, {
+    "tagName": "[/Plugin:ifDevice]",
+    "tagMockValue": ""
+}]

@@ -1,0 +1,22 @@
+<div ng-controller="CdnSuggestionsController"
+     ng-show="cdnSuggestions.length"
+     style="border:1px solid lightgray; max-height:150px; overflow-y:auto;">
+    <!-- TODO -->
+    <div ng-if="!showingOptions">
+        <div ng-repeat="suggestion in cdnSuggestions | orderBy: suggestionScore"
+             ng-click="loadSuggestionOptions(suggestion)"
+             class="cdn-suggestion">
+            <b>{{suggestion.name}}</b> {{suggestion.version}}<br>
+        </div>
+    </div>
+    <div ng-if="showingOptions" style="min-height:150px">
+        <span class="glyphicon glyphicon-repeat loading-spinner"
+              ng-if="loading"></span>
+
+        <div ng-repeat="asset in activeSuggestion.assets | orderBy: 'version':true"
+             ng-click="appendUrls(asset)"
+             class="cdn-suggestion">
+            {{asset.version}}
+        </div>
+    </div>
+</div>

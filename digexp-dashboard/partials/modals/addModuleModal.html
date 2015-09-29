@@ -1,0 +1,270 @@
+<div ng-controller="AddModuleController">
+    <div id="add-module-modal"
+         class="modal-body">
+        <strong>
+            <small style="letter-spacing:1px; color:gray">NEW MODULE
+            </small>
+        </strong>
+
+        <!-- FOR CUSTOM MODULES -->
+        <span class="glyphicon glyphicon-repeat loading-spinner text-center"
+              ng-if="loading"></span>
+
+        <div ng-show="stage===0 && !$parent.newModuleIsPredefined">
+            <div ng-show="!addingPrereqModules">
+                <div name="newModuleForm">
+                    <div class="form-group"
+                         ng-class="{'has-error': newModuleForm.newModuleId.$error.pattern
+                                        || $parent.moduleIds[newModule.id] }">
+                        <label for="new-module-id">
+                            ID
+                        <span style="color:firebrick"
+                              ng-show="newModuleForm.newModuleId.$error.pattern
+                                        || $parent.moduleIds[newModule.id]">
+                            <span class="glyphicon glyphicon-remove"></span>
+                            ID already exists or is invalid
+                        </span>
+                        </label>
+                        <input type="text" class="form-control" id="new-module-id"
+                               name="newModuleId"
+                               placeholder="(No spaces)" ng-model="newModule.id"
+                               ng-pattern="/^[\w\d_-]+$/">
+                    </div>
+                    <div class="form-group"
+                         ng-class="{'has-error': newModuleForm.newModuleFolder.$error.pattern || folderExists}">
+                        <label for="new-module-folder">
+                            Destination Folder
+                            <!-- TODO write a directive for red-x errors-->
+                        <span ng-show="newModuleForm.newModuleFolder.$error.pattern || folderExists"
+                              style="color: firebrick"><span
+                                class="glyphicon glyphicon-remove"></span> Folder already exists</span></label>
+                        </label>
+                        <input type="text" class="form-control"
+                               id="new-module-folder"
+                               name="newModuleFolder"
+                               placeholder="(No spaces)" ng-model="newModule.folder"
+                               ng-change="checkIfFolderExists()"
+                               ng-pattern="/^[ \w\d_-]+$/">
+                    </div>
+                    <div class="form-group">
+                        <label for="new-module-title">
+                            Title</label>
+                        <input type="text" class="form-control"
+                               id="new-module-title"
+                               placeholder="Optional" ng-model="newModule.title">
+                    </div>
+                    <div class="form-group">
+                        <label for="new-module-description">
+                            Description</label>
+                 <textarea type="text" class="form-control" rows=2
+                           id="new-module-description"
+                           ng-model="newModule.description"
+                           placeholder="Optional">
+                 </textarea>
+                    </div>
+                    <strong>
+                        Contributions
+                    </strong>
+
+                    <div class="btn-group pull-right">
+                        <button type="button" class="btn btn-sm"
+                                ng-class="{'btn-primary':!userSpecifiesUrl, 'btn-default':userSpecifiesUrl}"
+                                ng-click="userSpecifiesUrl=false">
+                            Local Files
+                        </button>
+                        <button type="button" class="btn btn-sm btn-default"
+                                ng-class="{'btn-primary':userSpecifiesUrl, 'btn-default':!userSpecifiesUrl}"
+                                ng-click="userSpecifiesUrl=true">
+                            URL or Library
+                        </button>
+                    </div>
+                    <!-- For adding files via the filesystem -->
+                    <div ng-show="!userSpecifiesUrl">
+                        Multiple files can be chosen by pressing 'ctrl' or
+                        'shift'.<br>
+                        Choose .js, .css, or .html files.<br>
+
+                        <div class="input-group">
+                <span class="input-group-btn">
+                    <span id="module-file-button"
+                          class="btn btn-default btn-file">Browse
+                        <input type="file" id="module-file-input"
+                               onchange="angular.element(this).scope().displayNewModuleFiles()"
+                               multiple>
+                    </span>
+                </span>
+                <span class="form-control"
+                      style="max-width:500px;overflow:hidden"
+                      id="module-files-display"
+                      onclick="$('#module-file-input').click()">
+                    {{newModule.filenames}}
+                </span>
+                        </div>
+                    </div>
+                    <!-- For adding files remotely -->
+                    <div ng-show="userSpecifiesUrl">
+                        Enter URLs for external source and .zip files. URLs can be
+                        separated by semicolons
+                        <input type="text" class="form-control" name="newModuleUrl"
+                               placeholder="url(s)" ng-model="newModule.urls"
+                               ng-class="{'ng-invalid': !urlsAreValid() }">
+                        <!--ng-change="$broadcast('newModuleUrlsChanged', newModule.urls)">-->
+                    </div>
+                    <!-- CDN autocomplete -->
+                    <div ng-include="'partials/modals/cdnSuggestionsArea.html'">
+                    </div>
+
+                    <br>
+                    <strong>
+                        Prerequisites
+                    </strong> <span style="color:#999">(Optional)</span><br>
+                    <div ng-repeat="module in prerequisites | orderBy: 'id'"
+                         ng-click="module.toAdd=!module.toAdd">
+                         <span ng-show="!module.toAdd"
+                               class="glyphicon glyphicon-unchecked"></span>
+                          <span ng-show="module.toAdd"
+                                class="glyphicon glyphicon-check"></span>
+                        {{module.id}}
+                    </div>
+                    <span class="glyphicon glyphicon-plus" style="color:#999; font-size:10px; margin-left:10px"></span>
+                    <button class="btn btn-default" style="padding: 5px"
+                            ng-click="loadPickerModules()">
+                        Choose Modules
+                    </button><br>
+                </div>
+            </div>
+            <div ng-show="addingPrereqModules" style="min-height: 45vh">
+                <div class="dropdown pull-right">
+                    <button class="btn btn-default dropdown-toggle" type="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
+                            ng-click="scrollToActiveCategory()">
+                        {{activeCategory}}
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" id="add-module-prereq-categories-dropdown" aria-labelledby="dropdownMenu1"
+                        style="max-height: 300px; overflow-y: auto;;">
+                        <li ng-repeat="category in moduleCategories | orderBy: category"
+                            ng-click="$parent.activeCategory=category"
+                            ng-class="{'active-module-category':activeCategory===category}">
+                            <a href="">
+                                {{category}}</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- The list of modules -->
+                Portal 8.5 system modules can be added by selecting a different category from
+                    the dropdown on the right.
+                <br>
+                Choose modules to add as prerequisites.
+                <div ng-repeat="module in allModules | filter:showActiveCategory | orderBy: 'title'"
+                     ng-click="module.toAdd=!module.toAdd">
+                   <span ng-if="!module.toAdd"
+                         class="glyphicon glyphicon-unchecked"></span>
+                    <span ng-if="module.toAdd"
+                          class="glyphicon glyphicon-check"></span>
+                    {{module.title || module.name}}
+                </div>
+            </div>
+        </div>
+
+        <!-- FOR PREDEFINED MODULES -->
+        <div ng-if="stage===0 && $parent.newModuleIsPredefined">
+            <div ng-repeat="predefinedModule in predefinedModules">
+                <input type="radio" name="predefinedModules"
+                       id="{{predefinedModule.name + predefinedModule.$index}}"
+                       ng-click="newModule.folder=predefinedModule.id;newModule.id=predefinedModule.id">
+                <label for="{{predefinedModule.name + predefinedModule.$index}}"
+                       ng-click="newModule.folder=predefinedModule.id;newModule.id=predefinedModule.id">
+                    {{predefinedModule.name}}
+                </label>
+            </div>
+        </div>
+
+        <div ng-if="stage===1">
+            <strong>Configure Files:</strong>
+
+            <div class="btn-group pull-right" style="margin-right: 4px">
+                <!-- <button type="button"  ng-click=""
+                         class="btn btn-default" onclick="alert('Not implemented, will be used for rtl, phones, etc')">
+                     <span class="glyphicon glyphicon-plus"></span> File Group</button>-->
+            </div>
+            <table class="table table-condensed table-hover">
+                <!--<tr><th>Filename</th><th>Contr. Type</th></tr>-->
+                <tr ng-repeat="file in files | orderBy: 'relative'">
+                    <td class="col-sm-1">
+                        <span class="glyphicon glyphicon-check"
+                              ng-show="!file.remove"
+                              ng-click="file.remove=true"
+                              style="color:#999;padding:10px"></span>
+                        <span class="glyphicon glyphicon-unchecked"
+                              ng-click="file.remove=false"
+                              ng-show="file.remove"
+                              style="color:#999;padding:10px"></span>
+                    </td>
+                    <td class=col-sm-8">
+                        <input type="text" class="small-input"
+                               ng-model="file.relative">
+                    </td>
+                    <td class="col-sm-2">
+                        <select class="pull-right small-input"
+                                style="width:auto !important;"
+                                ng-model="file.contributionType">
+                            <option value="head">Head</option>
+                            <option value="config">Config</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div ng-if="stage===2">
+            <div ng-if="!newModuleIsPredefined">
+                <strong>Select Profiles:</strong>
+
+                <table class="table table-condensed table-hover">
+                    <!--<tr><th>Include</th><th>Profile</th></tr>-->
+                    <tr ng-repeat="profile in newModule.profiles">
+                        <td class="col-sm-3">
+                            <select class="form-control"
+                                    style="width:auto !important; height: 30px !important"
+                                    ng-model="profile.include">
+                                <option value="deferred">Deferred</option>
+                                <option value="non-deferred">Non-deferred
+                                </option>
+                                <option value="no">Don't Include</option>
+                            </select>
+                        </td>
+                        <td class="col-sm-9">{{profile.name}}</td>
+                    </tr>
+                </table>
+                The module can be added to a new profile by creating a new
+                profile.
+            </div>
+            <div ng-if="newModuleIsPredefined">
+                The pre-defined modules can be added to profiles in the profiles
+                dialog.
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <!-- g-grandparent scope since it's a bool and three scopes were created by
+             ng-if, ng-include, and ng-controller. ng-if is used to reset this scope -->
+        <button type="button" class="btn btn-default"
+                ng-click="cancel()">
+            Cancel
+        </button>
+        <button type="button" class="btn btn-default"
+                id="new-module-prev-button" ng-disabled="stage===0"
+                ng-click="prevModalStage()" ;
+                ng-if="!newModuleIsPredefined">
+            Previous
+        </button>
+        <button type="button" class="btn btn-primary"
+                id="new-module-next-button"
+                ng-click="nextModalStage()"
+                ng-disabled="disableNext()">
+            {{ stage === 2 || newModuleIsPredefined ? 'Add module to theme' : 'Next' }}
+        </button>
+    </div>
+</div>

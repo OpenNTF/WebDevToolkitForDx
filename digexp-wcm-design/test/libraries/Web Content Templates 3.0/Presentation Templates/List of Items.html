@@ -1,0 +1,29 @@
+<div>
+  <div class="oobSampleContentContainer" tabindex="0" role="toolbar" aria-label="Authoring Tools" onfocus="if(ec = document.getElementById('EditControl_[Property context="current" type="content" field="id"]')){ec.style.display ='block';}">
+    [Plugin:PageMode pageMode="edit" compute="once"]
+      [Plugin:Matches pattern="^true;.*wcm_inplaceEdit.*" negative-match="true" compute="once" text="[Plugin:RequestAttribute key='ct.cam.enabled' compute='once'];[Plugin:ThemeCapability compute='once']"]
+        <span class="ibmPortalPortletIcons" style="float: right; textalign: right;">
+          [Component id="ea0a9c05-9668-4466-abf1-a245ba5fc67e:NC93ZWIgY29udGVudCB0ZW1wbGF0ZXMgMy4wL2VkaXQ=" name="web content templates 3.0/edit"]
+        </span>
+      [/Plugin:Matches]
+    [/Plugin:PageMode]
+  </div>
+  <h2 style="display:block; font-size: 1.364em; line-height: 1.455; margin-top: 1em; margin-bottom: 0.60em;">
+     [EditableProperty context="current" type="content" format="div" field="title"]
+        [Property context="current" type="content" field="title"]
+     [/EditableProperty]
+  </h2>
+  [EditableProperty context="current" type="content" format="div" field="description"]
+     [Property context="current" type="content" field="description"]
+  [/EditableProperty]
+  <p>
+    [Element context="current" type="content" key="menu"]
+    [Plugin:PageMode pageMode="edit" compute="once"]
+      <p>
+        <span>
+        [Component id="daccc837-f0ec-4a9a-9edf-0c35025d2922:NC93ZWIgY29udGVudCB0ZW1wbGF0ZXMgMy4wL2NyZWF0ZSBhcnRpY2xl" name="web content templates 3.0/create article"]
+        </span>
+      </p>
+    [/Plugin:PageMode]
+  </p>
+</div>

@@ -1,0 +1,49 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "IBM WebSphere Portal JSON Theme Profile schema",
+    "description": "A schema for use in a validator tool, to validate the syntax of WebSphere Portal Theme Optimization Framework profile definitions",
+     "type": "object",
+    "anyOf" : [
+        { "required" : ["moduleIDs"] },
+        { "required" : ["deferredModuleIDs"] }
+    ],
+    "properties" : {
+        "moduleIDs" : { "$ref" : "#/definitions/nonEmptyArrayOfNonNullModuleIDs" },
+        "deferredModuleIDs" : { "$ref" : "#/definitions/nonEmptyArrayOfNonNullModuleIDs" },
+        "titles" : { "$ref" : "#/definitions/titlesOrDescriptions" }, 
+        "descriptions" : { "$ref" : "#/definitions/titlesOrDescriptions" },
+        "metadata" : {"$ref" : "#/definitions/metadata"}
+    },
+    "additionalProperties" : false,
+    "definitions" : {
+        "nonEmptyArrayOfNonNullModuleIDs" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+                "type" : "string"
+            },
+            "uniqueItems" : true
+        },          
+        "titlesOrDescriptions" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+                "minProperties" : 2,
+                "properties" : {
+                    "lang" : {"type" : "string"} ,
+                    "value" : {"type" : "string"}
+                },
+                "required" : ["lang", "value"],
+                "additionalProperties" : false,
+                "uniqueItems" : true
+            }
+        },
+        "metadata" : {
+            "minProperties" : 1,
+            "additionalProperties" : false,
+            "patternProperties" : {
+                "[^metadata]" : {}
+            }
+        }
+    }          
+}

@@ -1,0 +1,43 @@
+<div class="modal-dialog" role="document"
+ng-controller="WcmErrorController">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal"
+			aria-label="Close"
+			ng-click="reset()">
+				<span aria-hidden="true">&times;</span>
+			</button>
+			<h4 class="modal-title">Resolve error for {{library.title}}</h4>
+		</div>
+		<div class="modal-body">
+			<div ng-switch="error.code">
+				<div ng-switch-when="ECONNRESET">
+					Error connection reset. Please verify that the server's port number {{error.port}} is accurate.
+				</div>
+				<div ng-switch-when="ECONNREFUSED">
+					Error: connection refused
+				</div>
+				<div ng-switch-when="ENOTFOUND">
+					Error: cannot connect to host {{error.host}}.
+				</div>
+				<div ng-switch-default>
+					<strong>Error: </strong>
+					<br>
+					Error code: {{error.code}}
+					<br>
+					Status code: {{error.statusCode}}
+					<br>
+					Response Headers: {{error.responseHeaders}}
+					<br>
+					Response Text: {{error.responseText}}
+					<br>
+				</div>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">
+				Close
+			</button>
+		</div>
+	</div>
+</div>

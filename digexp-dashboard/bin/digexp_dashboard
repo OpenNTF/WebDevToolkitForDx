@@ -1,0 +1,14 @@
+#! /usr/bin/env node
+
+var ch = require("child_process");
+
+ch.exec("nw", { cwd: __dirname + "/.." }, function(err, stdout, stderr) {
+  if (err) {
+    console.error("ERROR");
+    if (stderr) {
+      console.error(stderr);
+    }
+    console.error("Make sure that nw.js is installed");
+    console.error("run `npm install -g nw`");
+  }
+});

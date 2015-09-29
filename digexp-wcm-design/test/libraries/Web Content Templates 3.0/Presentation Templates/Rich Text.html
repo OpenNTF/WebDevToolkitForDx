@@ -1,0 +1,17 @@
+<div>
+HELLO!
+  <div class="oobSampleContentContainer" tabindex="0" role="toolbar" aria-label="Authoring Tools" onfocus="if(ec = document.getElementById('EditControl_[Property context="current" type="content" field="id"]')){ec.style.display ='block';}">
+    [Plugin:PageMode pageMode="edit" compute="once"]
+      [Plugin:Matches pattern="^true;.*wcm_inplaceEdit.*" negative-match="true" compute="once" text="[Plugin:RequestAttribute key='ct.cam.enabled' compute='once'];[Plugin:ThemeCapability compute='once']"]
+        <span class="ibmPortalPortletIcons" style="float: right; textalign: right">
+          [Component id="ea0a9c05-9668-4466-abf1-a245ba5fc67e:NC93ZWIgY29udGVudCB0ZW1wbGF0ZXMgMy4wL2VkaXQ=" name="web content templates 3.0/edit"]
+        </span>
+      [/Plugin:Matches]
+    [/Plugin:PageMode]
+  </div>
+  <div class="oobSampleRichText">
+    [EditableElement context="current" type="content" key="body"]
+      [Element context="current" type="content" key="body"]
+    [/EditableElement]
+  </div>
+</div>

@@ -1,0 +1,65 @@
+<div class="modal-dialog" role="document" ng-controller="ListThemesController">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Choose Themes to Add</h4>
+        </div>
+        <div class="modal-body">
+            <div ng-if="!submitted">
+                <strong>Username: </strong> {{portalConfig.username}} <br>
+                <strong>Password: </strong> ********<br>
+                <strong>Protocol: </strong> <span ng-if="portalConfig.secure">https</span><span ng-if="!portalConfig.secure">http</span><br>
+                <strong>Host: </strong> {{portalConfig.host}}<br>
+                <strong>Port: </strong> {{portalConfig.port}}<br>
+                <strong>Content Handler Path: </strong> {{portalConfig.contenthandlerPath}}<br>
+
+            </div>
+            <form name="listServerThemesForm" ng-if="submitted&&(!error.exists||serverThemes.length)">
+                For any themes you want to work with locally, enter the local folder name to use.
+                <br><br>
+                <div ng-repeat="theme in serverThemes | orderBy: 'title'">
+                    <div class="form-group" ng-class="{ 'has-error': folderIsTaken(theme) }">
+                        <label for="{{theme}}-path">{{theme}}
+                            <span ng-show="themeExists(theme, host)||(folders[theme]&&!folderIsTaken(theme))"
+                                  style="color: green" class="glyphicon glyphicon-ok"></span>
+                            <span ng-show="themeExists(theme, host)" style="color: green">
+                                Theme already exists locally
+                            </span>
+                            <span ng-show="!themeExists(theme, host)&&(folders[theme]&&!folderIsTaken(theme))" style="color: green">
+                                Folder will be created
+                            </span>
+                            <span ng-show="folderIsTaken(theme)"
+                                  style="color: firebrick"><span class="glyphicon glyphicon-remove"></span> Folder already exists</span></label>
+                        <input id="{{theme}}-path"
+                               name="{{theme}}-path" type="text" class="form-control"
+                               ng-disabled="themeExists(theme, host)"
+                               aria-describedby="basic-addon1" ng-model="folders[theme]"
+                               placeholder="Please enter a name for a new folder to get this theme">
+                    </div>
+                </div>
+                After clicking 'Create Theme Folders', press 'Pull' or 'Sync' to download the theme files.
+            </form>
+            <div ng-show="submitted&&error.exists&&!serverThemes.length">
+                <strong>Error: </strong><br>
+                Error code: {{error.error.code}}<br>
+                Status code: {{error.statusCode}}<br>
+                Response Headers: {{error.responseHeaders}}<br>
+                Response Text: {{error.responseText}}<br>
+                <div ng-if="error.error.code==='EPROTO'">
+                    Error: wrong protocol. This usually happens when the wrong protocol (http vs https)
+                    or port is used.
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" >
+                Close
+            </button>
+            <button ng-show="!error.exists" type="button" class="btn btn-primary"
+                    ng-click="dxsyncInit()" ng-disabled="submitted&&!getNewThemes().length">
+                <span ng-if="!submitted" id="list-themes-first-button">View Server Themes</span>
+                <span ng-if="submitted">Create Theme Folders</span>
+            </button>
+        </div>
+    </div>
+</div>
