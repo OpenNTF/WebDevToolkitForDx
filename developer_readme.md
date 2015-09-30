@@ -8,7 +8,7 @@ $ npm install -g gulp
 ```
 Then install the script's dependencies:
 ```
-$ npm install gulp gulp-tar gulp-gzip map-stream
+$ npm install 
 ```
 Then run
 ```
@@ -41,4 +41,10 @@ script run in the background.
 Also make sure that the gulp repackages the tarballs after
 pulling any changes from the git repo. The tarball's will not be committed
 after running `$ git pull` but the updated tarballs will be included in the next commit.
+
+To create the release zip  install Grunt client
+
+npm install -g grunt-cli
+
+then run grunt build to generate the zip in the build directory. When you are releasing copy the zip to the release directory
 
