@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "devDependencies": {
     "grunt": "latest",
-    "grunt-contrib-compress": "latest"
+    "grunt-contrib-compress": "latest",
+	"gulp": "latest",
+	"gulp-tar": "latest",
+	"gulp-gzip": "latest",
+	"map-stream": "latest"
   }
 }
