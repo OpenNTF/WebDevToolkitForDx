@@ -1,2 +1,2 @@
 #! /usr/bin/env node
-require("../dxwcmdesigns.js");
+require("../wcmdesigns.js");
