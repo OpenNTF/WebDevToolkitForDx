@@ -3,7 +3,7 @@ This project is an OpenNTF project, and is available under the Apache License V2
 
 This toolkit includes two main areas of functionality:
 - A "Web Developer Dashboard" that provides a user interface for working with Script Portlets, Portal themes, and WCM design elements. The theme support uses the Digital Experience File Sync tool under the covers. The Script Portlet support uses the Script Portlet command line support which must be installed separately on your workstation.
-- A command line tool "wcmdesigns" for moving WCM design elements - Presentation Templates and Components - between your local file system and your Portal server. This functionality is also available from the Dashboard.
+- A command line tool "dxwcmdesigns" for moving WCM design elements - Presentation Templates and Components - between your local file system and your Portal server. This functionality is also available from the Dashboard.
 
 # Requirements
 To use these tools you will need:
@@ -19,7 +19,8 @@ The Dashboard tool uses the nw.js package to implement the user interface, and o
 # Installation
 You must first install Node.js.  Node.js version 0.12 is the tested and recommended version.
 
-Download the digexp-toolkit.zip file in the release folder and unzip it on your workstation. Then run install.cmd (Windows) or install.sh (Mac/Linux). This will install the two main programs, digexp_dashboard (for the dashboard UI) and wcmdesigns (the command line support for accessing WCM design libraries). That completes the installation.  
+Download the digexp-toolkit.zip file in the release folder and unzip it on your workstation. Then run install.cmd (Windows) or install.sh (Mac/Linux). This will install the two main programs, dxdashboard
+ (for the dashboard UI) and dxwcmdesigns (the command line support for accessing WCM design libraries). That completes the installation.  
 
 For the Script Portlet "Push" support, you will need to have the Script Portlet command line client support installed and configured, and you will need to have the "sp" command on your system path. See this documentation for more on installing the Script Portlet command line client: http://www-01.ibm.com/support/knowledgecenter/SSHRKX_8.5.0/script/script-portlet/cmd_line_push.dita
 
@@ -39,7 +40,7 @@ Key features:
 ## Running the Web Developer Dashboard
 To launch the dashboard, run the following command:
 ```
-digexp_dashboard
+dxdashboard
 ```
 
 When you first run the dashboard, you should go to the "Settings" tab to configure your file locations and Portal server settings.   
@@ -48,10 +49,10 @@ When you first run the dashboard, you should go to the "Settings" tab to configu
 - WCM Design Folder: The parent folder for WCM design libraries. Each child folder represents one WCM library, with children for Components and Presentation Templates. To get any WCM library from the server, click the “Libraries” button.
 - Servers - Name, User, Password, Host, Port, Content Handler: Set these for your Portal server. You can have multiple server configurations and select the configuration to use. If you are using a Virtual Portal, include the Virtual Portal name as part of the "Content Handler" path, like this: /wps/mycontenthandler/my_vp_name.
 
-# Using the"wcmdesigns"  command line utility
+# Using the"dxwcmdesigns"  command line utility
 Note that all the functionality for push/pull of WCM design files is available from the Dashboard user interface. For the command line support, use:
 ```
-$ wcmdesigns <command> [options]
+$ dxdxwcmdesigns <command> [options]
 ```
 
 The commands are described below.
@@ -59,7 +60,7 @@ The commands are described below.
 ## init
 Usage:
 ```
-$ wcmdesigns init [options]
+$ dxdxwcmdesigns init [options]
 ```
 Running this command will display a prompt to select a WCM library. A subdirectory
 will be created (in the current working directory) and the selected library will be
@@ -74,7 +75,7 @@ The available options are:
 Usage:
 ```
 $ cd <path to the wcm library>
-$ wcmdesigns push [options]
+$ dxdxwcmdesigns push [options]
 ```
 Running this command will push the source files to WCM and update the library on the server.
 
@@ -90,7 +91,7 @@ The available options are:
 Usage:
 ```
 $ cd <path to the wcm library>
-$ wcmdesigns pull [options]
+$ dxdxwcmdesigns pull [options]
 ```
 This command will download any remote changes to the WCM library. First run `wcm init`
 to initialize the WCM library before using `wcm pull`.

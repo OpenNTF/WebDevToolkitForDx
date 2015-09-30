@@ -7,7 +7,7 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the 
  * specific language governing permissions and limitations under the License.
  */
-process.title = "wcmdesigns";
+process.title = "dxwcmdesigns";
 
 var argv;
 var utils = require('./lib/utils');
@@ -298,7 +298,7 @@ var pull = function(tries) {
 
 switch (argv._[0]) {
   case undefined:
-    console.log("Use 'wcmdesigns help' to view the available commands and options");
+    console.log("Use 'dxwcmdesigns help' to view the available commands and options");
     yargs.showHelp();
     break;
   case "help":
@@ -315,7 +315,7 @@ switch (argv._[0]) {
     break;
   default:
     console.log("Command '%s' not recognized.", argv._[0]);
-    console.log("Use 'wcmdesigns help' to view the available commands and options");
+    console.log("Use 'dxwcmdesigns help' to view the available commands and options");
 }
 
 function getInitPromptSchema(settings) {

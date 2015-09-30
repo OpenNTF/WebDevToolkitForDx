@@ -1,10 +1,10 @@
 {
   "name": "digexp-wcm-design",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "WCM Designs",
   "main": "wcmHelper",
   "bin": {
-    "wcmdesigns": "bin/wcmdesigns"
+    "dxwcmdesigns": "bin/dxwcmdesigns"
   },
   "dependencies": {
     "findit": "2.0.0",
