@@ -19,8 +19,7 @@ The Dashboard tool uses the nw.js package to implement the user interface, and o
 # Installation
 You must first install Node.js.  Node.js version 0.12 is the tested and recommended version.
 
-Download the digexp-toolkit.zip file from https://github.com/OpenNTF/WebDevToolkitForDx/blob/master/release/digexp-toolkit.zip and unzip it on your workstation. Then run install.cmd (Windows) or install.sh (Mac/Linux). This will install the two main programs, dxdashboard
- (for the dashboard UI) and dxwcmdesigns (the command line support for accessing WCM design libraries). That completes the installation.  
+Download the digexp-toolkit.zip file from https://github.com/OpenNTF/WebDevToolkitForDx/blob/master/release/digexp-toolkit.zip and unzip it on your workstation. Then run install.cmd (Windows) or install.sh (Mac/Linux). This will install the two main programs, dxdashboard (for the dashboard UI) and dxwcmdesigns (the command line support for accessing WCM design libraries). That completes the installation.  
 
 For the Script Portlet "Push" support, you will need to have the Script Portlet command line client support installed and configured, and you will need to have the "sp" command on your system path. See this documentation for more on installing the Script Portlet command line client: http://www-01.ibm.com/support/knowledgecenter/SSHRKX_8.5.0/script/script-portlet/cmd_line_push.dita
 
@@ -52,7 +51,7 @@ When you first run the dashboard, you should go to the "Settings" tab to configu
 # Using the"dxwcmdesigns"  command line utility
 Note that all the functionality for push/pull of WCM design files is available from the Dashboard user interface. For the command line support, use:
 ```
-$ dxdxwcmdesigns <command> [options]
+$ dxwcmdesigns <command> [options]
 ```
 
 The commands are described below.
@@ -60,7 +59,7 @@ The commands are described below.
 ## init
 Usage:
 ```
-$ dxdxwcmdesigns init [options]
+$ dxwcmdesigns init [options]
 ```
 Running this command will display a prompt to select a WCM library. A subdirectory
 will be created (in the current working directory) and the selected library will be
@@ -75,7 +74,7 @@ The available options are:
 Usage:
 ```
 $ cd <path to the wcm library>
-$ dxdxwcmdesigns push [options]
+$ dxwcmdesigns push [options]
 ```
 Running this command will push the source files to WCM and update the library on the server.
 
@@ -91,10 +90,10 @@ The available options are:
 Usage:
 ```
 $ cd <path to the wcm library>
-$ dxdxwcmdesigns pull [options]
+$ dxwcmdesigns pull [options]
 ```
-This command will download any remote changes to the WCM library. First run `wcm init`
-to initialize the WCM library before using `wcm pull`.
+This command will download any remote changes to the WCM library. First run `dxwcmdesigns init`
+to initialize the WCM library before using `dxwcmdesigns pull`.
 
 The available options are:
 - `-d`, `--dir`: The local directory of the WCM library. By default, it will be
