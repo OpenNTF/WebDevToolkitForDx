@@ -52,7 +52,7 @@ When you first run the dashboard, you should go to the "Settings" tab to configu
 # Using the"dxwcmdesigns"  command line utility
 Note that all the functionality for push/pull of WCM design files is available from the Dashboard user interface. For the command line support, use:
 ```
-$ dxdxwcmdesigns <command> [options]
+$ dxwcmdesigns <command> [options]
 ```
 
 The commands are described below.
@@ -60,7 +60,7 @@ The commands are described below.
 ## init
 Usage:
 ```
-$ dxdxwcmdesigns init [options]
+$ dxwcmdesigns init [options]
 ```
 Running this command will display a prompt to select a WCM library. A subdirectory
 will be created (in the current working directory) and the selected library will be
@@ -75,7 +75,7 @@ The available options are:
 Usage:
 ```
 $ cd <path to the wcm library>
-$ dxdxwcmdesigns push [options]
+$ dxwcmdesigns push [options]
 ```
 Running this command will push the source files to WCM and update the library on the server.
 
@@ -91,7 +91,7 @@ The available options are:
 Usage:
 ```
 $ cd <path to the wcm library>
-$ dxdxwcmdesigns pull [options]
+$ dxwcmdesigns pull [options]
 ```
 This command will download any remote changes to the WCM library. First run `wcm init`
 to initialize the WCM library before using `wcm pull`.

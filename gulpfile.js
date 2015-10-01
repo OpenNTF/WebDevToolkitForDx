@@ -21,7 +21,7 @@ const SP_SERVER = "./digexp-sp-server";
 var getFileList = function(folder) {
   // todo read gitignore, npmignore
   return [folder + "/**", "!" + folder + "/.git/**", "!" + folder + "/node_modules/**",
-          "!" + folder + "/node_modules/", "!" + folder + "/.idea/**", "!" + folder + "/user-settings.json"];
+          "!" + folder + "/node_modules/", "!" + folder + "/.idea/**", "!" + folder + "/user-settings.json", + "!" + folder + "/**.*~"];
 };
 
 var npm_pack = function(folder, dest) {

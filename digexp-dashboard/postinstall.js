@@ -44,29 +44,72 @@ var rm_rf = function(path, cb) {
 
 console.log("Installing dxsync:");
 
-ch.exec("npm install https://github.com/digexp/dxsync/archive/1.0.2.tar.gz --no-optional",
-  function(err) {
-    if (err) {
-      console.error("Error installing dxsync: " + err.message);
-    } else {
-      rm_rf("node_modules/dxsync/precompiled_modules/");
-      rm_rf("node_modules/dxsync/precompiled_modules.zip");
+var cwd = process.cwd();
 
-      setTimeout(function() {
-        console.log("Done!")
-      }, 300);
+var command = "npm install --no-optional --no-bin-links --prefix " + cwd + " https://github.com/digexp/dxsync/archive/1.0.2.tar.gz";
+
+if (process.platform == "win32") {
+  command = "npm install --no-optional https://github.com/digexp/dxsync/archive/1.0.2.tar.gz"
+}
+
+var cleanup = function() {
+  rm_rf("node_modules/dxsync/precompiled_modules/");
+  rm_rf("node_modules/dxsync/precompiled_modules.zip");
+}
+
+var cleanupWindows = function(cb) {
+  ch.exec("npm root -g", { }, function(err, root) {
+    root = root || process.env._;
+    if (root && fs.existsSync(root + "\\dxsync\\package.json")) {
+      ch.exec('xcopy "' + root + '\\dxsync" "' + process.cwd() + '\\node_modules\\dxsync" /e /y', function() {
+        cb && cb();
+      });
+    } else {
+      cb && cb();
     }
   });
+}
+
+var cleanupUnix = function(cb) {
+  if (fs.existsSync("lib/node_modules/dxsync/package.json")) {
+    ch.exec("cp -r lib/node_modules/dxsync/ node_modules/dxsync/", function() {
+      rm_rf("lib/node_modules/dxsync"); // ./lib/ shouldn't exist in this version of npm
+      cb && cb();
+    });
+  }
+}
+
+cleanup();
+/*ch.exec(command, { cwd: cwd },
+  function(err, stdout, stderr) {
+    if (stdout) {
+      console.log(stdout);
+    }
+    if (stderr) {
+      console.error(stderr);
+    }
+    if (err) {
+      console.error("Error installing dxsync: " + err.message);
+    } else if (process.platform == "win32") {
+      cleanupWindows(cleanup);
+    } else {
+      cleanupUnix(cleanup);
+    }
+    setTimeout(function() {
+        console.log("Done!")
+      }, 500);
+  });*/
 
 // check if user-settings has been saved temporarily
 // (for saving settings when re-installing the dashboard globally)
-ch.exec("npm root -g", function(err, root) {
+ch.exec("npm root -g", { }, function(err, root) {
+  root = root || process.env._;
   if (root) {
     root = root.replace(/\n|\r/g, "");
     fs.readFile(path.resolve(root, ".digexp-dashboard-user-settings.json"),
       function(err, contents) {
         if (!err) {
-          fs.writeFile(path.resolve(root, "digexp-dashboard/user-settings.json"),
+          fs.writeFile(path.resolve(root,"digexp-dashboard/user-settings.json"),
             contents);
           fs.unlink(path.resolve(root, ".digexp-dashboard-user-settings.json"))
         }
