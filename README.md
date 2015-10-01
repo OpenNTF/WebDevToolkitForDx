@@ -19,8 +19,9 @@ The Dashboard tool uses the nw.js package to implement the user interface, and o
 # Installation
 You must first install Node.js.  Node.js version 0.12 is the tested and recommended version.
 
-Download the digexp-toolkit.zip file from https://github.com/OpenNTF/WebDevToolkitForDx/blob/master/release/digexp-toolkit.zip and unzip it on your workstation. Then run install.cmd (Windows) or install.sh (Mac/Linux). This will install the two main programs, dxdashboard
- (for the dashboard UI) and dxwcmdesigns (the command line support for accessing WCM design libraries). That completes the installation.  
+Download the digexp-toolkit.zip file from here: https://github.com/OpenNTF/WebDevToolkitForDx/blob/master/release/digexp-toolkit.zip?raw=true
+
+Extract the file on your workstation. Then run install.cmd (Windows) or install.sh (Mac/Linux). This will install the two main programs, dxdashboard (for the dashboard UI) and dxwcmdesigns (the command line support for accessing WCM design libraries). That completes the installation.  
 
 For the Script Portlet "Push" support, you will need to have the Script Portlet command line client support installed and configured, and you will need to have the "sp" command on your system path. See this documentation for more on installing the Script Portlet command line client: http://www-01.ibm.com/support/knowledgecenter/SSHRKX_8.5.0/script/script-portlet/cmd_line_push.dita
 
@@ -93,8 +94,8 @@ Usage:
 $ cd <path to the wcm library>
 $ dxwcmdesigns pull [options]
 ```
-This command will download any remote changes to the WCM library. First run `wcm init`
-to initialize the WCM library before using `wcm pull`.
+This command will download any remote changes to the WCM library. First run `dxwcmdesigns init`
+to initialize the WCM library before using `dxwcmdesigns pull`.
 
 The available options are:
 - `-d`, `--dir`: The local directory of the WCM library. By default, it will be
