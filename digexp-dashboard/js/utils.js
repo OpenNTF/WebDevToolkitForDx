@@ -8,6 +8,8 @@
  * specific language governing permissions and limitations under the License.
  */
 var tracer = require("tracer"),
+    algorithm = "aes-256-ctr",
+    password = "U6Jv]H[tf;mxE}6t*PQz?j474A7T@Vx%gcVJA#2cr2GNh96ve+",
     debugEnvironmentVar = process.env.DIGEXP_DEBUG || '',
     debugNames = debugEnvironmentVar.toUpperCase().split(','),
     debugFunctions = {};
@@ -30,6 +32,22 @@ function debugLogger(moduleName) {
     }
     return debugFunctions[moduleName];
 };
+
+function encrypt( text ) {
+    var crypto =  require('crypto');
+    var cipher = crypto.createCipher( algorithm, password );
+    var crypted = cipher.update( text, "utf8", "hex" );
+    crypted += cipher.final( "hex" );
+    return crypted;
+}
+
+function decrypt( text ) {
+    var crypto =  require('crypto');
+    var decipher = crypto.createDecipher( algorithm, password );
+    var dec = decipher.update( text, "hex", "utf8" );
+    dec += decipher.final( "utf8" );
+    return dec;
+}
 
 var getModified = function(dirName, dateString, ignore, callback){
     // takes the name of the directory you want to find the modified and a string for a date that is the toLocaleString of a date object
@@ -97,4 +115,6 @@ utils.copyProperties = function(a, b) {
 };
 
 utils.debugLogger = debugLogger;
+utils.encrypt = encrypt;
+utils.decrypt = decrypt;
 

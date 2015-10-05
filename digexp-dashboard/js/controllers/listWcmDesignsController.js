@@ -116,7 +116,7 @@ function($scope) {
         }, function(err) {
             debugLogger.error(err);
             $parent.$parent.loadingNewLibraries--;
-            $parent.$parent.$apply(function(){$scope.status = 'Error Pulling Library ' + library.title;});
+            window.alert('Error Pulling Library ' + library.title + ' ' + err);
             $parent.$apply();
             debugLogger.log("Error adding " + library.title);
         });

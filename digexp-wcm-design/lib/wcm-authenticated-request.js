@@ -477,7 +477,7 @@ var globalPassword = '';
 var authCookie = null;
 
 var init = function(host, port, user, password, contentHandlerPath) {
-    debugLogger.trace('init:: host::' + host + ' port::' + port + ' user::' + user + ' password::' + password + ' contentHandlerPath::' + contentHandlerPath);
+    debugLogger.trace('init:: host::' + host + ' port::' + port + ' user::' + user + ' contentHandlerPath::' + contentHandlerPath);
     var deferred = Q.defer(), initialize = function(contentHandlerPath) {
         var pathComponents = contentHandlerPath.split('/');
         // for vitrula portals the last component is the portal context if

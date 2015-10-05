@@ -97,6 +97,8 @@ function getPresetFolders(libName){
             getWcmItemsForOperation(entry, "alternate").then(function (items){
                // this always returns a single result
                getWcmItemsForOperation(items[0], "preset-folders").then(function (items){
+                   if(items.length == 0)
+                        return deferred.reject("Please check that you have Portal 8.5 with CF05 or later");
                    getFoldersWithhRefs(items).then(function(folders){
                        deferred.resolve(folders);
                    },function(err){

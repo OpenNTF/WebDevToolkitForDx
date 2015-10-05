@@ -639,6 +639,11 @@ dashboardControllers.controller('AppsListController', ['$scope', '$route', '$loc
       if (server.userName && server.password) {
         args += " -portalUser " + server.userName + " -portalPassword " + server.password;
       }
+      var cPath = server.contenthandlerPath.split('/');
+      if (cPath.length > 3){
+         args += " -virtualPortalID " + cPath[3];
+      };
+
       return args;
     };
 

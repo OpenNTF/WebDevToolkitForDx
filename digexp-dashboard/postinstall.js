@@ -44,7 +44,7 @@ var rm_rf = function(path, cb) {
 
 console.log("Installing dxsync:");
 
-ch.exec("npm install https://github.com/digexp/dxsync/archive/1.0.2.tar.gz --no-optional",
+ch.exec("npm install https://github.com/OpenNTF/WebDevToolkitForDx/blob/master/dxsync-1.0.2.tar?raw=true --no-optional",
   function(err) {
     if (err) {
       console.error("Error installing dxsync: " + err.message);

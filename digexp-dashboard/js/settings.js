@@ -22,7 +22,7 @@ var settings = (function() {
           configInfo.servers.push({});
           configInfo.servers[count].name = (document.querySelector("#serverName"+ count) || {}).value;
           configInfo.servers[count].userName = (document.querySelector("#userName"+ count) || {}).value;
-          configInfo.servers[count].password = (document.querySelector("#password"+ count) || {}).value;
+          configInfo.servers[count].password = encrypt((document.querySelector("#password"+ count) || {}).value);
           configInfo.servers[count].host = (document.querySelector("#host"+count) || {}).value;
           configInfo.servers[count].port = (document.querySelector("#port"+count) || {}).value;
           configInfo.servers[count].secure = (document.querySelector("#secure"+count) || {}).checked;
@@ -35,7 +35,7 @@ var settings = (function() {
 
       // update user-settings.json
       fs.writeFileSync('./user-settings.json', JSON.stringify(configInfo, null, 4));
-
+      dashConfig.clearConfig();
     },
     setSettings: function(newSettings) {
       var configInfo = dashConfig.getConfigInfo();

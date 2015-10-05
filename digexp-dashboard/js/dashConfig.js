@@ -23,6 +23,7 @@ var dashConfig = (function(){
   };
 
   return {
+    clearConfig: function() {configInfo = "";},
     getConfigInfo: function (){
       // Read base config first, then get any overrides from user-settings.json
       if(configInfo == ""){
@@ -33,6 +34,12 @@ var dashConfig = (function(){
           var data = fs.readFileSync('./user-settings.json', 'utf8');
           var userConfig = JSON.parse(data);
           // Copy settings
+          userConfig.servers.forEach(function(server){
+              if(server.password)
+              var nPwd = decrypt( server.password );
+                if(nPwd.length != 0)
+                    server.password = nPwd;
+          });
           copyObj(configInfo, userConfig);
         }
       }
@@ -44,6 +51,10 @@ var dashConfig = (function(){
       fs.exists("./dashboard-config.json", function (exists) {
         if (exists) {
           copyObj(configInfo, newConfig);
+          configInfo.servers.forEach(function(server){
+              if(server.password)
+                server.password = encrypt( server.password );
+          });
           fs.writeFile("./dashboard-config.json", JSON.stringify(configInfo, null, '  '));
         }
       });
@@ -68,7 +79,13 @@ var dashConfig = (function(){
             rVal = configInfo.spAppServer;
             break;
         case this.tools.dxTheme:
-            rVal = configInfo.dxThemeServer;
+            var serverInfo = {};
+            copyObj(serverInfo, this.getServerInfo(configInfo.dxThemeServer));
+            var cPath = serverInfo.contenthandlerPath.split('/');
+            if (cPath.length > 3){
+                serverInfo.contenthandlerPath = '/' + cPath[1] + '/' + cPath[2];
+            };
+            return serverInfo;
             break;
         case this.tools.wcmDesigns:
             rVal = configInfo.wcmDesignsServer;

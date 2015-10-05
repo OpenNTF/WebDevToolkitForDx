@@ -10,7 +10,7 @@ module.exports = function(grunt) {
                 files : [{
                     expand : true,
                     cwd : ".",
-                    src : ["install.cmd", "install.sh", "readme.md", "wcm-design.tar.gz", "dashboard.tar.gz", "sp-server.tar.gz", "LICENSE", "NOTICE"],
+                    src : ["install.cmd", "install.sh", "readme.md", "wcm-design.tar.gz", "dashboard.tar.gz", "dxsync-1.0.2.tar.gz", "sp-server.tar.gz", "LICENSE", "NOTICE"],
                     dest : "/",
                     filter : "isFile"
                 }]
