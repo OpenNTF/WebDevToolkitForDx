@@ -1,12 +1,12 @@
 {
-  "name": "diggexp-toolkit",
+  "name": "digexp-toolkit",
   "version": "0.1.0",
   "devDependencies": {
     "grunt": "latest",
     "grunt-contrib-compress": "latest",
-	"gulp": "latest",
-	"gulp-tar": "latest",
-	"gulp-gzip": "latest",
-	"map-stream": "latest"
+    "gulp": "^3.9.0",
+    "gulp-gzip": "^1.2.0",
+    "gulp-tar": "^1.4.0",
+    "map-stream": "0.0.6"
   }
 }

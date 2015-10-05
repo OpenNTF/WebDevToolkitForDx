@@ -12,6 +12,8 @@ var fs = require("fs");
 var ch = require("child_process");
 
 ch.exec("npm root -g", function(err, root) {
+  root = root || process.env._;
+  console.log(root);
   if (root) {
     root = root.replace(/\n|\r/g, "");
     fs.readFile(path.resolve(root, "digexp-dashboard/user-settings.json"),
