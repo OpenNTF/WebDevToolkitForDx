@@ -7,7 +7,7 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-var http = require('http');
+var http = null; // will use either http or https, depending on "secure" option
 var Q = require('q');
 var debugLogger = require('./utils').debugLogger('wcm-request');
 var currentRequestLevel = 0;    // Track number of concurrent requests
@@ -18,7 +18,10 @@ var warnParallel = true;
 var httpGetHelper = function(options) {
     options.headers.Cookie = authCookie;
     var deferred = Q.defer(), body = '', doRequest = function(options) {
-        debugLogger.trace('httpGetHelper:: options::' + options);
+        debugLogger.trace('httpGetHelper:: options::', options);
+        if (options.secure) {
+            options.rejectUnauthorized = false;
+        }
         var reqGet = http.request(options, function(response) {
             if(options.headers && options.headers.ContentType && options.headers.ContentType.indexOf('image') != -1)
                 response.setEncoding('binary');
@@ -71,7 +74,10 @@ var httpGetHelper = function(options) {
 var httpPostHelper = function(options, postData) {
     options.headers.Cookie = authCookie;
     var deferred = Q.defer(), body = '', doRequest = function(options, postData) {
-        debugLogger.trace('httpPostHelper:: options::' + options + ' postData::' + postData);
+        debugLogger.trace('httpPostHelper:: options::', options, ' postData::' + postData);
+        if (options.secure) {
+            options.rejectUnauthorized = false;
+        }
         var reqPost = http.request(options, function(response) {
             if (response.statusCode == 404) {
                 var err = getErrorFromResponse(null, response);
@@ -140,9 +146,12 @@ var getLTPAToken = function(user, pass, options, postData) {
     };
 
     var deferred = Q.defer(), doRequest = function(optionspost, options, postData) {
-        debugLogger.trace('getLTPAToken:: user::' + user + ' pass::' + pass + ' options::' + options + ' postData::' + postData);
+        debugLogger.trace('getLTPAToken:: user::' + user + ' options::', options, ' postData::' + postData);
         // todo use request instead of node http for cleaner error handling
         try {
+            if (options.secure) {
+                optionspost.rejectUnauthorized = false;
+            }
             var reqPost = http.request(optionspost, function(response) {
                 if (!response.headers["set-cookie"]) {
                     var err =  getErrorFromResponse("Authentication error");
@@ -238,7 +247,7 @@ var maxLtpaAge = 1000 * 60 * 30;    // 30 minutes
 
 var authenticatedRequest = function(user, pass, options, postData) {
     var deferred = Q.defer(), authenticate = function(user, pass, options, postData) {
-        debugLogger.trace('authenticatedRequest:: user::' + user + ' pass::' + pass + ' options::' + options + ' postData::' + postData);
+        debugLogger.trace('authenticatedRequest:: user::' + user + ' options::', options, ' postData::' + postData);
         // sometimes the content HandlerPath might be part of the uri already if not add
         if (options.path.lastIndexOf(options.contentHandlerPath, 0) != 0)
             options.path = options.contentHandlerPath + options.path;
@@ -347,6 +356,7 @@ var getJson = function(uri) {
             port : globalPort,
             contentHandlerPath : globalContentHandlerPath,
             path : uri,
+            secure : globalSecure,
             method : 'GET',
             headers : {
                 Accept : "application/json"
@@ -378,6 +388,7 @@ var setJson = function(uri, postData) {
             port : globalPort,
             contentHandlerPath : globalContentHandlerPath,
             path : uri,
+            secure : globalSecure,
             method : 'Post',
             headers : {
                 'Content-Type' : 'application/atom+xml',
@@ -412,6 +423,7 @@ var setContent = function(uri, contentType, data) {
             contentHandlerPath : globalContentHandlerPath,
             port : globalPort,
             path : uri,
+            secure : globalSecure,
             method : 'Put',
             headers : {
                 'ContentType' : contentType,
@@ -445,6 +457,7 @@ var getContent = function(uri, contentType) {
             port : globalPort,
             contentHandlerPath : globalContentHandlerPath,
             path : uri + '?mime-type=' + encodeURIComponent(contentType),
+            secure : globalSecure,
             method : 'Get',
             headers : {
                 'Content-Type' : contentType,
@@ -474,10 +487,12 @@ var globalPort = null;
 var globalContentHandlerPath = '/wps/mycontenthandler';
 var globalUser = '';
 var globalPassword = '';
+var globalSecure = false;
 var authCookie = null;
 
-var init = function(host, port, user, password, contentHandlerPath) {
-    debugLogger.trace('init:: host::' + host + ' port::' + port + ' user::' + user + ' contentHandlerPath::' + contentHandlerPath);
+var init = function(host, port, user, password, contentHandlerPath, secure) {
+    http = secure ? require('https') : require('http');
+    debugLogger.trace('init:: host::' + host + ' port::' + port + ' user::' + user + ' contentHandlerPath::' + contentHandlerPath + ' secure::' + secure);
     var deferred = Q.defer(), initialize = function(contentHandlerPath) {
         var pathComponents = contentHandlerPath.split('/');
         // for vitrula portals the last component is the portal context if
@@ -504,6 +519,7 @@ var init = function(host, port, user, password, contentHandlerPath) {
     };
     globalHost = host;
     globalPort = port;
+    globalSecure = secure;
     if (contentHandlerPath != undefined)
         globalContentHandlerPath = contentHandlerPath;
     globalUser = user;

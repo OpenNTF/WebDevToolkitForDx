@@ -43,6 +43,7 @@ var authRequest = require('./lib/wcm-authenticated-request'),
  wcmCwd = '', curHost = '', curUser = '', curPassword = '',
  curPort = '',
  curContentPath = '',
+ curSecure = false,
  curPullLibrary = undefined;
 
 /**
@@ -54,8 +55,8 @@ var authRequest = require('./lib/wcm-authenticated-request'),
  * These will reset to 0 when the operation(s) is completed.
  */
 var progCounter = 0, progGoal = 0;
-init = function(host, port, contentPath, user, password, wcmDir) {
-    debugLogger.trace("init:: host::"+host +" port::" + port + "contentPath::" + contentPath + "user::" + user + "password::" + password + "wcmDir::" + wcmDir);
+init = function(host, port, contentPath, user, password, wcmDir, secure) {
+    debugLogger.trace("init:: host::"+host +" port::" + port + " contentPath::" + contentPath + " user::" + user + " wcmDir::" + wcmDir + ' secure::' + secure);
     wcmRequests.clearFolderMap();
     wcmCwd = wcmDir + Path.sep;
     curUser = user;
@@ -63,7 +64,8 @@ init = function(host, port, contentPath, user, password, wcmDir) {
     curHost = host;
     curPort = port;
     curContentPath = contentPath;
-    return authRequest.init(host, port, user, password, contentPath);
+    curSecure = secure;
+    return authRequest.init(host, port, user, password, contentPath, secure);
 }, getLibraries = function() {
     var libraries = [];
     return wcmRequests.getAllLibraries().then(function(items) {
@@ -157,6 +159,7 @@ init = function(host, port, contentPath, user, password, wcmDir) {
                                     libSettings.host = curHost;
                                     libSettings.port = curPort;
                                     libSettings.contenthandlerPath = curContentPath;
+                                    libSettings.secure = curSecure;
                                     libSettings.title = libTitle;
                                     libSettings.serverPulled = curHost + curContentPath;
                                     libSettings.title = libTitle;
