@@ -43,6 +43,7 @@ var authRequest = require('./lib/wcm-authenticated-request'),
  wcmCwd = '', curHost = '', curUser = '', curPassword = '',
  curPort = '',
  curContentPath = '',
+ curSecure = false,
  curPullLibrary = undefined;
 
 /**
@@ -63,6 +64,7 @@ init = function(host, port, contentPath, user, password, secure, wcmDir) {
     curHost = host;
     curPort = port;
     curContentPath = contentPath;
+    curSecure = secure;
     return authRequest.init(host, port, user, password, contentPath, secure);
 }, getLibraries = function() {
     var libraries = [];
@@ -157,6 +159,7 @@ init = function(host, port, contentPath, user, password, secure, wcmDir) {
                                     libSettings.host = curHost;
                                     libSettings.port = curPort;
                                     libSettings.contenthandlerPath = curContentPath;
+                                    libSettings.secure = curSecure;
                                     libSettings.title = libTitle;
                                     libSettings.serverPulled = curHost + curContentPath;
                                     libSettings.title = libTitle;
