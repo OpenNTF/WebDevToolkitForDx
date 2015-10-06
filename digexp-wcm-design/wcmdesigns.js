@@ -352,7 +352,13 @@ function getInitPromptSchema(settings) {
       description: "Content Handler Path ",
       required: true,
       default: settings.contenthandlerPath || "/wps/mycontenthandler"
-    }
+    },
+    secure: {
+      description: "Secure Connection (https)?",
+      type: "boolean",
+      required: true,
+      default: false
+     }
   };
 };
 
