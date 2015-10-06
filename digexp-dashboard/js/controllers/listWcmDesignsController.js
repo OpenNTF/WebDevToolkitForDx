@@ -24,6 +24,7 @@ function($scope) {
         password : $scope.server.password,
         host : $scope.server.host,
         port : $scope.server.port,
+        secure : $scope.server.secure,
         contenthandlerPath : $scope.server.contenthandlerPath
     };
 
