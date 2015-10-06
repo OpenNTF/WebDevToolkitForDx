@@ -18,7 +18,7 @@ var warnParallel = true;
 var httpGetHelper = function(options) {
     options.headers.Cookie = authCookie;
     var deferred = Q.defer(), body = '', doRequest = function(options) {
-        debugLogger.trace('httpGetHelper:: options::', options);
+        // debugLogger.trace('httpGetHelper:: options::', options);
         if (options.secure) {
             options.rejectUnauthorized = false;
         }
@@ -247,7 +247,7 @@ var maxLtpaAge = 1000 * 60 * 30;    // 30 minutes
 
 var authenticatedRequest = function(user, pass, options, postData) {
     var deferred = Q.defer(), authenticate = function(user, pass, options, postData) {
-        debugLogger.trace('authenticatedRequest:: user::' + user + ' options::', options, ' postData::' + postData);
+        // debugLogger.trace('authenticatedRequest:: user::' + user + ' options::', options, ' postData::' + postData);
         // sometimes the content HandlerPath might be part of the uri already if not add
         if (options.path.lastIndexOf(options.contentHandlerPath, 0) != 0)
             options.path = options.contentHandlerPath + options.path;
@@ -260,7 +260,7 @@ var authenticatedRequest = function(user, pass, options, postData) {
             getLTPAToken(user, pass, options, postData).then(function(data) {
                 if (postData == undefined) {
                     return httpGetHelper(options).then(function(data) {
-                        debugLogger.trace('Completed get for ', options.path);
+                        // debugLogger.trace('Completed get for ', options.path);
                         checkEndRequest();
                         deferred.resolve(data);
                     }, function(err) {
@@ -276,7 +276,7 @@ var authenticatedRequest = function(user, pass, options, postData) {
                     });
                 } else {
                     return httpPostHelper(options, postData).then(function(data) {
-                        debugLogger.trace('Completed post for ', options.path);
+                        // debugLogger.trace('Completed post for ', options.path);
                         checkEndRequest();
                         deferred.resolve(data);
                     }, function(err) {
@@ -307,7 +307,7 @@ var authenticatedRequest = function(user, pass, options, postData) {
         } else {
             if (postData == undefined) {
                 return httpGetHelper(options).then(function(data) {
-                    debugLogger.trace('Completed get for ', options.path);
+                    // debugLogger.trace('Completed get for ', options.path);
                     checkEndRequest();
                     deferred.resolve(data);
                 }, function(err) {
@@ -323,7 +323,7 @@ var authenticatedRequest = function(user, pass, options, postData) {
                 });
             } else {
                 return httpPostHelper(options, postData).then(function(data) {
-                    debugLogger.trace('Completed post for ', options.path);
+                    // debugLogger.trace('Completed post for ', options.path);
                     checkEndRequest();
                     deferred.resolve(data);
                 }, function(err) {
@@ -350,7 +350,7 @@ var authenticatedRequest = function(user, pass, options, postData) {
 // todo: do the JSON parse here, so each caller doesn't have to do it
 var getJson = function(uri) {
     var deferred = Q.defer(), authenticate = function(uri) {
-        debugLogger.trace('getJson:: uri::' + uri);
+        // debugLogger.trace('getJson:: uri::' + uri);
         var callOptions = {
             host : globalHost,
             port : globalPort,
