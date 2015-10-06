@@ -17,7 +17,7 @@ function($scope, $route) {
     $scope.configInfo = dashConfig.getConfigInfo();
     $scope.server = dashConfig.getServerForTool(dashConfig.tools.wcmDesigns);
     if ($scope.server != oldServer){
-        wcmDesign.init($scope.server.host, $scope.server.port, $scope.server.contenthandlerPath, $scope.server.userName, $scope.server.password, $scope.configInfo.wcmDesignsPath);
+        wcmDesign.init($scope.server.host, $scope.server.port, $scope.server.contenthandlerPath, $scope.server.userName, $scope.server.password, $scope.server.secure, $scope.configInfo.wcmDesignsPath);
         oldServer = $scope.server;
     }
 
@@ -193,5 +193,5 @@ function($scope, $route) {
         watchProcesses[wcmDesign.title] = null;
     };
 
-    $scope.numOfLibs = function() { return Object.keys($scope.wcmDesigns).length }
+    $scope.numOfLibs = function() { return Object.keys($scope.wcmDesigns).length; };
 }]);

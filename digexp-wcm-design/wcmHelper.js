@@ -54,8 +54,8 @@ var authRequest = require('./lib/wcm-authenticated-request'),
  * These will reset to 0 when the operation(s) is completed.
  */
 var progCounter = 0, progGoal = 0;
-init = function(host, port, contentPath, user, password, wcmDir) {
-    debugLogger.trace("init:: host::"+host +" port::" + port + "contentPath::" + contentPath + "user::" + user + "password::" + password + "wcmDir::" + wcmDir);
+init = function(host, port, contentPath, user, password, secure, wcmDir) {
+    debugLogger.trace("init:: host::"+host +" port::" + port + "contentPath::" + contentPath + "user::" + user + "secure::" + secure + "wcmDir::" + wcmDir);
     wcmRequests.clearFolderMap();
     wcmCwd = wcmDir + Path.sep;
     curUser = user;
@@ -63,7 +63,7 @@ init = function(host, port, contentPath, user, password, wcmDir) {
     curHost = host;
     curPort = port;
     curContentPath = contentPath;
-    return authRequest.init(host, port, user, password, contentPath);
+    return authRequest.init(host, port, user, password, contentPath, secure);
 }, getLibraries = function() {
     var libraries = [];
     return wcmRequests.getAllLibraries().then(function(items) {

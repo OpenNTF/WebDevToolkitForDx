@@ -147,7 +147,7 @@ var init = function() {
 var initWcmHelper = function(settings, dir) {
   dir = dir || cwd;
   return wcmHelper.init(settings.host, settings.port, settings.contenthandlerPath,
-    settings.username, settings.password, dir);
+    settings.username, settings.password, settings.secure, dir);
 };
 
 var chooseLibraries = function(settings) {

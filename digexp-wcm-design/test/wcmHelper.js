@@ -14,9 +14,10 @@ var should = require("chai").should(),
 
 const TEST_USERNAME = "wpsadmin";
 const TEST_PASSWORD = "wpsadmin";
-const TEST_HOST = "wpg-portal85-cf06.rtp.raleigh.ibm.com";
+const TEST_HOST = "gsagerwcmdesign.rtp.raleigh.ibm.com";
 const TEST_PORT = 10039;
 const TEST_CONTENT_HANDLER = "/wps/mycontenthandler";
+const TEST_SECURE = false;
 
 const BAD_USERNAME = "justfortesting";
 const BAD_PASSWORD = "alsorgangrpgaasgoijgoah842948aofwehffortesting";
@@ -50,7 +51,7 @@ describe("getLibraries-valid-server", function() {
   before(function(done) {
     this.timeout(LONG_TIMEOUT);
     wcmHelper.init(TEST_HOST, TEST_PORT, TEST_CONTENT_HANDLER, TEST_USERNAME,
-      TEST_PASSWORD, TESTING_FOLDER);
+      TEST_PASSWORD, TEST_SECURE, TESTING_FOLDER);
     wcmHelper.getLibraries().then(function(items) {
       libraries = items;
       done();
@@ -83,7 +84,7 @@ describe("getLibraries-invalid-server", function() {
     this.timeout(LONG_TIMEOUT);
     var wcmHelper = require("../wcmHelper.js");
     wcmHelper.init(TEST_HOST, TEST_PORT, TEST_CONTENT_HANDLER, BAD_USERNAME,
-      TEST_PASSWORD, TESTING_FOLDER);
+      TEST_PASSWORD, TEST_SECURE, TESTING_FOLDER);
     return wcmHelper.getLibraries().then(function(items) {
       assert(!items, "NO libraries should be given when the username is invalid")
       console.log("DONE, NO ERROR");
@@ -99,7 +100,7 @@ describe("getLibraries-invalid-server", function() {
     this.timeout(LONG_TIMEOUT);
     var wcmHelper = require("../wcmHelper.js");
     wcmHelper.init(TEST_HOST, TEST_PORT, TEST_CONTENT_HANDLER, TEST_USERNAME,
-      BAD_PASSWORD, TESTING_FOLDER);
+      BAD_PASSWORD, TEST_SECURE, TESTING_FOLDER);
     return wcmHelper.getLibraries().then(function(items) {
       console.log("ITEMS!")
       // console.log(items)
@@ -114,7 +115,7 @@ describe("getLibraries-invalid-server", function() {
     var wcmHelper = require("../wcmHelper.js");
     this.timeout(LONG_TIMEOUT);
     wcmHelper.init(BAD_HOST, TEST_PORT, TEST_CONTENT_HANDLER, TEST_USERNAME,
-      TEST_PASSWORD, TESTING_FOLDER);
+      TEST_PASSWORD, TEST_SECURE, TESTING_FOLDER);
     return wcmHelper.getLibraries().then(function(items) {
       assert(!items, "NO libraries should be given when the host is invalid")
       should.fail("", "There should be an error if it's invalid");
@@ -128,7 +129,7 @@ describe("getLibraries-invalid-server", function() {
     this.timeout(LONG_TIMEOUT);
     var wcmHelper = require("../wcmHelper.js");
     wcmHelper.init(TEST_HOST, BAD_PORT, TEST_CONTENT_HANDLER, TEST_USERNAME,
-      TEST_PASSWORD, TESTING_FOLDER);
+      TEST_PASSWORD, TEST_SECURE, TESTING_FOLDER);
     return wcmHelper.getLibraries().then(function(items) {
       assert(!items, "NO libraries should be given when the port is invalid")
       should.fail("", "There should be an error if it's invalid");
@@ -142,7 +143,7 @@ describe("getLibraries-invalid-server", function() {
     this.timeout(LONG_TIMEOUT);
     var wcmHelper = require("../wcmHelper.js");
     wcmHelper.init(TEST_HOST, TEST_PORT, BAD_CONTENT_HANDLER, TEST_USERNAME,
-      TEST_PASSWORD, TESTING_FOLDER);
+      TEST_PASSWORD, TEST_SECURE, TESTING_FOLDER);
     wcmHelper.getLibraries().then(function(items) {
       assert(!items, "NO libraries should be given when the port is invalid")
       should.fail("", "There should be an error if it's invalid");
@@ -157,7 +158,7 @@ describe("getLibraries-invalid-server", function() {
     this.timeout(LONG_TIMEOUT);
     var wcmHelper = require("../wcmHelper.js");
     wcmHelper.init(TEST_HOST, TEST_PORT, BAD_CONTENT_HANDLER_WITH_SUBFOLDER, TEST_USERNAME,
-      TEST_PASSWORD, TESTING_FOLDER);
+      TEST_PASSWORD, TEST_SECURE, TESTING_FOLDER);
     wcmHelper.getLibraries().then(function(items) {
       assert(!items, "NO libraries should be given when the content handler is invalid")
       should.fail("", "There should be an error if it's invalid");
@@ -174,7 +175,7 @@ describe("pullLibrary-valid-server", function() {
   it("should-succeed-when-server-is-valid", function() {
     this.timeout(LONG_TIMEOUT);
     wcmHelper.init(TEST_HOST, TEST_PORT, TEST_CONTENT_HANDLER, TEST_USERNAME,
-      TEST_PASSWORD, TESTING_FOLDER);
+      TEST_PASSWORD, TEST_SECURE, TESTING_FOLDER);
     return wcmHelper.pullLibrary(TESTING_LIBRARY, {includeMeta: false}).then(function() {
       // success!
     }, function(err) {
@@ -187,7 +188,7 @@ describe("pullLibrary-valid-server-parallel", function() {
   it("should-succeed-when-server-is-valid", function() {
     this.timeout(LONG_TIMEOUT);
     wcmHelper.init(TEST_HOST, TEST_PORT, TEST_CONTENT_HANDLER, TEST_USERNAME,
-      TEST_PASSWORD, TESTING_FOLDER);
+      TEST_PASSWORD, TEST_SECURE, TESTING_FOLDER);
     return wcmHelper.pullLibrary(TESTING_LIBRARY, {includeMeta: false, pullParallel: true}).then(function() {
       // success!
     }, function(err) {
@@ -200,7 +201,7 @@ describe("pullLibrary-invalid-server", function() {
   it("should-fail-when-given-an-invalid-host", function() {
     this.timeout(LONG_TIMEOUT);
     wcmHelper.init(BAD_HOST, TEST_PORT, TEST_CONTENT_HANDLER, TEST_USERNAME,
-      TEST_PASSWORD, TESTING_FOLDER);
+      TEST_PASSWORD, TEST_SECURE, TESTING_FOLDER);
     return wcmHelper.pullLibrary(TESTING_LIBRARY, {includeMeta: false}).then(function(items) {
       fail("Expected an error");
     }, function(err) {
@@ -212,7 +213,7 @@ describe("pullLibrary-invalid-server", function() {
   it("should-fail-when-given-an-invalid-port", function() {
     this.timeout(LONG_TIMEOUT);
     wcmHelper.init(TEST_HOST, BAD_PORT, TEST_CONTENT_HANDLER, TEST_USERNAME,
-      TEST_PASSWORD, TESTING_FOLDER);
+      TEST_PASSWORD, TEST_SECURE, TESTING_FOLDER);
     return wcmHelper.pullLibrary(TESTING_LIBRARY, {includeMeta: false}).then(function() {
       fail("Expected an error");
     }, function(err) {
@@ -224,7 +225,7 @@ describe("pullLibrary-invalid-server", function() {
   it("should-fail-when-given-an-invalid-content-handler", function() {
     this.timeout(LONG_TIMEOUT);
     wcmHelper.init(TEST_HOST, TEST_PORT, BAD_CONTENT_HANDLER, TEST_USERNAME,
-      TEST_PASSWORD, TESTING_FOLDER);
+      TEST_PASSWORD, TEST_SECURE, TESTING_FOLDER);
     return wcmHelper.pullLibrary(TESTING_LIBRARY, {includeMeta: false}).then(function() {
       fail("Expected an error");
     }, function(err) {
@@ -236,7 +237,7 @@ describe("pullLibrary-invalid-server", function() {
   it("should-fail-when-given-an-invalid-content-handler-subfolder", function() {
     this.timeout(LONG_TIMEOUT);
     wcmHelper.init(TEST_HOST, TEST_PORT, BAD_CONTENT_HANDLER_WITH_SUBFOLDER, TEST_USERNAME,
-      TEST_PASSWORD, TESTING_FOLDER);
+      TEST_PASSWORD, TEST_SECURE, TESTING_FOLDER);
     return wcmHelper.pullLibrary(TESTING_LIBRARY, {includeMeta: false}).then(function(items) {
       console.log("NO ERROR")
       fail("Expected an error");
@@ -250,7 +251,7 @@ describe("pullLibrary-invalid-server", function() {
   it("should-fail-when-given-an-invalid-username", function() {
     this.timeout(LONG_TIMEOUT);
     wcmHelper.init(TEST_HOST, TEST_PORT, TEST_CONTENT_HANDLER, BAD_USERNAME,
-      TEST_PASSWORD, TESTING_FOLDER);
+      TEST_PASSWORD, TEST_SECURE, TESTING_FOLDER);
     return wcmHelper.pullLibrary(TESTING_LIBRARY, {includeMeta: false}).then(function(items) {
       console.log("NO ERROR")
       fail("Expected an error");
@@ -264,7 +265,7 @@ describe("pullLibrary-invalid-server", function() {
   it("should-fail-when-given-an-invalid-password", function() {
     this.timeout(LONG_TIMEOUT);
     wcmHelper.init(TEST_HOST, TEST_PORT, TEST_CONTENT_HANDLER, TEST_USERNAME,
-      BAD_PASSWORD, TESTING_FOLDER);
+      BAD_PASSWORD, TEST_SECURE, TESTING_FOLDER);
     return wcmHelper.pullLibrary(TESTING_LIBRARY, {includeMeta: false}).then(function(items) {
       console.log("NO ERROR")
       fail("Expected an error");
@@ -280,7 +281,7 @@ describe("pushLibrary-valid-server", function() {
   it("should-succeed-when-server-is-valid", function(done) {
     this.timeout(LONG_TIMEOUT);
     wcmHelper.init(TEST_HOST, TEST_PORT, TEST_CONTENT_HANDLER, TEST_USERNAME,
-      TEST_PASSWORD, TESTING_FOLDER);
+      TEST_PASSWORD, TEST_SECURE, TESTING_FOLDER);
     wcmHelper.pushLibrary(TESTING_LIBRARY, true).then(function() {
       expect(true).to.equal(true);
       done();
@@ -300,7 +301,7 @@ describe("pushLibrary-invalid-server", function() {
   it("should-fail-when-given-an-invalid-host", function() {
     this.timeout(LONG_TIMEOUT);
     wcmHelper.init(BAD_HOST, TEST_PORT, TEST_CONTENT_HANDLER, TEST_USERNAME,
-      TEST_PASSWORD, TESTING_FOLDER);
+      TEST_PASSWORD, TEST_SECURE, TESTING_FOLDER);
     return wcmHelper.pushLibrary(TESTING_LIBRARY, true).then(function() {
       fail("Expected an error");
     }, function(err) {
@@ -313,7 +314,7 @@ describe("pushLibrary-invalid-server", function() {
   it("should-fail-when-given-an-invalid-port", function() {
     this.timeout(LONG_TIMEOUT);
     wcmHelper.init(TEST_HOST, BAD_PORT, TEST_CONTENT_HANDLER, TEST_USERNAME,
-      TEST_PASSWORD, TESTING_FOLDER);
+      TEST_PASSWORD, TEST_SECURE, TESTING_FOLDER);
     return wcmHelper.pushLibrary(TESTING_LIBRARY, true).then(function() {
       console.log("DONE WITHOUT AN ERROR")
       fail("Expected an error");
@@ -327,7 +328,7 @@ describe("pushLibrary-invalid-server", function() {
   it("should-fail-when-port-is-out-of-range", function() {
     this.timeout(LONG_TIMEOUT);
     wcmHelper.init(TEST_HOST, 99999999, TEST_CONTENT_HANDLER, TEST_USERNAME,
-      TEST_PASSWORD, TESTING_FOLDER);
+      TEST_PASSWORD, TEST_SECURE, TESTING_FOLDER);
     return wcmHelper.pushLibrary(TESTING_LIBRARY, true).then(function() {
       fail("Expected an error");
     }, function(err) {
@@ -341,7 +342,7 @@ describe("pushLibrary-invalid-server", function() {
     this.timeout(LONG_TIMEOUT);
 
     wcmHelper.init(TEST_HOST, TEST_PORT, BAD_CONTENT_HANDLER, TEST_USERNAME,
-      TEST_PASSWORD, TESTING_FOLDER);
+      TEST_PASSWORD, TEST_SECURE, TESTING_FOLDER);
     return wcmHelper.pushLibrary(TESTING_LIBRARY, true).then(function() {
       console.log("NO ERROR")
       fail("Expected an error");
@@ -355,7 +356,7 @@ describe("pushLibrary-invalid-server", function() {
   it("should-fail-when-given-an-invalid-content-handler-subfolder", function() {
     this.timeout(LONG_TIMEOUT);
     wcmHelper.init(TEST_HOST, TEST_PORT, BAD_CONTENT_HANDLER_WITH_SUBFOLDER, TEST_USERNAME,
-      TEST_PASSWORD, TESTING_FOLDER);
+      TEST_PASSWORD, TEST_SECURE, TESTING_FOLDER);
     return wcmHelper.pushLibrary(TESTING_LIBRARY, true).then(function() {
       console.log("NO ERROR")
       fail("Expected an error");
@@ -369,7 +370,7 @@ describe("pushLibrary-invalid-server", function() {
   it("should-fail-when-given-an-invalid-username", function() {
     this.timeout(LONG_TIMEOUT);
     wcmHelper.init(TEST_HOST, TEST_PORT, TEST_CONTENT_HANDLER, BAD_USERNAME,
-      TEST_PASSWORD, TESTING_FOLDER);
+      TEST_PASSWORD, TEST_SECURE, TESTING_FOLDER);
     return wcmHelper.pushLibrary(TESTING_LIBRARY, true).then(function() {
       fail("Expected an error");
     }, function(err) {
@@ -381,7 +382,7 @@ describe("pushLibrary-invalid-server", function() {
   it("should-fail-when-given-an-invalid-password", function() {
     this.timeout(LONG_TIMEOUT);
     wcmHelper.init(TEST_HOST, TEST_PORT, TEST_CONTENT_HANDLER, TEST_USERNAME,
-      BAD_PASSWORD, TESTING_FOLDER);
+      BAD_PASSWORD, TEST_SECURE, TESTING_FOLDER);
     return wcmHelper.pushLibrary(TESTING_LIBRARY, true).then(function() {
       fail("Expected an error");
     }, function(err) {

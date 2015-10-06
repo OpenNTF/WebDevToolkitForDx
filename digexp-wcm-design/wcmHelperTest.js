@@ -10,7 +10,7 @@
 
 wcmHelper = require('./wcmHelper');
 // wcmHelper.init('gsagercf05trans.rtp.raleigh.ibm.com', 10039, '/wps/mycontenthandler', 'wpsadmin', 'wpsadmin','C:/awcm1');
-wcmHelper.init('gsagerwcmdesign.rtp.raleigh.ibm.com', 10039, '/wps/mycontenthandler/Gws', 'wpsadmin', 'wpsadmin','c:\awcm1').then(function(){
+wcmHelper.init('gsagerwcmdesign.rtp.raleigh.ibm.com', 10039, '/wps/mycontenthandler/Gws', 'wpsadmin', 'wpsadmin', false, 'c:\awcm1').then(function(){
 try{
     var libs = wcmHelper.getLibraries().then(function(){
         wcmHelper.pullLibrary('Web Content').then(function(count) {

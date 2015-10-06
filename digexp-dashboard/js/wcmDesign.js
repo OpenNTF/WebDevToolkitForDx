@@ -22,8 +22,8 @@ var parseDate = function(dateStr) {
 var wcmDesign  = (function() {
     return {
         wcmDesigns: wcmDesignMap,
-        init: function( host, port, contenthandlerPath , userName, password, designsFolder){
-            wcmHelper.init(host, port, contenthandlerPath , userName, password, designsFolder);
+        init: function( host, port, contenthandlerPath , userName, password, secure, designsFolder){
+            wcmHelper.init(host, port, contenthandlerPath , userName, password, secure, designsFolder);
         },
         getWcmDesigns:function () {
             /**
