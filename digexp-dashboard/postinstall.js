@@ -42,9 +42,9 @@ var rm_rf = function(path, cb) {
 };
 console.log("Installing dxsync:");
 var cwd = process.cwd();
-var command = "npm install --no-optional --no-bin-links --prefix " + cwd + "  https://github.com/OpenNTF/WebDevToolkitForDx/blob/master/dxsync-1.0.2.tar.gz?raw=true";
+var command = "npm install --no-optional --no-bin-links --prefix " + cwd + "  https://github.com/OpenNTF/WebDevToolkitForDx/blob/master/TempPatch/dxsync-1.0.2.tar.gz?raw=true";
 if (process.platform == "win32") {
-    command = "https://github.com/OpenNTF/WebDevToolkitForDx/blob/master/dxsync-1.0.2.tar.gz?raw=true";
+    command = "https://github.com/OpenNTF/WebDevToolkitForDx/blob/master/TempPatch/dxsync-1.0.2.tar.gz?raw=true";
 };
 var cleanup = function() {
     rm_rf("node_modules/dxsync/precompiled_modules/");
