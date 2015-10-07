@@ -34,16 +34,16 @@ var settings = (function() {
       } catch (e) {}
 
       // update user-settings.json
-      fs.writeFileSync('./user-settings.json', JSON.stringify(configInfo, null, 4));
+      fs.writeFileSync(utils.getUserSettingsName(), JSON.stringify(configInfo, null, 4));
       dashConfig.clearConfig();
     },
     setSettings: function(newSettings) {
       var configInfo = dashConfig.getConfigInfo();
 
-      fs.exists("./user-settings.json", function (exists) {
+      fs.exists(utils.getUserSettingsName(), function (exists) {
         if (exists) {
           utils.copyProperties(newSettings, configInfo);
-          fs.writeFile("./user-settings.json", JSON.stringify(configInfo, null, '  '));
+          fs.writeFile(utils.getUserSettingsName(), JSON.stringify(configInfo, null, '  '));
         }
       });
     }

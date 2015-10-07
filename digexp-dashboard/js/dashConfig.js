@@ -30,8 +30,8 @@ var dashConfig = (function(){
         var fs = require('fs');
         var data = fs.readFileSync('./dashboard-config.json', 'utf8');
         configInfo = JSON.parse(data);
-        if(fs.existsSync('./user-settings.json')){
-          var data = fs.readFileSync('./user-settings.json', 'utf8');
+        if(fs.existsSync(utils.getUserSettingsName())){
+          var data = fs.readFileSync(utils.getUserSettingsName(), 'utf8');
           var userConfig = JSON.parse(data);
           // Copy settings
           userConfig.servers.forEach(function(server){

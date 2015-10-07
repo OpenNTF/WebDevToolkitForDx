@@ -101,7 +101,8 @@ var getModified = function(dirName, dateString, ignore, callback){
 
 var utils = utils || {};
 
-
+var userHome = getUserHome();
+var settingsFileName;
 // Copy the properties of a onto b
 utils.copyProperties = function(a, b) {
   for (var key in a) {
@@ -113,6 +114,27 @@ utils.copyProperties = function(a, b) {
     }
   }
 };
+
+// get the user settings file name
+utils.getUserSettingsName = function(){
+    if(settingsFileName)
+        return settingsFileName;
+    var Path = require('path');
+     if(userHome.length  != 0){
+        // make sure the path ends in a path separator
+        if(userHome.lastIndexOf(Path.sep) != userHome.length -1)
+            userHome += Path.sep;
+    }
+    else
+        userHome = '.' + Path.sep;
+    settingsFileName = userHome + 'user-settings.json';
+    return settingsFileName;
+};
+
+function getUserHome() {
+  return process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
+}
+
 
 utils.debugLogger = debugLogger;
 utils.encrypt = encrypt;
