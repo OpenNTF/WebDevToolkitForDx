@@ -7,7 +7,7 @@ This toolkit includes two main areas of functionality:
 
 # Requirements
 To use these tools you will need:
-- Node.js must be installed on your workstation. Version 0.12 is the recommended and tested version.
+- Node.js must be installed on your workstation. Node.js version 0.12 is the minimum version and has had the most testing.
 - For the WCM support you need Portal 8.5 with CF05 or later. 
 - DX Sync (used for theme support) you need Portal 8.5.
 - For Script Portlet "push" you will need to have the Script Portlet command line client installed, and your server must have Script Portlet installed.
@@ -17,11 +17,22 @@ To use these tools you will need:
 The Dashboard tool uses the nw.js package to implement the user interface, and on some versions of Linux there are issues with some of the dependency packages for nw.js.
 
 # Installation
-You must first install Node.js.  Node.js version 0.12 is the tested and recommended version.
+You must first install Node.js.  Node.js version 0.12 is the minimum version and has had the most testing.
 
 Download the digexp-toolkit.zip file from here: https://github.com/OpenNTF/WebDevToolkitForDx/blob/master/release/digexp-toolkit.zip?raw=true
 
-Extract the file on your workstation. Then run install.cmd (Windows) or install.sh (Mac/Linux). This will install the two main programs, dxdashboard (for the dashboard UI) and dxwcmdesigns (the command line support for accessing WCM design libraries). That completes the installation.  
+First, extract the file on your workstation. Then if you are on Windows, run
+```
+install.cmd
+```
+
+or if you are on Mac or Linux, run:
+```
+sudo chmod a+x ./install.sh
+sudo install.sh
+```
+
+This will install the two main programs, dxdashboard (for the dashboard UI) and dxwcmdesigns (the command line support for accessing WCM design libraries). That completes the installation.  
 
 For the Script Portlet "Push" support, you will need to have the Script Portlet command line client support installed and configured, and you will need to have the "sp" command on your system path. See this documentation for more on installing the Script Portlet command line client: http://www-01.ibm.com/support/knowledgecenter/SSHRKX_8.5.0/script/script-portlet/cmd_line_push.dita
 
