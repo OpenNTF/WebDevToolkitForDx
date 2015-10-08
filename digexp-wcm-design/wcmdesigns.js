@@ -12,6 +12,7 @@ process.title = "dxwcmdesigns";
 var argv;
 var utils = require('./lib/utils');
 var logger = utils.debugLogger;
+var curCount = 0;
 utils.debugLogger = function(name) {
 
   var lg = logger(name).log;
@@ -213,15 +214,13 @@ var chooseLibraries = function(settings) {
  */
 var getLibrary = function(libraries, lib, settings) {
   console.log("Downloading '" + libraries[lib].title + "' ...");
-  setTimeout(printProgress, 80);
-  wcmHelper.pullLibrary(libraries[lib].title, { includeMeta : false, filterComponentId: true }).then(function() {
+    wcmHelper.pullLibrary(libraries[lib].title, { includeMeta : false, filterComponentId: true }).then(function() {
     for (var k in libraries[lib]) {
       settings[k] = libraries[lib][k];
     }
     fs.writeFile(cwd + "/" + libraries[lib].title + "/.settings", JSON.stringify(settings, null, '  '), function() {
-      printProgress(0, 1);
-      commandDone = true;
-      console.log("done!");
+      console.log( ' Pulled '  + curCount + " item(s) from library " + libraries[lib].title);
+      curCount = 0;
       printDir(cwd + "/" + libraries[lib].title);
     });
   }, function(err) {
@@ -246,11 +245,11 @@ var push = function(tries) {
       var settings = JSON.parse(data.toString());
 
       if (settings.title) {
-        console.log("in progress ...");
-        setTimeout(printProgress.bind(global, 80), 100);
+        console.log("Pushing to library " + settings.title + " in progress ...");
         initWcmHelper(settings, path.dirname(path.normalize(cwd))).then(function(){
             wcmHelper.pushLibrary(settings.title, argv.all ? true : false).then(function() {
-              console.log("done!");
+              console.log(' Pushed '  + curCount  + " item(s) to library " + settings.title);
+              curCount = 0;
             }, function(err) {
               console.error("Error: " + err.message);
             });
@@ -277,14 +276,13 @@ var pull = function(tries) {
     } else {
       var settings = JSON.parse(data.toString());
       if (settings.title) {
-        console.log("in progress ...");
-        setTimeout(printProgress.bind(global, 80), 80);
+        console.log('Pulling from library ' + settings.title +' in progress ...');
+        
         initWcmHelper(settings, path.dirname(path.normalize(cwd))).then(function(){
             wcmHelper.pullLibrary(settings.title, {includeMeta: false, filterComponentId: true})
               .then(function() {
-                printProgress(0, 1);
-                commandDone = true;
-                console.log("done!");
+                console.log(' Pulled '  + curCount + " item(s) from library " + settings.title);
+                curCount = 0;
               }, function(err) {
                 console.error("Error: " + err.message);
               });
@@ -363,22 +361,20 @@ function getInitPromptSchema(settings) {
 };
 
 var eventEmitter = wcmHelper.getEventEmitter();
-if (argv.v) {
   eventEmitter.on("pushed", function(libName, itemToPush) {
-    clearConsole();
-    console.log("pushed: " + itemToPush.name + ", " + path.relative(cwd, itemToPush.file));
+    curCount++;
+    console.log("pushed: " + itemToPush.file);
   });
 
   eventEmitter.on("pulled", function(libName, type, entry, path, extension) {
-    clearConsole();
+    curCount++;
     console.log("pulled: " + path + extension);
   });
 
   eventEmitter.on("pullingType", function(libName, type) {
-    clearConsole();
     console.log("pulling type: " + type);
   });
-}
+
 eventEmitter.on("error", function(err, msg) {
   clearConsole();
   console.log("ERROR");
@@ -433,35 +429,6 @@ function copyObjectProperties(source, dest) {
       dest[key] = source[key];
     }
   }
-}
-
-function printProgress(timeout, progress) {
-  if (commandDone) {
-    return;
-  }
-
-  try {
-    var width = 72; // width of progress bar
-    if (typeof progress === 'undefined') {
-      progress = wcmHelper.getProgress();
-    }
-    clearConsole();
-
-    var limit = Math.round(progress * width);
-    for (var i = 0; i < limit; i++) {
-      process.stdout.write("=")
-    }
-    for (var i = limit; i < width; i++) {
-      process.stdout.write("-")
-    }
-    process.stdout.write(" " + (100 * progress).toFixed(2) + "%");
-
-    if (progress == 1) {
-      console.log();
-    } else if (timeout || timeout === 0) {
-      setTimeout(printProgress.bind(null, timeout), timeout);
-    }
-  } catch (e) { }
 }
 
 function clearConsole() {
