@@ -19,7 +19,7 @@ The Dashboard tool uses the nw.js package to implement the user interface, and o
 # Installation
 You must first install Node.js.  Node.js version 0.12 is the minimum version and has had the most testing.
 
-Download the digexp-toolkit.zip file from here: https://github.com/OpenNTF/WebDevToolkitForDx/blob/master/release/digexp-toolkit.zip?raw=true
+Download the digexp-toolkit.zip file from here: https://github.com/OpenNTF/WebDevToolkitForDx/releases/download/0.1.1/digexp-toolkit.zip
 
 First, extract the file on your workstation. Then if you are on Windows, run
 ```
