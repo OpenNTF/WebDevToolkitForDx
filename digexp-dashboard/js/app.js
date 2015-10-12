@@ -10,27 +10,42 @@
 // Main application with dependencies
 var dashboardApp = angular.module('dashboardApp',
   ['ngRoute', 'dashboardApp.navBar','dashboardControllers', 'ngAnimate']);
-
-var digExperienceDashboard = 'Digital Experience Dashboard';
-
+var firstRoute = true;
 // Configure routes for the different views
 dashboardApp.config(['$routeProvider', function($routeProvider) {
+    var redirect = '/listApps';
+    if(firstRoute == true){
+        firstRoute = false;
+        var digExperienceDashboard = 'Digital Experience Dashboard';
+        var configInfo = dashConfig.getConfigInfo();
+        var haveServers = configInfo.servers[0].host.length!= 0;
+        // first start up and no routes go to settings
+        if(haveServers == false){
+            redirect = '/settings';
+        }
+        else{
+            redirect = configInfo.lastOpened;
+            if(!redirect)
+                redirect = '/listApps';
+        }
+        
+    }
     $routeProvider.when('/listApps', {
-        templateUrl: 'partials/listAppsView.html'
-        ,controller: 'AppsListController'
-    }).when('/appDetails/:id', {
-        templateUrl: 'partials/appDetailsView.html'
-            // , controller : 'AppDetailsController'
-    }).when('/settings', {
-        templateUrl: 'partials/settingsView.html'
-        ,controller: 'SettingsController'
-    }).when('/listThemes', {
-        templateUrl: 'partials/listThemesView.html'
-        ,controller: 'ThemeListController'
-    }).when('/listWcmDesigns', {
-        templateUrl: 'partials/listWcmDesignsView.html'
-        ,controller: 'WcmDesignListController'
-    }).otherwise({
-        redirectTo: '/listApps'
-    });
+            templateUrl: 'partials/listAppsView.html'
+            ,controller: 'AppsListController'
+        }).when('/appDetails/:id', {
+            templateUrl: 'partials/appDetailsView.html'
+                // , controller : 'AppDetailsController'
+        }).when('/settings', {
+            templateUrl: 'partials/settingsView.html'
+            ,controller: 'SettingsController'
+        }).when('/listThemes', {
+            templateUrl: 'partials/listThemesView.html'
+            ,controller: 'ThemeListController'
+        }).when('/listWcmDesigns', {
+            templateUrl: 'partials/listWcmDesignsView.html'
+            ,controller: 'WcmDesignListController'
+        }).otherwise({
+            redirectTo: redirect
+        });
 }]);

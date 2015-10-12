@@ -14,6 +14,8 @@ dashboardControllers.controller('ThemeListController', ['$scope', '$route', '$lo
     var logger = null;
 
     $scope.configInfo = dashConfig.getConfigInfo();
+    $scope.configInfo.lastOpened = '/listThemes';
+    dashConfig.setConfigInfo($scope.configInfo);
     $scope.getThemeList = function() {
       return Object.keys($scope.themes).map(function(key) {
         return $scope.themes[key];

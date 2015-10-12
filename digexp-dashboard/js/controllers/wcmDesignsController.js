@@ -15,6 +15,9 @@ var __oldWcmDesignsPath = "";
 dashboardControllers.controller('WcmDesignListController', ['$scope', '$route', '$location',
 function($scope, $route) {
     $scope.configInfo = dashConfig.getConfigInfo();
+    $scope.configInfo.lastOpened = '/listWcmDesigns';
+    dashConfig.setConfigInfo($scope.configInfo);
+
     $scope.server = dashConfig.getServerForTool(dashConfig.tools.wcmDesigns);
     if ($scope.server != oldServer){
         wcmDesign.init($scope.server.host, $scope.server.port, $scope.server.contenthandlerPath, $scope.server.userName, $scope.server.password, $scope.server.secure, $scope.configInfo.wcmDesignsPath);

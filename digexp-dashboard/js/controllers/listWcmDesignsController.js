@@ -109,8 +109,7 @@ function($scope) {
             $parent.$parent.loadingNewLibraries--;
             fs.writeFileSync($scope.configInfo.wcmDesignsPath + '/' + library.title + '.json', JSON.stringify(library, null, '  '));
             if($parent.$parent.loadingNewLibraries == 0){
-                $parent.$parent.wcmDesigns = wcmDesign.getWcmDesigns();
-                $parent.$apply();
+                $parent.$apply($parent.reload());
                 $parent.$parent.$apply(function(){$scope.status = 'Pulling Library ' + library.title + ' complete';});
             }
             debugLogger.log("Success adding " + library.title);

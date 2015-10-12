@@ -43,7 +43,9 @@ dashboardControllers.controller('AppsListController', ['$scope', '$route', '$loc
     };
 
     $scope.configInfo = dashConfig.getConfigInfo();
-    $scope.apps = spApp.apps;
+    $scope.configInfo.lastOpened = '/listApps';
+    dashConfig.setConfigInfo($scope.configInfo);
+    $scope.apps = spApp.apps;;
     $scope.spCmdlnLog = "";
     $scope.server = dashConfig.getServerForTool(dashConfig.tools.spApp);
 
