@@ -54,7 +54,7 @@ var dashConfig = (function(){
             if(server.password)
               server.password = encrypt( server.password );
         });
-        fs.writeFileSync("./dashboard-config.json", JSON.stringify(configInfo, null, '  '));
+        fs.writeFileSync(utils.getUserSettingsName(), JSON.stringify(configInfo, null, '  '));
         configInfo.servers.forEach(function(server){
             if(server.password)
               server.password = decrypt( server.password );
