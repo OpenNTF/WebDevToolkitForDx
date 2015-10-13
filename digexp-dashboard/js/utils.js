@@ -13,6 +13,8 @@ var tracer = require("tracer"),
     debugEnvironmentVar = process.env.DIGEXP_DEBUG || '',
     debugNames = debugEnvironmentVar.toUpperCase().split(','),
     debugFunctions = {};
+    if(debugEnvironmentVar.length != 0)
+        require('nw.gui').Window.get().showDevTools();
 
 function debugLogger(moduleName) {
     moduleName = moduleName.toUpperCase();

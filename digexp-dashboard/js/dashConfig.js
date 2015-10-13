@@ -48,16 +48,18 @@ var dashConfig = (function(){
     setConfigInfo: function(newConfig) {
       configInfo = configInfo || getConfigInfo();
 
-      fs.exists("./dashboard-config.json", function (exists) {
-        if (exists) {
-          copyObj(configInfo, newConfig);
-          configInfo.servers.forEach(function(server){
-              if(server.password)
-                server.password = encrypt( server.password );
-          });
-          fs.writeFile("./dashboard-config.json", JSON.stringify(configInfo, null, '  '));
-        }
-      });
+      if(fs.existsSync("./dashboard-config.json")) {
+        copyObj(configInfo, newConfig);
+        configInfo.servers.forEach(function(server){
+            if(server.password)
+              server.password = encrypt( server.password );
+        });
+        fs.writeFileSync("./dashboard-config.json", JSON.stringify(configInfo, null, '  '));
+        configInfo.servers.forEach(function(server){
+            if(server.password)
+              server.password = decrypt( server.password );
+        });
+      };
     }
     ,getServerInfo:  function(name){
         if(configInfo == "")
