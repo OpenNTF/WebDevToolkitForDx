@@ -11,12 +11,12 @@
 var dashboardApp = angular.module('dashboardApp',
   ['ngRoute', 'dashboardApp.navBar','dashboardControllers', 'ngAnimate']);
 var firstRoute = true;
+var digExperienceDashboard = 'Digital Experience Dashboard';
 // Configure routes for the different views
 dashboardApp.config(['$routeProvider', function($routeProvider) {
     var redirect = '/listApps';
     if(firstRoute == true){
         firstRoute = false;
-        var digExperienceDashboard = 'Digital Experience Dashboard';
         var configInfo = dashConfig.getConfigInfo();
         var haveServers = configInfo.servers[0].host.length!= 0;
         // first start up and no routes go to settings

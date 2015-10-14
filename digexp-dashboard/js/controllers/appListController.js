@@ -106,7 +106,7 @@ dashboardControllers.controller('AppsListController', ['$scope', '$route', '$loc
           $scope.$apply();
           spAppServer = require("ScriptAppServer");
         }));
-      })
+      });
     };
 
     var loadSpConfigs = function(callback) {
@@ -138,10 +138,10 @@ dashboardControllers.controller('AppsListController', ['$scope', '$route', '$loc
               cb(e);
             }
           }
-        })
+        });
       };
 
-      var fns = Object.keys($scope.apps).map(function(id) { return loadSpConfig.bind(null, id) });
+      var fns = Object.keys($scope.apps).map(function(id) { return loadSpConfig.bind(null, id); });
 
       var cb = function() {
         debugLogger.log("Done loading sp-config.json files for apps");
@@ -161,10 +161,10 @@ dashboardControllers.controller('AppsListController', ['$scope', '$route', '$loc
             $scope.apps[id].imgUrl = applicationsFolder + "/" + id + "/preview-image.png";
           }
           cb();
-        })
+        });
       };
 
-      var fns = Object.keys($scope.apps).map(function(id) { return addPreviewImage.bind(null, id) });
+      var fns = Object.keys($scope.apps).map(function(id) { return addPreviewImage.bind(null, id); });
 
       var cb = function() {
         setTimeout($scope.$apply.bind($scope), 300);
@@ -258,7 +258,7 @@ dashboardControllers.controller('AppsListController', ['$scope', '$route', '$loc
           $scope.apps[id].watchIgnore = json.watchIgnore || $scope.apps[id].watchIgnore;
           $scope.apps[id].splintIgnore = json.splintIgnore || $scope.apps[id].splintIgnore;
           $scope.apps[id].buildCommand = json.buildCommand || $scope.apps[id].buildCommand;
-          cb && cb(null, json)
+          cb && cb(null, json);
         }
       });
     };
@@ -287,7 +287,7 @@ dashboardControllers.controller('AppsListController', ['$scope', '$route', '$loc
     $scope.push = function(id) {
       $scope.apps[id].loading++;
       if ($scope.apps[id].buildCommand) {
-        prePush(id, function() { spPush(id) });
+        prePush(id, function() { spPush(id); });
       } else {
         spPush(id);
       }
@@ -323,7 +323,7 @@ dashboardControllers.controller('AppsListController', ['$scope', '$route', '$loc
           // TODO check splint-config.json
           options.src = ["./**"];
           options.src = options.src.concat($scope.apps[id].splintIgnore.split(";")
-            .map(function(glob) { return "!" + glob }))
+            .map(function(glob) { return "!" + glob; }));
         }
         debugLogger.log(options);
 
@@ -468,7 +468,7 @@ dashboardControllers.controller('AppsListController', ['$scope', '$route', '$loc
             $scope.$apply();
           }
           debugLogger.log($scope.spCmdlnLog);
-        })
+        });
     };
 
     // $scope.modalItem = {};
@@ -486,7 +486,13 @@ dashboardControllers.controller('AppsListController', ['$scope', '$route', '$loc
      * Writes the sp-config of the specified to the disk.
      */
     $scope.updateSpConfig = function(id, cb) {
-      $scope.apps[id].config = $scope.apps[id].config || {};
+      var config;
+      try{
+        var curConfig = fs.readFileSync(applicationsFolder + "/" + id + "/sp-config.json");
+        config = JSON.parse(curConfig);      
+      }
+      catch(e){};
+      $scope.apps[id].config = config || {};
 
       $scope.apps[id].name = $scope.apps[id].config.wcmContentName;
       var json = JSON.parse(JSON.stringify($scope.apps[id].config)); // clone the config
@@ -502,7 +508,7 @@ dashboardControllers.controller('AppsListController', ['$scope', '$route', '$loc
       fs.writeFile(applicationsFolder + "/" + id + "/sp-config.json", json, function() {
         $scope.$apply();
         cb && cb();
-      })
+      });
     };
 
     $scope.$on('$viewContentLoaded', function(){
@@ -594,7 +600,7 @@ dashboardControllers.controller('AppsListController', ['$scope', '$route', '$loc
           if (!killed) {
             $scope.apps[id].loading--;
             $scope.$apply();
-            cb && cb()
+            cb && cb();
           };
         });
 
@@ -604,13 +610,13 @@ dashboardControllers.controller('AppsListController', ['$scope', '$route', '$loc
           // prompts an option to kill the process if it's still executing after 10s
           if (executing) {
             var close = function() {
-              $(".terminateButton" + id).remove()
+              $(".terminateButton" + id).remove();
             };
             var buttons = [{
               text: "Wait",
               onclick: function() {
                 wait();
-                close()
+                close();
               }
             }, {
               text: "Terminate",
@@ -621,7 +627,7 @@ dashboardControllers.controller('AppsListController', ['$scope', '$route', '$loc
                   $scope.$apply();
                   cb && cb();
                 }
-                close()
+                close();
               }
             }];
             displayInfoBox("Command " + $scope.apps[id].buildCommand + " is not finishing",
@@ -685,7 +691,7 @@ dashboardControllers.controller('AppsListController', ['$scope', '$route', '$loc
     };
 
     var displayInfoBox = function(msg, type, classes, buttons) {
-      console.log(arguments)
+      console.log(arguments);
       type = type || "info";
       classes = classes || "";
       var html = '<div class="alert alert-' + type + ' ' + classes +
@@ -702,13 +708,13 @@ dashboardControllers.controller('AppsListController', ['$scope', '$route', '$loc
         btn = buttons[btn];
         $("<button>" + btn.text + "</button>")
           .addClass("btn btn-sm btn-default")
-          .on("click", function() { btn.onclick() })
+          .on("click", function() { btn.onclick(); })
           .appendTo($html);
       }
 
       $("#alert-wrapper").append($html);
     };
 
-    $scope.numOfApps = function() { return Object.keys($scope.apps).length}
+    $scope.numOfApps = function() { return Object.keys($scope.apps).length;};
   }
 ]);
