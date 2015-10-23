@@ -95,6 +95,12 @@ var argv = yargs
       .alias('h', 'help')
       .argv;
   })
+  .command("create", "create a new WCM library", function(yargs) {
+    argv = yargs
+      .help('help')
+      .alias('h', 'help')
+      .argv;
+  })
   .command("help", "show commands and options")
   .help("help")
   .alias('h', 'help')
@@ -209,6 +215,15 @@ var chooseLibraries = function(settings) {
   });
 };
 
+var createLibrary = function(settings) {
+  console.log("creating library " + settings.libname);
+  initWcmHelper(settings).then(function(){
+      wcmHelper.createLibrary(settings.libname).then(function(library){
+          console.log('Library ' + library.title + " was created.");
+        });
+   });   
+};
+
 /**
  * Downloads the library
  */
@@ -294,6 +309,30 @@ var pull = function(tries) {
   });
 };
 
+var create = function(){
+  var settings = {};
+  try {
+    var s = JSON.parse(fs.readFileSync(cwd + "/.settings").toString());
+    if (s.title) {
+      console.error("Error: This directory already contains a WCM library");
+      return;
+    }
+  } catch (e) {}
+  prompt.start();
+  var schema = getInitPromptSchema(settings);
+  schema.libname = {
+      pattern: /^[\w\d_-]+$/,
+      description: "Library name",
+      required: true
+    };
+  prompt.get({properties: schema}, function(err, results) {
+    if (err) {
+      console.warn(err.message);
+    } else {
+      createLibrary(results);
+    }
+  });   
+};
 switch (argv._[0]) {
   case undefined:
     console.log("Use 'dxwcmdesigns help' to view the available commands and options");
@@ -310,6 +349,9 @@ switch (argv._[0]) {
     break;
   case "pull":
     pull(3);
+    break;
+  case "create":
+    create();
     break;
   default:
     console.log("Command '%s' not recognized.", argv._[0]);

@@ -31,8 +31,52 @@ wcmTypes = {
                                             ,listPresetationComponent: "LibraryListPresetationComponent"
                                                 ,listPresetationComponent: "LibraryListPresetationComponent"
                                                     ,folder: "Folder"
+                                                    ,library: "Library"
 
 };
+
+/**
+ * Returns the result of the created library 
+ * @param String library title
+ * @param bolean is the library enabled
+ * @param boolean can you delete the library
+ * @param boolean include default items in library 
+* @returns a promise thet returns the result of the created library
+ */
+
+function createLibrary(libTitle, enabled, allowDeletion, includeDefaultItems) {
+    var deferred = Q.defer(), doRequest = function(libTitle, allowDeletion, includeDefaultItems) {
+        if (allowDeletion == undefined)
+            allowDeletion = true;
+        if (includeDefaultItems == undefined)
+            includeDefaultItems = false;
+        if (enabled == undefined)
+            enabled = true;
+        postData = {
+            entry : {
+                name : libTitle,
+                content : {
+                    type : 'application/vnd.ibm.wcm+xml',
+                    library : {
+                        allowDeletion : allowDeletion,
+                        enabled : enabled,
+                        includeDefaultItems : includeDefaultItems
+                    }
+                }
+            }
+        };
+
+        authRequest.setJson(getUrlForType(wcmTypes.library), postData).then(function(library) {
+           if(libraryList != undefined)
+                libraryList.push(library);
+            deferred.resolve(library);
+        }, function(err) {
+            deferred.reject(err);
+        });
+    };
+    doRequest(libTitle, enabled, allowDeletion, includeDefaultItems);
+    return deferred.promise;
+}
 
 /**
  * Returns an array of wcmItems that are libraries 
@@ -385,14 +429,14 @@ function getWcmItemsForOperation(item, operation, resultValues){
                     }else
                         if(dataJson.feed.entry != undefined)
                             entries = dataJson.feed.entry;
-                        if (resultValues) {
-                            // if we're adding to array, push these entries and use as resolved value
-                            resultValues = resultValues.concat(entries);
-                            deferred.resolve(resultValues);
-                        }
-                        else {
-                            deferred.resolve(entries);
-                        }
+                    if (resultValues) {
+                       // if we're adding to array, push these entries and use as resolved value
+                        resultValues = resultValues.concat(entries);
+                        deferred.resolve(resultValues);
+                    }
+                    else {
+                        deferred.resolve(entries);
+                    }
                 }
             },function(err){
                 debugLogger.error("getWcmItemsForOperation::getJson::err::"+err);
@@ -516,16 +560,45 @@ function createNewWcmItem(type, libraryName, name, fileName, parent ){
     var deferred = Q.defer(), doRequest = function(type, libraryName, name, fileName, parent){
        debugLogger.trace('createNewWcmItem::type::' + type + 'libraryName::'+ libraryName + ' name::' + name + ' fileName::' + fileName + ' parent::' + parent);
         getLibrary(libraryName).then(function(lib){
-            var pLink = "";
+            var links = {};
             url = getUrlForType(type);
             href = wcmItem.getOperationHref(lib, "library");
 
             if(parent != undefined){
-                pLink = '<link rel="parent" href="' + wcmItem.getOperationHref(parent, "self") + '"/>';
+//                pLink = '<link rel="parent" href="' + wcmItem.getOperationHref(parent, "self") + '"/>';
+                  links =[
+                            {
+                                "rel": "library",
+                                "href": href,
+                                "label": "Library"
+                            },
+                             {
+                                "rel": "parent",
+                                "href": wcmItem.getOperationHref(parent, "self"),
+                                "label": "Parent"
+                            }
+                        ];
             }
-            postData = '<entry xmlns="http://www.w3.org/2005/Atom" xmlns:wcm="wcm/namespace"><title>'+
-            name + '</title><link rel="library" href="' + href + '"/>' + pLink + '<wcm:name>'+
-            name + '</wcm:name></entry>';
+            else {
+                links = [
+                            {
+                                "rel": "library",
+                                "href": href,
+                                "label": "Library"
+                            }
+                        ];
+            }
+            
+//            postData = '<entry xmlns="http://www.w3.org/2005/Atom" xmlns:wcm="wcm/namespace"><title>'+
+//            name + '</title><link rel="library" href="' + href + '"/>' + pLink + '<wcm:name>'+
+//            name + '</wcm:name></entry>';
+            postData = {
+                entry : {
+                    title : name,
+                    name : name,
+                    link : links
+                    }
+            };
             authRequest.setJson(url, postData).then(function( data ) {
                 var dataJson = getJson(deferred, data);
                 if(dataJson != undefined){
@@ -615,8 +688,8 @@ function getWcmItemData(type, id){
     var deferred = Q.defer(), doRequest = function(type, id){
         debugLogger.trace('getWcmItemData::type::' + type + ' id:' + id);
         wcmGetJson(getUrlForType(type) + '/' + getRawId(id)).then (function (item){
-            if(item.content)
-                deferred.resolve(item).done();
+            if(item.content && type != wcmTypes.imageComponent && type != wcmTypes.fileComponent)
+                return deferred.resolve(item);
             getWcmItemsForOperation(item, "edit-media").then(function (item){
                 var entry = item[0];
                 if(wcmTypes.htmlComponent == type || wcmTypes.presentationTemplate == type){
@@ -653,13 +726,14 @@ function getContentReference(type, item){
     debugLogger.trace('getContentReference::type::' + type + ' item::' + item);
     var cRef  = undefined;
     switch(type){
-/*    case wcmTypes.fileComponent:
+/*  
     case wcmTypes.htmlComponent:
     case wcmTypes.jspComponent:
     case wcmTypes.linkComponent:
     case wcmTypes.textComponent:
     case wcmTypes.richTextComponent:
 */  
+    case wcmTypes.fileComponent:
     case wcmTypes.imageComponent: 
     case wcmTypes.styleSheetComponent:{
         cRef  = wcmItem.getOperationHref(item, 'edit-media');
@@ -811,8 +885,13 @@ function setUpDataForType(item, type, fileName){
         switch(type){ 
             case wcmTypes.authoringTools:
             case wcmTypes.jspComponent:
-            case wcmTypes.linkComponent:
+            case wcmTypes.linkComponent:{
+                break;
+            }
             case wcmTypes.fileComponent:{
+                var binaraydata = fs.readFileSync(fileName);
+                var ext = Path.extname(fileName).slice(1);
+                rVal = {type: 'application/' + ext, value: binaraydata  };
                 break;
             }
             case wcmTypes.presentationTemplate:
@@ -826,15 +905,6 @@ function setUpDataForType(item, type, fileName){
                 var binaraydata = fs.readFileSync(fileName);
  
                 var ext = Path.extname(fileName).slice(1);
-    /*               var baseName = Path.basename(fileName);
-                var content = wcmItem.getContent(item);
-                var data;
-    //            if(getContentReference(type, item) == undefined)
-                    data = '<content  type="application/vnd.ibm.wcm+xml"><wcm:image xmlns="http://www.ibm.com/xmlns/wcm"><dimension height="' +
-                    content.image.dimension.height + '" border="0"/><altText></altText><tagName></tagName><wcm:binaryresource type="image/"' + ext + ' fileName="' + baseName + '">' + b64data + '</wcm:binaryresource></wcm:image></content>';
-    //            else
-    //               data = b64data;
-    */
                 rVal = { type: 'image/' + ext, value: binaraydata };
                 break;
             }
@@ -846,22 +916,6 @@ function setUpDataForType(item, type, fileName){
             case wcmTypes.styleSheetComponent:{
                 var data = fs.readFileSync(fileName, "utf8");
                 rVal = { type: 'text/css', value: data };
-             /*if(getContentReference(type, item) != undefined){
-                 var data = fs.readFileSync(fileName, "utf8");
-                 rVal = {type: mType, value: data};
-             }
-             else{
-                 var b64data = base64_encode(fileName);
-                 var baseName = Path.basename(fileName);
-                 var content = wcmItem.getContent(item);
-                 data = '<content  type="application/vnd.ibm.wcm+xml"><wcm:stylesheet xmlns="http://www.ibm.com/xmlns/wcm"><type>'+
-                     content.type + '</type>"/><mediaType>' +
-                     content.mediaType +'</mediaType><title>' +
-                     content.title + '</title><wcm:binaryresource type="text/css" fileName="' +
-                     baseName + '">' + b64data +
-                     '</wcm:binaryresource></wcm:stylesheet></content>';
-                 rVal = { type: mType, value: data };
-             }*/
                 break;
             };
         };
@@ -918,6 +972,7 @@ exports.wcmTypes= wcmTypes;
 exports.clearFolderMap = clearFolderMap;exports.getWcmItemsOfType = getWcmItemsOfType;
 exports.getWcmItemOfTypeAndName = getWcmItemOfTypeAndName;
 exports.getAllLibraries = getAllLibraries;
+exports.createLibrary = createLibrary;
 exports.getLibrary = getLibrary;
 exports.getLibraryId = getLibraryId;
 exports.getFolderMap = getFolderMap;

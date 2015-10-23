@@ -23,8 +23,10 @@ var httpGetHelper = function(options) {
             options.rejectUnauthorized = false;
         }
         var reqGet = http.request(options, function(response) {
-            if(options.headers && options.headers.ContentType && options.headers.ContentType.indexOf('image') != -1)
+            if(options.headers && options.headers.ContentType && options.headers.ContentType){
                 response.setEncoding('binary');
+                debugLogger.trace(options.headers.ContentType + " read binary");
+            }
             if (response.statusCode == 404) {
                 var err = getErrorFromResponse(null, response);
                 debugLogger.error("httpGetHelper::err::" + err);
@@ -131,8 +133,8 @@ var getLTPAToken = function(user, pass, options, postData) {
     // the post options
     // authenticate for VP uses the base portal
     var cPath = options.contentHandlerPath.split('/');
-    if (cPath.length > 2){
-        options.contentHandlerPath = cPath[0] + '/' + cPath[1];
+    if (cPath.length > 3){
+        options.contentHandlerPath = cPath[1] + '/' + cPath[2];
     };
     var optionspost = {
         host : options.host,
@@ -258,6 +260,10 @@ var authenticatedRequest = function(user, pass, options, postData) {
         if (authCookie == null || ltpaTokenAge > maxLtpaAge) {
             ltpaTokenDate = now;
             getLTPAToken(user, pass, options, postData).then(function(data) {
+                if(data != undefined){
+                    checkEndRequest();
+                    return deferred.resolve(data);
+                }
                 if (postData == undefined) {
                     return httpGetHelper(options).then(function(data) {
                         // debugLogger.trace('Completed get for ', options.path);
@@ -381,8 +387,24 @@ var getJson = function(uri) {
 };
 
 var setJson = function(uri, postData) {
-    var deferred = Q.defer(), authenticate = function(uri, postData) {
+    var deferred = Q.defer(), authenticate = function(uri, postData, contentType) {
+        var headers;
         debugLogger.trace('setJson:: uri::' + uri + ' postData::' + postData);
+        if(typeof postData == 'object'){
+            postData = JSON.stringify(postData);
+            headers = {
+                'content-type': 'application/json',
+                'accept': 'application/json'
+                };
+        }
+        else{
+             headers = {
+                'Content-Type' : 'application/atom+xml',
+                'Content-Length' : postData.length,
+                'Accept' : "application/json"
+            };
+        }
+        
         var callOptions = {
             host : globalHost,
             port : globalPort,
@@ -390,11 +412,7 @@ var setJson = function(uri, postData) {
             path : uri,
             secure : globalSecure,
             method : 'Post',
-            headers : {
-                'Content-Type' : 'application/atom+xml',
-                'Content-Length' : postData.length,
-                Accept : "application/json"
-            }
+            headers : headers
         };
         authenticatedRequest(globalUser, globalPassword, callOptions, postData).then(function(data) {
             deferred.resolve(data);

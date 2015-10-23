@@ -122,8 +122,12 @@ function getOperationHref(item, opName){
 function getTypeforUpdate(item){
     var type = undefined;
     var link = getLinkForRel(item.type, item.link,"edit-media");
-   if(link != undefined)
-       type = link.type;
+   if(link != undefined){
+       if(item.content && item.content.resourceUri && item.content.resourceUri.type)
+        type = item.content.resourceUri.type;
+       else
+        type = link.type;
+   }
     return type;
 }
 
@@ -142,6 +146,12 @@ function getLinkForRel(type, linkArray, relName) {
                 else
                      if(type == 'LibraryImageComponent'){
                         if(linkEntry.type == 'image/*'){
+                             retval = linkEntry;
+                        };
+                     }
+                     else
+                        if(type == 'LibraryFileComponent'){
+                        if(linkEntry.type == '*/*'){
                              retval = linkEntry;
                         };
                      }
