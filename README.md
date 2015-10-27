@@ -122,6 +122,7 @@ The supported WCM types are:
 - Text Component
 - Rich Text Component
 - Presentation Template
+- File Component (with trial option enabled)
 
 Other Component types, Authoring Templates, and Content Items are not supported.
 
@@ -131,6 +132,7 @@ There are some options that can be set to control some of the behavior when down
     "includeMeta": false,
     "filterComponentId": true,
     "pullParallel": true,
+    "trial":true,
     "include":[
        "PresentationTemplate",
        "LibraryStyleSheetComponent",
@@ -141,4 +143,5 @@ There are some options that can be set to control some of the behavior when down
 - includeMeta: If set to true, each component will have a corresponding <name>-md.json file containing all the metadata from WCM.
 - filterComponentId: If set to true, any Component tags in the downloaded data will include the ID of the referenced Component. By default these IDs are are removed, and the "name" attribute is used to identify the referenced Component.
 - pullParallel: If set to true, requests to the server for components are done in parallel wich can speed up the download of large libraries. By default components are synced sequentially.
+- trial: if set any new features that have been added but not fully testes are added
 - include: This is an array of item types that allows you to limit the types of items that will be included in the pushed/pull actions for this library, this list will only support types that are handled by default. It allows you to limit the types to a subset of the supported types.  i.e. Some one that only works on icons could limit it to "LibraryImageComponent"

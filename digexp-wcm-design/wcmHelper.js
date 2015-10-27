@@ -169,7 +169,7 @@ init = function(host, port, contentPath, user, password, secure, wcmDir) {
                                 totalCount += count;
     
                             eventEmitter.emit("pullingType", libTitle, wcmRequests.wcmTypes.fileComponent);
-                            pullType(options, wcmRequests.wcmTypes.fileComponent, libTitle, ".stff", map).then(function(count) {
+                            pullType(options, wcmRequests.wcmTypes.fileComponent, libTitle, "", map).then(function(count) {
                                 totalCount += count;
     
                                 eventEmitter.emit("pullingType", libTitle, wcmRequests.wcmTypes.richTextComponent);
@@ -306,8 +306,8 @@ init = function(host, port, contentPath, user, password, secure, wcmDir) {
                         // skip metadata files which end with md-jsom
                         if(file.indexOf(metadataSuffix) == -1)
                             itemType = wcmRequests.wcmTypes.fileComponent;
-                    }
-                    else
+                    } // only do file components if the user turns on trial code
+                    else if(options.trial && options.trial == true)
                         itemType = wcmRequests.wcmTypes.fileComponent;
                     if (itemType != null && '.settings' != name && includeOption(options, itemType)) {
                         var pushedItem = {
@@ -411,7 +411,11 @@ function pullType(options, type, libTitle, extension, map) {
 function pullTypeParallel(options, type, libTitle, extension, map) {
     debugLogger.trace('pullType::optioins ' + options + ' type::' + type + ' libTitle::' + libTitle + ' extension::' + extension);
     var deferred = Q.defer();
-    if (includeOption(options, type)) {
+    if((options.trial == undefined || options.trial == false) && type == wcmRequests.wcmTypes.fileComponent)
+    {
+        deferred.resolve(0); 
+    }
+    else if (includeOption(options, type)) {
         wcmRequests.getWcmItemsOfType(type, libTitle).then(function(entries) {
             var promises = [];
             progGoal += entries.length;
@@ -454,7 +458,11 @@ function pullTypeParallel(options, type, libTitle, extension, map) {
 function pullTypeSequential(options, type, libTitle, extension, map) {
     debugLogger.trace('pullType::optioins ' + options + ' type::' + type + ' libTitle::' + libTitle + ' extension::' + extension);
     var deferred = Q.defer();
-    if (includeOption(options, type)) {
+    if((options.trial == undefined || options.trial == false) && type == wcmRequests.wcmTypes.fileComponent)
+    {
+        deferred.resolve(0); 
+    }
+    else if (includeOption(options, type)) {
         wcmRequests.getWcmItemsOfType(type, libTitle).then(function(entries) {
             progGoal += entries.length;
             if (entries.length == 0) {
@@ -508,7 +516,7 @@ function updateLocalFile(options, libTitle, data, extension, map){
         if(cData.resourceUri && cData.resourceUri.value){
             var extStart = cData.resourceUri.value.lastIndexOf('.');
             var extEnd =  cData.resourceUri.value.lastIndexOf('?');
-            if(extStart != -1)
+             if(extStart != -1 && (extEnd-extStart != 1))
                 extension = cData.resourceUri.value.substring(extStart,extEnd);
         }
         fs.writeFileSync(path + extension, cData.value, "binary");

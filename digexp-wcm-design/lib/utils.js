@@ -56,6 +56,9 @@ setSettings = function(cwd, settings) {
   }
 },
 getMergerdOptions = function(options, settings){
+    var trial = process.env.DIGEXP_TRIAL || '';
+    if(trial != '')
+        options.trial = true;
     if(settings.options != undefined){
         if(settings.options.includeMeta != undefined)
             options.includeMeta = settings.options.includeMeta;
@@ -63,8 +66,10 @@ getMergerdOptions = function(options, settings){
             options.pullParallel = settings.options.pullParallel;
         if(settings.options.include != undefined)
             options.include = settings.options.include;
-         if(settings.options.filterComponentId != undefined)
+        if(settings.options.filterComponentId != undefined)
             options.filterComponentId = settings.options.filterComponentId;
+        if(settings.options.trial != undefined)
+            options.trial = settings.options.trial;
     };   
     return options;
 };
