@@ -5,3 +5,5 @@
 *.gitattributes eol=crlf
 
 *.zip binary
+*.gz binary
+*.md binary
