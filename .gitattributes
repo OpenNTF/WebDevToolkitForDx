@@ -1,3 +1,7 @@
 * text eol=lf
+
 *.cmd eol=crlf
 
+*.gitattributes eol=crlf
+
+*.zip binary
