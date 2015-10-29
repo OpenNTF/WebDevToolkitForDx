@@ -52,9 +52,9 @@ or if you are on Mac or Linux, run:
 ```
 sudo chmod a+x ./uninstall.sh
 sudo ./uninstall.sh
+```
 
 # Using the Web Developer Dashboard
-
 This is a Node.js-based "dashboard" that runs on your laptop and lets you work with your Portal Themes, WCM design libraries, and Script Portlet applications in a simple user interface. 
 
 Key features:
