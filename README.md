@@ -16,10 +16,14 @@ To use these tools you will need:
 
 The Dashboard tool uses the nw.js package to implement the user interface, and on some versions of Linux there are issues with some of the dependency packages for nw.js.
 
+# upgrade 
+If you are upgrading an existing installation you should remove it using uninstall and then install the new version.
+See instruction for uninstall and install below. 
+
 # Installation
 You must first install Node.js.  Node.js version 0.12 is the minimum version and has had the most testing.
 
-Download the digexp-toolkit.zip file from here: https://github.com/OpenNTF/WebDevToolkitForDx/releases/download/v0.1.2/digexp-toolkit.zip
+Download the digexp-toolkit.zip file from here: https://github.com/OpenNTF/WebDevToolkitForDx/releases/download/0.1.2/digexp-toolkit.zip
 
 First, extract the file on your workstation. Then if you are on Windows, run
 ```
@@ -29,15 +33,28 @@ install.cmd
 or if you are on Mac or Linux, run:
 ```
 sudo chmod a+x ./install.sh
-sudo install.sh
+sudo ./install.sh
 ```
 
 This will install the two main programs, dxdashboard (for the dashboard UI) and dxwcmdesigns (the command line support for accessing WCM design libraries). That completes the installation.  
 
 For the Script Portlet "Push" support, you will need to have the Script Portlet command line client support installed and configured, and you will need to have the "sp" command on your system path. See this documentation for more on installing the Script Portlet command line client: http://www-01.ibm.com/support/knowledgecenter/SSHRKX_8.5.0/script/script-portlet/cmd_line_push.dita
 
-# Using the Web Developer Dashboard
+# Uninstall
+If you want to uninstall the toolkit
 
+Download the digexp-toolkit.zip file if you haven't already and extract the file on your workstation. Then if you are on Windows, run
+```
+uninstall.cmd
+```
+
+or if you are on Mac or Linux, run:
+```
+sudo chmod a+x ./uninstall.sh
+sudo ./uninstall.sh
+```
+
+# Using the Web Developer Dashboard
 This is a Node.js-based "dashboard" that runs on your laptop and lets you work with your Portal Themes, WCM design libraries, and Script Portlet applications in a simple user interface. 
 
 Key features:
