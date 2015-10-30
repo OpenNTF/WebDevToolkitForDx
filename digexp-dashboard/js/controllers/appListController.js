@@ -483,18 +483,11 @@ dashboardControllers.controller('AppsListController', ['$scope', '$route', '$loc
     };
 
     /**
-     * Writes the sp-config of the specified to the disk.
+     * Writes the config of the specified app to the sp-config.json.
      */
     $scope.updateSpConfig = function(id, cb) {
-      var config;
-      try{
-        var curConfig = fs.readFileSync(applicationsFolder + "/" + id + "/sp-config.json");
-        config = JSON.parse(curConfig);      
-      }
-      catch(e){};
-      $scope.apps[id].config = config || {};
-
       $scope.apps[id].name = $scope.apps[id].config.wcmContentName;
+      
       var json = JSON.parse(JSON.stringify($scope.apps[id].config)); // clone the config
       json.dateLinted = $scope.apps[id].dateLinted;
       json.datePushed = $scope.apps[id].datePushed;
