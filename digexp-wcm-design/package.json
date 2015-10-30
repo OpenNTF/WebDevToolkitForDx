@@ -1,6 +1,6 @@
 {
   "name": "digexp-wcm-design",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "WCM Designs",
   "main": "wcmHelper",
   "bin": {
