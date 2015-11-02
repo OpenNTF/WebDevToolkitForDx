@@ -16,10 +16,6 @@ To use these tools you will need:
 
 The Dashboard tool uses the nw.js package to implement the user interface, and on some versions of Linux there are issues with some of the dependency packages for nw.js.
 
-# upgrade 
-If you are upgrading an existing installation you should remove it using uninstall and then install the new version.
-See instruction for uninstall and install below. 
-
 # Installation
 You must first install Node.js.  Node.js version 0.12 is the minimum version and has had the most testing.
 
@@ -38,12 +34,16 @@ sudo ./install.sh
 
 This will install the two main programs, dxdashboard (for the dashboard UI) and dxwcmdesigns (the command line support for accessing WCM design libraries). That completes the installation.  
 
+If you are behind a proxy server, the nw package used by the Dashboard requires setting the http_proxy environment variable prior to running install. See this page for more information: https://www.npmjs.com/package/nw.
+
 For the Script Portlet "Push" support, you will need to have the Script Portlet command line client support installed and configured, and you will need to have the "sp" command on your system path. See this documentation for more on installing the Script Portlet command line client: http://www-01.ibm.com/support/knowledgecenter/SSHRKX_8.5.0/script/script-portlet/cmd_line_push.dita
 
-# Uninstall
-If you want to uninstall the toolkit
+# Upgrade 
+If you are upgrading an existing installation you should remove it using uninstall and then install the new version.
+See instructions for uninstall below. 
 
-Download the digexp-toolkit.zip file if you haven't already and extract the file on your workstation. Then if you are on Windows, run
+# Uninstall
+If you want to uninstall the toolkit, if you are on Windows, run
 ```
 uninstall.cmd
 ```
