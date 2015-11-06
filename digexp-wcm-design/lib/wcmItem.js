@@ -128,6 +128,8 @@ function getTypeforUpdate(item){
        else
         type = link.type;
    }
+   else if(item.content && item.content.type)
+      type  = item.content.type;
     return type;
 }
 
