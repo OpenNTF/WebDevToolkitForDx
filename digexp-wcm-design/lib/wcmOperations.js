@@ -16,23 +16,40 @@ Path = require('path'),
 debugLogger = require('./utils').debugLogger('wcm-design'),
 libraryList,
 baseUrl = '/wcmrest/',
+cEditmedia = "edit-media",
+cElements = "elements",
+cAlternate = "alternate",
+wcmExts = {
+    LibraryHTMLComponent: ".html",
+    HTMLComponent: ".html",
+    LibraryImageComponent: ".png",
+    LibraryTextComponent: ".txt",
+    TextComponent: ".txt",
+    LibraryRichTextComponent: ".rtf",
+    RichTextComponent: ".rtf",
+    LibraryStyleSheetComponent: ".css",
+    LibraryShortTextComponent: "_st.txt",
+    ShortTextComponent: "_st.txt"
+},
 wcmTypes = {
     presentationTemplate: "PresentationTemplate"
         ,contentTemplate: "ContentTemplate"
+        ,referenceComponents: "ReferenceComponent"
         ,authoringToolsComponent: "LibraryAuthoringToolsComponent"
-            ,htmlComponent: "LibraryHTMLComponent"
-                ,imageComponent: "LibraryImageComponent"
-                    ,textComponent: "LibraryTextComponent"
-                        ,richTextComponent: "LibraryRichTextComponent"
-                            ,styleSheetComponent: "LibraryStyleSheetComponent"
-                                ,fileComponent: "LibraryFileComponent"
-                                    ,linkComponent: "LibraryLinkComponent"
-                                        ,jspComponent: "LibraryJSPComponent"
-                                            ,listPresetationComponent: "LibraryListPresetationComponent"
-                                                ,listPresetationComponent: "LibraryListPresetationComponent"
-                                                    ,folder: "Folder"
-                                                    ,library: "Library"
-
+        ,metaData:"md"
+        ,htmlComponent: "LibraryHTMLComponent"
+        ,imageComponent: "LibraryImageComponent"
+        ,textComponent: "LibraryTextComponent"
+        ,shortTextComponent: "LibraryShortTextComponent"
+        ,richTextComponent: "LibraryRichTextComponent"
+        ,styleSheetComponent: "LibraryStyleSheetComponent"
+        ,fileComponent: "LibraryFileComponent"
+        ,linkComponent: "LibraryLinkComponent"
+        ,jspComponent: "LibraryJSPComponent"
+        ,listPresetationComponent: "LibraryListPresetationComponent"
+        ,listPresetationComponent: "LibraryListPresetationComponent"
+        ,folder: "Folder"
+        ,library: "Library"
 };
 
 /**
@@ -138,7 +155,7 @@ function getLibrary(libName){
 function getPresetFolders(libName){
     var deferred = Q.defer(), doRequest = function(libName){
         getLibrary(libName).then( function (entry){
-            getWcmItemsForOperation(entry, "alternate").then(function (items){
+            getWcmItemsForOperation(entry, cAlternate).then(function (items){
                // this always returns a single result
                getWcmItemsForOperation(items[0], "preset-folders").then(function (items){
                    if(items.length == 0)
@@ -177,7 +194,7 @@ function getFoldersWithhRefs(items){
         var initialValue = Q.resolve([]);   // start with empty array and keep adding to it
         return items.reduce(function(soFar, wItem) {
             return soFar.then(function(valueSoFar) {
-                return getWcmItemsForOperation(wItem, "alternate", valueSoFar);
+                return getWcmItemsForOperation(wItem, cAlternate, valueSoFar);
             });
         }, initialValue).then(function(resultFolders) {
             deferred.resolve(resultFolders);
@@ -468,20 +485,29 @@ function createWcmItemFromPath(type, path, fileName){
         if(compLength == 3 && type != wcmTypes.folder){
             createNewWcmItem( type, libName, name, fileName).then(function( entry ){
                 deferred.resolve(entry);
-            },function(err){deferred.reject(err);});
+            },function(err){
+                debugLogger.error("CreateNewItem::err::"+err);
+                deferred.reject(err);
+                });
         }else{
             getFolderMap( libName).then(function (folderMap){
                 var pFolder = folderMap.get(parentFolderPath);
                 if(compLength == 3 ){
                     createNewWcmItem( type, libName, name, fileName ,pFolder).then(function( entry ){
                         deferred.resolve(entry);
-                    },function(err){deferred.reject(err);});
+                    },function(err){
+                        debugLogger.error("CreateNewItem::err::"+err);
+                        deferred.reject(err);
+                        });
                 }
                 else
                     if(pFolder)
                         createNewWcmItem( type, libName, name, fileName ,pFolder).then(function( entry ){
                              deferred.resolve(entry);
-                        },function(err){deferred.reject(err);});
+                        },function(err){
+                            debugLogger.error("CreateNewItem::err::"+err);
+                            deferred.reject(err);
+                            });
                     else
                         {
                         var folderExists = false;
@@ -509,7 +535,10 @@ function createWcmItemFromPath(type, path, fileName){
                             var pFolder = folderMap.get(parentFolderPath);
                             createNewWcmItem( type, libName, name, fileName ,pFolder).then(function( entry ){
                                 deferred.resolve(entry);
-                            },function(err){deferred.reject(err);});
+                            },function(err){
+                                debugLogger.error("CreateNewItem::err::"+err);
+                                deferred.reject(err);
+                                });
                         });
                    };
             });
@@ -532,15 +561,23 @@ function updateWcmItemFromPath(type, path, fileName){
         itemExists(type, path).then(function(entry){
             updateWcmItem(type, entry, fileName).then(function( entry ){
                 deferred.resolve(entry);
-            },function(err){deferred.reject(err);});
+            },function(err){
+                debugLogger.error("UpdateWcmItem::err::"+err);
+                deferred.reject(err);
+                });
         },
         function(err){
             if(err == 'Not found')
                 createWcmItemFromPath(type, path, fileName).then(function(entry){
                     deferred.resolve(entry);
-                },function(err){deferred.reject(err);});
-             else
+                },function(err){
+                   debugLogger.error("CreateNewItemFromPath::err::"+err);
+                   deferred.reject(err);
+                    });
+             else{
+                debugLogger.error("ItemExists::err::"+err);
                 deferred.reject(err);
+             }
         });
     };
     doRequest(type, path, fileName);
@@ -611,28 +648,73 @@ function createNewWcmItem(type, libraryName, name, fileName, parent ){
                                     entry.path =  getPath(libraryName,entry, folderMap);
                                     folderMap.set(entry.path, entry);
                                     deferred.resolve(entry);
-                                },function(err){deferred.reject(err);});
+                                },function(err){
+                                    debugLogger.error("GetFolderMap::err::"+err);
+                                    deferred.reject(err);
+                                    });
                             }
                             else {
                                 deferred.resolve(entry);
                             }
-                        },function(err){deferred.reject(err);});
+                        },function(err){
+                            debugLogger.error("UpdateItem::err::"+err);
+                            deferred.reject(err);
+                            });
                     }
                     else if(type == wcmTypes.folder){
                         getFolderMap(libraryName).then(function(folderMap){
                             entry.path =  getPath(libraryName,entry, folderMap);
                             folderMap.set(entry.path, entry);
                             deferred.resolve(entry);
-                        },function(err){deferred.reject(err);});
+                        },function(err){
+                            debugLogger.error("GetFolderMap::err::"+err);
+                            deferred.reject(err);
+                            });
                     }
                     else {
                         deferred.resolve(entry);
                     }
                 }
-            },function(err){deferred.reject(err);});
-        },function(err){deferred.reject(err);});
+            },function(err){
+                debugLogger.error("SetJson::err::"+err);
+                deferred.reject(err);
+                });
+        },function(err){
+            debugLogger.error("GetLibrary::err::"+err);
+            deferred.reject(err);
+            });
     };
     doRequest(type, libraryName, name, fileName, parent);
+    return deferred.promise;
+}
+
+/**
+ * Updates the specified wcm item metadata from the md file 
+ * @param FileName which contains the contents of the objects metadata 
+ * @returns a Promise that returns  the updated object
+ */
+function updateWcmItemMetaData(fileName){
+    var deferred = Q.defer(), doRequest = function(item , val){
+        debugLogger.trace('updateWcmItemMetaData:: fileName::' + fileName);
+        var data = fs.readFileSync(fileName, "utf8");
+        try{
+            var item = JSON.parse(data);
+            data = '{"entry":' + data + '}';
+            var entry = JSON.parse(data);
+            var uri = getUrlForType(wcmItem.getType(item)) + '/' +  getRawId(wcmItem.getId(item));
+            authRequest.setJson(uri, entry, 'Put').then(function(data){
+                deferred.resolve(data);
+            },function(err){
+                debugLogger.error("SetJson::err::"+err);
+                deferred.reject(err);
+                });
+        }
+        catch(e){
+            debugLogger.error("update metadata ::err::"+e);
+            deferred.reject('bad data in md file');
+            }
+    };
+    doRequest(fileName);
     return deferred.promise;
 }
 
@@ -655,12 +737,18 @@ function updateWcmItem(type, item, fileName){
         if( cRef != undefined){
             authRequest.setContent(cRef, val.type, val.value).then(function(data){
                 deferred.resolve(data);
-            },function(err){deferred.reject(err);});
+            },function(err){
+                debugLogger.error("UpdateItem::err::"+err);
+                deferred.reject(err);
+                });
         }
         else
-            authRequest.setContent(wcmItem.getOperationHref(item, "edit-media"), val.type, val.value).then(function(data){
+            authRequest.setContent(wcmItem.getOperationHref(item, cEditmedia), val.type, val.value).then(function(data){
                 deferred.resolve(data);
-            },function(err){deferred.reject(err);});
+            },function(err){
+                debugLogger.error("UpdateItem::err::"+err);
+                deferred.reject(err);
+                });
     };
     doRequest(item, setUpDataForType(item, type, fileName));
     return deferred.promise;
@@ -684,39 +772,92 @@ function getWcmItem(type, id){
  * @param id of the item to be retrieved 
  * @returns a Promise that that returns the item with it's data
  */
-function getWcmItemData(type, id){
-    var deferred = Q.defer(), doRequest = function(type, id){
+
+
+function getWcmItemData(type, id) {
+    var deferred = Q.defer(), doRequest = function(type, id) {
         debugLogger.trace('getWcmItemData::type::' + type + ' id:' + id);
-        wcmGetJson(getUrlForType(type) + '/' + getRawId(id)).then (function (item){
-            if(item.content && type != wcmTypes.imageComponent && type != wcmTypes.fileComponent)
+        wcmGetJson(getUrlForType(type) + '/' + getRawId(id)).then(function(item) {
+            var editmedia = wcmItem.getOperationHref(item, cEditmedia);
+            var elements = wcmItem.getOperationHref(item, cElements);
+            if ((item.content && type != wcmTypes.imageComponent && type != wcmTypes.fileComponent) || (editmedia == undefined && elements == undefined))
                 return deferred.resolve(item);
-            getWcmItemsForOperation(item, "edit-media").then(function (item){
-                var entry = item[0];
-                if(wcmTypes.htmlComponent == type || wcmTypes.presentationTemplate == type){
-                    deferred.resolve(entry);  
-                }else{
-                    var cRef = getContentReference(type, entry);
-                    if(cRef != undefined){
-                        entry.content.value = "";
-                            authRequest.getContent(cRef, wcmItem.getTypeforUpdate(entry)).then(function(data){
-                                  entry.content.value = data;
+            // no media check for elements
+            if (editmedia == undefined) {
+                var entry = item;
+                getWcmItemsForOperation(item, cElements).then(function(items) {
+                    if(items.length == 0){
+                        return deferred.resolve(entry);
+                    }
+                    var curCount = 0;
+                    var sWarn = authRequest.getWarnParallel();
+                    authRequest.setWarnParallel(false);
+                    entry.elements = [];
+                    items.forEach(function(item) {
+                        var cRef = getContentReference(item.type, item);
+                        if (cRef != undefined) {
+                            authRequest.getContent(cRef, wcmItem.getTypeforUpdate(item)).then(function(data) {
+                                curCount++;
+                                item.data = data;
+                                entry.elements.push(item);
+                                if (curCount == items.length){
+                                    authRequest.setWarnParallel(sWarn);
+                                    return deferred.resolve(entry);
+                                }
+                            }, function(err) {
+                                curCount++;
+                                if (err.message) {
+                                    if (err.message.indexOf('400') != -1) {
+                                        item.data = undefined;
+                                        entry.elements.push(item);
+                                        if (curCount == items.length){
+                                            authRequest.setWarnParallel(sWarn);
+                                            return deferred.resolve(entry);
+                                        }
+                                    } else{
+                                        authRequest.setWarnParallel(sWarn);
+                                        return deferred.reject(err);
+                                    }
+                                } else{
+                                    authRequest.setWarnParallel(sWarn);
+                                    return deferred.reject(err);
+                                }
+                            });
+                        }
+                    });
+                }, function(err) {
+                    debugLogger.error("getWcmItemData::getWcmItemsForOperation::err::" + err);
+                    deferred.reject(err);
+                });
+            } else {    // get the content from edit-media
+                getWcmItemsForOperation(item, cEditmedia).then(function(item) {
+                    var entry = item[0];
+                    if (wcmTypes.htmlComponent == type || wcmTypes.presentationTemplate == type) {
+                        deferred.resolve(entry);
+                    } else {
+                        var cRef = getContentReference(type, entry);
+                        if (cRef != undefined) {
+                            entry.content.value = "";
+                            authRequest.getContent(cRef, wcmItem.getTypeforUpdate(entry)).then(function(data) {
+                                entry.content.value = data;
                                 deferred.resolve(entry);
-                            }, function(err){
+                            }, function(err) {
                                 deferred.reject(err);
                             });
+                        } else {
+                            // entry.content.value = "";
+                            deferred.resolve(entry);
+                        }
                     }
-                    else{
-                       // entry.content.value = "";
-                        deferred.resolve(entry);
-                    }
-                }
-            },function(err){
-                debugLogger.error("getWcmItemData::getWcmItemsForOperation::err::"+err);
-                deferred.reject(err);
+                }, function(err) {
+                    debugLogger.error("getWcmItemData::getWcmItemsForOperation::err::" + err);
+                    deferred.reject(err);
                 });
-        },function(err){
-            debugLogger.error("getWcmItemData::wcmgetJson::err::"+err);
-            deferred.reject(err);});
+            }
+        }, function(err) {
+            debugLogger.error("getWcmItemData::wcmgetJson::err::" + err);
+            deferred.reject(err);
+        });
     };
     doRequest(type, id);
     return deferred.promise;
@@ -733,13 +874,23 @@ function getContentReference(type, item){
     case wcmTypes.textComponent:
     case wcmTypes.richTextComponent:
 */  
+    case wcmTypes.referenceComponents:{
+        cRef  = wcmItem.getOperationHref(item, cAlternate);
+        break;
+    };
     case wcmTypes.fileComponent:
     case wcmTypes.imageComponent: 
     case wcmTypes.styleSheetComponent:{
-        cRef  = wcmItem.getOperationHref(item, 'edit-media');
+        cRef  = wcmItem.getOperationHref(item, cEditmedia);
         break;
         };
+        
+    default: 
+            cRef  = wcmItem.getOperationHref(item, cAlternate);
+
     };
+    if(cRef == undefined)  // try edit media
+        cRef  = wcmItem.getOperationHref(item, cEditmedia);
     return cRef;
 }
 /**
@@ -851,6 +1002,10 @@ function getFolderForType(type){
     switch(type){
     case wcmTypes.presentationTemplate:{
         rVal = "Presentation Templates";
+        break;
+    } 
+    case wcmTypes.contentTemplate:{
+        rVal = "Authoring Templates";
         break;
     } 
     case wcmTypes.authoringToolsComponent:
@@ -969,6 +1124,7 @@ function clearFolderMap(){
 }
 
 exports.wcmTypes= wcmTypes;
+exports.wcmExts= wcmExts;
 exports.clearFolderMap = clearFolderMap;exports.getWcmItemsOfType = getWcmItemsOfType;
 exports.getWcmItemOfTypeAndName = getWcmItemOfTypeAndName;
 exports.getAllLibraries = getAllLibraries;
@@ -983,4 +1139,5 @@ exports.getUrlForType = getUrlForType;
 exports.getWcmItem = getWcmItem;
 exports.getWcmItemData = getWcmItemData;
 exports.itemExists = itemExists;
+exports.updateWcmItemMetaData = updateWcmItemMetaData;
 exports.base64_decode = base64_decode;

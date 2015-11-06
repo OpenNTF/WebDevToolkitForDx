@@ -34,6 +34,7 @@ var authRequest = require('./lib/wcm-authenticated-request'),
  Q = require('q'),
  fs = require('graceful-fs'),
  metadataSuffix = '-md.json',
+ elementSuffix =  '-elements.json',
  wcmItem = require('./lib/wcmItem'),
  wcmRequests = require('./lib/wcmOperations'),
  debugLogger = require('./lib/utils').debugLogger('wcmHelper'),
@@ -44,7 +45,9 @@ var authRequest = require('./lib/wcm-authenticated-request'),
  curPort = '',
  curContentPath = '',
  curSecure = false,
- curPullLibrary = undefined;
+ curPullLibrary = undefined,
+ cElementsDir = '-elements',
+ cAuthoringTemplates = 'Authoring Templates';
  
 /**
  * progGoal: the number of steps in progress (if more than one operation is being
@@ -129,6 +132,7 @@ init = function(host, port, contentPath, user, password, secure, wcmDir) {
             createFolder(wcmCwd + libTitle);
             createFolder(wcmCwd + libTitle + Path.sep + 'Presentation Templates');
             createFolder(wcmCwd + libTitle + Path.sep + 'Components');
+            createFolder(wcmCwd + libTitle + Path.sep + cAuthoringTemplates);
             progGoal++;
             var totalCount = 0;
             var libSettings = utils.getSettings(wcmCwd + libTitle + Path.sep);
@@ -172,6 +176,10 @@ init = function(host, port, contentPath, user, password, secure, wcmDir) {
                             pullType(options, wcmRequests.wcmTypes.fileComponent, libTitle, "", map).then(function(count) {
                                 totalCount += count;
     
+                            eventEmitter.emit("pullingType", libTitle, wcmRequests.wcmTypes.contentTemplate);
+                            pullType(options, wcmRequests.wcmTypes.contentTemplate, libTitle, ".ct", map).then(function(count) {
+                                totalCount += count;
+    
                                 eventEmitter.emit("pullingType", libTitle, wcmRequests.wcmTypes.richTextComponent);
                                 pullType(options, wcmRequests.wcmTypes.richTextComponent, libTitle, ".rtf", map).then(function(count) {
                                     totalCount += count;
@@ -196,6 +204,11 @@ init = function(host, port, contentPath, user, password, secure, wcmDir) {
                                     deferred.reject(err);
                                     eventEmitter.emit("error", err, "pullLibrary::richTextComponent::err::"+err);
                                 });
+                            }, function(err) {
+                                debugLogger.error("pullLibrary::contentTemplate::err::"+err);
+                                deferred.reject(err);
+                                eventEmitter.emit("error", err, "pullLibrary::contentTemplate::err::"+err);
+                            });
                             }, function(err) {
                                 debugLogger.error("pullLibrary::fileComponent::err::"+err);
                                 deferred.reject(err);
@@ -285,7 +298,10 @@ init = function(host, port, contentPath, user, password, secure, wcmDir) {
                 if (stat.mtime > cDate  || stat.birthtime >= cDate) {
                     var ext = Path.extname(file);
                     var dir = Path.dirname(file).slice(wcmCwd.length);
-                    if(dir.indexOf(Path.sep) == -1)
+                    if(dir.indexOf(Path.sep) == -1 ||
+                     dir.indexOf(cElementsDir) != -1 || 
+                     dir.indexOf(cAuthoringTemplates) != -1 ||
+                     dir.indexOf(elementSuffix) != -1)
                         return;
                     var name = Path.basename(file, ext);
                     var itemType = null;
@@ -306,6 +322,8 @@ init = function(host, port, contentPath, user, password, secure, wcmDir) {
                         // skip metadata files which end with md-jsom
                         if(file.indexOf(metadataSuffix) == -1)
                             itemType = wcmRequests.wcmTypes.fileComponent;
+                        else
+                            itemType = wcmRequests.wcmTypes.metaData;
                     } // only do file components if the user turns on trial code
                     else if(options.trial && options.trial == true)
                         itemType = wcmRequests.wcmTypes.fileComponent;
@@ -385,7 +403,9 @@ function pushFiles(fileList, libTitle) {
         return soFar.then(function() {
             progCounter++;
             eventEmitter.emit("pushed", libTitle || "", itemToPush);
-            return wcmRequests.updateWcmItemFromPath(itemToPush.itemType, itemToPush.dir + Path.sep + itemToPush.name, itemToPush.file);
+            if(itemToPush.itemType != wcmRequests.wcmTypes.metaData)
+                return wcmRequests.updateWcmItemFromPath(itemToPush.itemType, itemToPush.dir + Path.sep + itemToPush.name, itemToPush.file);
+            return wcmRequests.updateWcmItemMetaData(itemToPush.file);
         }, function(err){
             debugLogger.error("pushType::err::"+err);
             eventEmitter.emit("error", err, "pushLibrary::err::"+err);
@@ -521,10 +541,36 @@ function updateLocalFile(options, libTitle, data, extension, map){
         }
         fs.writeFileSync(path + extension, cData.value, "binary");
     }
-    else
+    else if(wcmRequests.wcmTypes.contentTemplate == wtype){
+        if(data.elements){
+            var elPath = path + cElementsDir + Path.sep;
+            createFolder( elPath );
+            data.elements.forEach(function(element){
+                try{
+                    var ext = wcmRequests.wcmExts[element.type];
+                    if(ext != undefined)
+                        fs.writeFileSync(elPath + element.name + ext, element.data);
+                }catch(e){
+                    debugLogger.error("save Element::err::"+e);
+                }
+            });
+        }
+        data.elements.forEach(function(element){
+           if(element.title)
+            delete element.title; 
+           if(element.link)
+            delete element.link;
+           if(element.content)
+            delete element.content; 
+        });
+        fs.writeFileSync(path + elementSuffix, JSON.stringify(data.elements));
+        delete data.elements;
+    }
+    else if(cData != undefined)   // check there is data to write
         fs.writeFileSync(path + extension, cData.value);
-    if (options == undefined || options.includeMeta == undefined || options.includeMeta == true) {
-        wcmItem.getContent(data).value = undefined;
+    if(options == undefined || options.includeMeta == undefined || options.includeMeta == true) {
+        delete  data.content;
+        delete data.link;
         fs.writeFileSync(path + metadataSuffix, JSON.stringify(data));
     }
     eventEmitter.emit("pulled", libTitle, wtype, data, path, extension);

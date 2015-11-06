@@ -386,7 +386,7 @@ var getJson = function(uri) {
     return deferred.promise;
 };
 
-var setJson = function(uri, postData) {
+var setJson = function(uri, postData, method) {
     var deferred = Q.defer(), authenticate = function(uri, postData, contentType) {
         var headers;
         debugLogger.trace('setJson:: uri::' + uri + ' postData::' + postData);
@@ -404,14 +404,15 @@ var setJson = function(uri, postData) {
                 'Accept' : "application/json"
             };
         }
-        
+        if(method == undefined)
+            method = 'Post';
         var callOptions = {
             host : globalHost,
             port : globalPort,
             contentHandlerPath : globalContentHandlerPath,
             path : uri,
             secure : globalSecure,
-            method : 'Post',
+            method : method,
             headers : headers
         };
         authenticatedRequest(globalUser, globalPassword, callOptions, postData).then(function(data) {
