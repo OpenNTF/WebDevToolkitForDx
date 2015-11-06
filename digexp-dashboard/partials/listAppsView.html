@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container dashboard-view">
     <h3 style="margin-top: 5px;">Script Applications</h3>
     <h4 ng-if="configInfo.spAppPath" style="color: gray">
         ({{configInfo.spAppPath}})</h4>
@@ -9,14 +9,11 @@
     <h4 ng-if="!configInfo.spAppPath" style="color: gray">Please set an app
         folder in settings</h4>
 
-    <div style="width: 100%; float: left; margin-bottom: 10px;"
-         class="form-inline">
-        <div style="float: left; width: 50%;">
-            <div class="form-group">
-                <label for="angular_search_input">Filter:</label> <input
-                    ng-model="query" type="search" class="form-control"
-                    id="angular_search_input"/>
-            </div>
+    <div class="form-inline">
+        <div class="form-group">
+            <label for="angular_search_input">Filter:</label> <input
+                ng-model="query" type="search" class="form-control"
+                id="angular_search_input"/>
         </div>
         <div style="float: right;">
             <button type="button" ng-click="pushUpdated()"
@@ -34,7 +31,8 @@
             </button>
         </div>
     </div>
-    <div>
+    <div id="dash-separator"></div>
+    <div class="dashboard-list">
         <div ng-if="numOfApps()===0&&configInfo.spAppPath.length>0&&!spAppPathNotFound">
             No Script Portlet apps found in <code>{{configInfo.spAppPath}}</code>.
         </div>

@@ -1,7 +1,7 @@
-<div class="container">
+<div class="container dashboard-view">
     <h3 style="margin-top: 5px;">WCM Design Libraries
     <span class="glyphicon glyphicon-repeat loading-spinner"
-            ng-show="loadingNewLibraries"></span>
+          ng-show="loadingNewLibraries"></span>
     </h3>
     <div ng-show="loadingNewLibraries">{{status}}</div>
     <h4 ng-if="configInfo.wcmDesignsPath" style="color: gray">({{configInfo.wcmDesignsPath}})</h4>
@@ -28,7 +28,8 @@
             </button>
         </div>
     </div>
-    <div>
+    <div id="dash-separator"></div>
+    <div class="dashboard-list">
         <div ng-if="numOfLibs()===0&&configInfo.wcmDesignsPath.length>0&&!wcmPathNotFound">
             No WCM libraries found in <code>{{configInfo.wcmDesignsPath}}</code>.
         </div>
@@ -41,7 +42,7 @@
                                   ng-if="wcmDesign.syncing"
                                   style="position: absolute; margin-left: 10px; top:-2px"></span>
                         </h4>
-					    <div ng-if="wcmDesign.syncing">{{status}}</div>
+                        <div ng-if="wcmDesign.syncing">{{status}}</div>
                         <div class="list-group-item-text">{{wcmDesign.summary}}</div>
                         <div class="list-group-item-text" ng-if="wcmDesign.dateUpdated">
                             <label>Last modified: </label> {{wcmDesign.dateUpdated}}
@@ -82,7 +83,7 @@
                                     <input type="text" ng-model="watchIgnore[wcmDesign.title]"
                                            placeholder="eg: test/*.js;test/*.css">
                                 </li>
-                             </ul>
+                            </ul>
                             <button type="button dropdown-toggle"
                                     data-toggle="dropdown" ng-click=""
                                     class="btn btn-default">

@@ -55,6 +55,17 @@ dashboardControllers.controller('ThemeListController', ['$scope', '$route', '$lo
       });
     }
 
+    if (process.platform !== "win32") {
+      ch.exec("ulimit -n", function(err, stdout) {
+        console.log(stdout);
+        if (!err && stdout && parseInt(stdout.toString()) < 1024) {
+          ch.exec("ulimit -n 4096", function() {
+
+          });
+        }
+      })
+    }
+
     $scope.modals = {
       "cloneTheme": "partials/modals/cloneThemeModal.html",
       "listThemes": "partials/modals/listThemesModal.html",

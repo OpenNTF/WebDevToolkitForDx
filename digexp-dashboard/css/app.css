@@ -6,10 +6,30 @@ body {
 html {
     font-size: initial;
     box-sizing: border-box;
-    overflow-y: scroll;
+    overflow-y: hidden;
 }
+
+.dashboard-list {
+    overflow-y: scroll;
+    width: calc(100% + 15px);
+    padding-right: 15px;
+    padding-top: 15px;
+    max-height: calc(100vh - 240px);
+    overflow-x: hidden;
+}
+
+.navbar {
+    margin-bottom: 10px
+}
+
+#dash-separator {
+    margin-left: -15px;
+    margin-right: -15px;
+    border-bottom: 1px solid lightgray;
+}
+
 .form-inline {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .navbar-default {
@@ -68,6 +88,7 @@ html {
 #alert-wrapper .alert:hover {
     opacity: 1.0;
 }
+
 
 .item-row {
     margin-bottom: 20px;
