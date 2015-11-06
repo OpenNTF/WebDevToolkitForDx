@@ -87,6 +87,8 @@ dashboardControllers.controller('SyncErrorController', ['$scope', function($scop
       action: "upload"
     });
     delete $scope.theme.conflicts[id];
+    $scope.theme.conflictRecognized = $scope.theme.conflicts.length;
+    $scope.$apply();
   };
 
   $scope.resolveWithLocal = function(id) {
@@ -96,6 +98,8 @@ dashboardControllers.controller('SyncErrorController', ['$scope', function($scop
       action: "upload"
     });
     delete $scope.theme.conflicts[id];
+    $scope.theme.conflictRecognized = $scope.theme.conflicts.length;
+    $scope.$apply();
   }
 
 }]);

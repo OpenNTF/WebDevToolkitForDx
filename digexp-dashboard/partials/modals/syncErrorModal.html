@@ -18,9 +18,9 @@
 
             <div ng-repeat="(id, conflict) in theme.conflicts">
                 <strong>{{id}}</strong>
-                <pre><span ng-repeat="part in conflict.diff"
+                <pre><span ng-repeat="part in conflict.diff track by $index"
                            ng-style="{'background-color':(part.added?'lightgreen':part.removed?'lightcoral':'')}"
-                           style="padding: 2px">{{part.value}}</span></pre>
+                           style="padding: 2px">{{part.value}}<br ng-if="$index!=conflict.diff.length-1"></span></pre>
                 Manually merge the files to handle the conflict.<br>
                 <button type="button" class="btn btn-sm btn-primary"
                         ng-click="resolveWithRemote(id)">
@@ -30,6 +30,9 @@
                         ng-click="resolveWithLocal(id)">
                     Resolve with Local
                 </button>
+            </div>
+            <div ng-if="!theme.conflictRecognized">
+                No conflicts found for {{theme.name}}.
             </div>
 
         </div>

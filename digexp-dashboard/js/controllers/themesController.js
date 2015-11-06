@@ -122,8 +122,11 @@ dashboardControllers.controller('ThemeListController', ['$scope', '$route', '$lo
       $scope.themes[id].dxsync.error = false;
       $scope.themes[id].syncing++; // for the UI to update immediately
 
-      // conditionally runs the build command
-      runBuildCommand(id, function() { sync(id); });
+      // Wait 20ms for the UI to update
+      setTimeout(function() {
+        // conditionally runs the build command
+        runBuildCommand(id, function() { sync(id); });
+      }, 20);
     };
 
     /**
@@ -200,6 +203,7 @@ dashboardControllers.controller('ThemeListController', ['$scope', '$route', '$lo
               break;
             case "conflict_recognized":
               if (!substatus.local.match(/\.conflict$/)) {
+                notifyOS("Conflict recognized for " + substatus.local + " in" + id);
                 $scope.themes[id].conflictRecognized = true;
                 $scope.themes[id].conflicts = $scope.themes[id].conflicts || {};
                 $scope.themes[id].conflicts[substatus.id] = substatus;
