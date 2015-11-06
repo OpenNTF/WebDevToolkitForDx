@@ -22,9 +22,14 @@ dashboardControllers.controller('ThemeListController', ['$scope', '$route', '$lo
       });
     };
 
-    // VARS
+    // Private variables
+
     var eventEmitters = {};
     var watchProcesses = {};
+
+    // dxsyncHashes[id][file] gives the hash for the file for the theme corresponding to the id
+    // note: the file is a path relative to the theme's folder that also begins with /
+    // the file's path must use forward slashes.
     var dxsyncHashes = {};
 
     /**
@@ -33,11 +38,16 @@ dashboardControllers.controller('ThemeListController', ['$scope', '$route', '$lo
      * - watching (boolean):
      */
     $scope.themes = {};
+    // TODO fix the triangle of indentation below
     if ($scope.configInfo.dxThemePath) {
       fs.exists($scope.configInfo.dxThemePath, function(exists) {
         $scope.dxThemePathNotFound = !exists;
         if (exists) {
           $scope.themes = themes.getThemes();
+          // load the hashes
+          setTimeout(function() {
+            loadDxsyncHashes();
+          }, 3000);
         } else {
           $scope.themes = {};
         }
@@ -70,30 +80,11 @@ dashboardControllers.controller('ThemeListController', ['$scope', '$route', '$lo
     // Theme to edit
     $scope.activeTheme = "";
 
-    //var loadDashConfig = function() {
-    //  var themePath = dashConfig.getConfigInfo().dxThemePath;
-    //  vfs = vfs || require("vinyl-fs");
-    //  vfs.src(themePath + "/*/digexp-dash-config.json", { base: themePath })
-    //    .pipe(map(function(file, cb) {
-    //      var json = JSON.parse(file.contents.toString());
-    //      var id = path.dirname(file.relative);
-//
-    //      // check .settings and user-settings.json for any config that isn't in
-    //      // in digexp-dash-config.json but is in .settings or user-settings.json
-//
-    //      // the .settings files and user-settings files should have already been checked
-    //      // by now
-    //      $scope.themes[id].datePushed = json.datePushed || $scope.themes[id].settings.datePushed;
-    //      $scope.themes[id].datePulled = json.datePulled || $scope.themes[id].settings.datePulled;
-    //      $scope.themes[id].dateSynced = json.dateSynced || $scope.themes[id].settings.dateSynced;
-    //      $scope.themes[id].watchIgnore = json.watchIgnore || $scope.themes[id].watchIgnore;
-    //      $scope.themes[id].buildCommand = json.buildCommand || $scope.themes[id].buildCommand;
-    //      cb(null, file);
-    //    })).on("end", function() { $scope.$apply(); })
-    //};
-    //loadDashConfig();*
-
     // FUNCTIONS
+
+    /**
+     * Runs dxsync push on the theme
+     */
     $scope.push = function(id) {
       $scope.themes[id].dxsync.error = false;
       $scope.themes[id].syncing++; // for the UI to update immediately
@@ -101,12 +92,21 @@ dashboardControllers.controller('ThemeListController', ['$scope', '$route', '$lo
       // conditionally runs the build command
       runBuildCommand(id, function() {  themes.push(id, getEventEmitter(id)); });
     };
+
+    /**
+     * Runs dxsync pull on the theme
+     */
     $scope.pull = function(id) {
       $scope.themes[id].dxsync.error = false;
       $scope.themes[id].syncing++; // for the UI to update immediately
       $scope.themes[id].needsToBeSynced = false;
+      $scope.themes[id].pulling = true;
       themes.pull(id, getEventEmitter(id));
     };
+
+    /**
+     * Runs dxsync sync on the theme with UI updates
+     */
     $scope.sync = function(id) {
       // reset error
       $scope.themes[id].dxsync.error = false;
@@ -116,6 +116,9 @@ dashboardControllers.controller('ThemeListController', ['$scope', '$route', '$lo
       runBuildCommand(id, function() { sync(id); });
     };
 
+    /**
+     * Runs dxsync for the theme
+     */
     var sync = function(id) {
       notifyOS("Starting syncing theme: " + id);
 
@@ -149,6 +152,9 @@ dashboardControllers.controller('ThemeListController', ['$scope', '$route', '$lo
       watch(id);
     };
 
+    /**
+     * Returns the dxsync eventEmitter (a singleton) for the given theme.
+     */
     var getEventEmitter = function(id) {
       if (!eventEmitters[id]) {
         eventEmitters[id] = new events.EventEmitter();
@@ -171,7 +177,9 @@ dashboardControllers.controller('ThemeListController', ['$scope', '$route', '$lo
             case "idle":
               $scope.themes[id].waiting = $scope.themes[id].backgroundSync;
               $scope.themes[id].syncing = 0;
+              loadDxsyncHashes(id);
               $scope.$apply();
+              $scope.themes[id].pulling = false;
               break;
             case "error":
               console.warn(substatus);
@@ -180,6 +188,7 @@ dashboardControllers.controller('ThemeListController', ['$scope', '$route', '$lo
               $scope.themes[id].syncing = 0;
               $scope.cancel(id); // stop watching
               $scope.$apply();
+              $scope.themes[id].pulling = false;
               break;
             case "conflict_recognized":
               if (!substatus.local.match(/\.conflict$/)) {
@@ -204,6 +213,10 @@ dashboardControllers.controller('ThemeListController', ['$scope', '$route', '$lo
       $scope.themes[id].needsToBeSynced = needsToBeSynced;
     };
 
+    /**
+     * Starts watching the theme
+     * @param id
+     */
     var watch = function(id) {
       // check if the theme should be watched
       if (shouldBeWatched(id)) {
@@ -235,126 +248,158 @@ dashboardControllers.controller('ThemeListController', ['$scope', '$route', '$lo
           data = data.toString();
           debugLogger.log("theme (%s) watch process stdout: " + data, id);
 
-          // if syncing is in progress then any changes should be taken care of
-          // todo check what happens if a file is changed after its synchronization
-          // but while dxsync is still synchronizing other files
-          if (!$scope.themes[id].syncing && data.match(/path_changed/)) {
-            var file = data.split(":")[1];
-            if ($scope.themes[id].pushOnWatch) {
-              pushFile(file, id);
-            } else {
-              syncFile(file, id);
+          var changedFiles = {}, unlinkedFiles = {};
+
+          // The data is expected to take the form of
+          // "path_changed:foo.html\nunlink:bar.js\npath_changed:foo.html\npath_changed:baz.html
+
+          // This parses the data message and adds the changed/deleted files
+          // to the keys of changedFiles and unlinkedFiles
+          var messages = data.split(/[\r\n]+/g);
+          for (var i = 0; i < messages.length; i++) {
+            if (messages[i].match(/^path_changed:/)) {
+              var filename = messages[i].split(":")[1];
+              changedFiles[filename.trim()] = true;
+            } else if (messages[i].match(/^unlink:/)) {
+              var filename = messages[i].split(":")[1];
+              unlinkedFiles[filename.trim()] = true;
             }
           }
+
+          // This pushes/deletes the hash for each file
+          Object.keys(changedFiles).forEach(function(file) {
+            pushFile(file, id);
+          });
+          Object.keys(unlinkedFiles).forEach(function(file) {
+            deleteDxsyncHash(file, id);
+          });
         });
       }
     };
 
-    var pushFile = function(relPath, id) {
-      $scope.themes[id].syncing++;
-      vfs = vfs || require("vinyl-fs");
-      vfs.src($scope.configInfo.dxThemePath + "/" + id + "/" + relPath,
-        { base: $scope.configInfo.dxThemePath + "/" + id })
-        .pipe(function(file, cb) {
-          uploadVinyl(file, cb, id);
-        })
-        .on("end", function() {
-          $scope.themes[id].syncing--;
-          $scope.$apply();
-        });
-    };
-
     /**
-     *  @param relPath: path relative to root of the theme's directory
+     * Pushes a file from the theme to the server
+     * @param relPath Path of the file relative to the local directory of the theme
+     * @param id ID of the theme
      */
-    var syncFile = function(relPath, id) {
-      relPath = relPath.replace(/\n|\r/g, "");
+    var pushFile = function(relPath, id) {
+      var base = $scope.configInfo.dxThemePath + "/" + id;
+      debugLogger.log("Pushing " + relPath + " for " + id);
 
-      notifyOS("Starting syncing " + relPath + " for " + id);
       $scope.themes[id].syncing++;
       $scope.$apply();
-      vfs = vfs || require("vinyl-fs");
-      vfs.src($scope.configInfo.dxThemePath + "/" + id + "/" + relPath,
-        { base: $scope.configInfo.dxThemePath + "/" + id })
-        .pipe(map(function(file, cb) {
-          checkConflicts(file.relative, file.contents.toString(), id, function(err, conflict) {
-            debugLogger.log("checking conflicts for " + file.relative);
-            debugLogger.log("changed file hash: " + makeHash(file.contents.toString()));
-            if (err) {
-              notifyOS("Error syncing " + relPath + " for " + id);
-              debugLogger.log("Error syncing " + relPath + " for " + id);
-              eventEmitters[id] = getEventEmitter(id);
-              eventEmitters[id].emit("status", "error", { error: err });
-              console.warn(err);
-            } else if (cgetonflict) {
-              notifyOS("Conflict syncing " + relPath + " for " + id);
-              debugLogger.log("Conflict syncing " + relPath + " for " + id);
-              var options = {
-                id: file.relative,
-                local: file.path,
-                remote: file.path + ".conflict"
-              };
-              eventEmitters[id] = getEventEmitter(id);
-              eventEmitters[id].emit("status", "conflict_recognized", options);
-              cb();
-            } else {
-              notifyOS("Finished syncing " + relPath + " for " + id);
-              updateDxsyncHashes(file.relative, file.contents, id);
-              uploadVinyl(file, cb, id);
-            }
-          });
-        }))
-        .on("end", function() {
-          $scope.themes[id].syncing--;
-          $scope.$apply();
-        });
-    };
 
-    $scope.broadcastDxsyncErrorModal = function(theme) {
-      console.log(theme);
-      $scope.$broadcast('dxsyncErrorModal', theme)
-    };
-
-    var checkConflicts = function(relPath, contents, id, cb) {
-      getDxsyncHash(relPath, contents, id, function(err, hash) {
+      // When it's done pushing
+      var done = function(err, message) {
+        debugLogger.log("Done pushing " + relPath + " for " + id + ", " + message);
+        $scope.themes[id].syncing--;
+        $scope.$apply();
         if (err) {
-          cb && cb(err);
-        } else {
-          var baseUrl = getWebDavBaseUrl(id);
-          var options = {
-            url: "/" + relPath,
-            baseUrl: baseUrl,
-            method: "GET"
-          };
-          request = request || require("request");
-          request(options, function(error, response, body) {
-            if (error) {
-              console.error(error);
-              cb(error);
-            } else if (response.statusCode >= 400) {
-              console.warn(relPath + ": " + response.statusCode + ", " + response.statusMessage);
-              cb();
-            } else {
-              debugLogger.log("remote file hash: " + makeHash(body.toString()));
-              debugLogger.log("hash in .hashes: " + hash);
-              var conflict = makeHash(body.toString()) !== hash;
-              if (conflict) {
-                fs.writeFile(dashConfig.getConfigInfo().dxThemePath + "/" + id + "/" + relPath + ".conflict",
-                  body)
-              }
-              cb && cb(null, conflict);
-            }
-          });
+          console.warn(err);
+          console.warn(err.stack);
+          if (message) {
+            notifyOS(message);
+            eventEmitters[id] = getEventEmitter(id);
+            eventEmitters[id].emit("status", "error", {error: err});
+          }
+        } else if (message) {
+          notifyOS(message);
         }
+      };
+
+      // Actually pushes the file
+      var push = function(contents, newHash) {
+        // If the newHash is different, the file needs to be pushed
+        var file = {
+          relative: relPath,
+          path: base + "/" + relPath,
+          contents: contents,
+          base: base,
+          isBuffer: function() { return true; }
+        };
+
+        uploadVinyl(file, function(err) {
+          if (err) {
+            done(err, 'Error pushing "' + file.relative + '" for theme: ' + id);
+          } else {
+            updateDxsyncHash(relPath, contents, id, newHash,
+              done.bind(null, null, 'Finished pushing "' + relPath + '" for theme: ' + id));
+          }
+        }, id);
+      };
+
+      // TODO fix callback hell!!
+
+      // Check if the path is a directory
+      fs.stat(base + "/" + relPath, function(err, stats) {
+        // In case of an error, or if the path is for a directory, don't do anything
+        if (err || !stats.isFile()) {
+          debugLogger.log("Cancelling pushing " + relPath + " for " + id + ", not a file");
+          done(err, false);
+          return;
+        }
+
+        // Else the file will be pushed
+        notifyOS('Pushing "' + relPath + '" for theme: ' + id);
+        fs.readFile(base + "/" + relPath, function(err, contents) {
+          if (err) {
+            done(err, false);
+            return
+          }
+          var oldHash = (dxsyncHashes[id] || {})[toDxsyncHashPath(relPath)];
+          var newHash = makeDxsyncHash(contents.toString());
+
+          if (oldHash !== newHash || !oldHash) {
+            // If the newHash is different, the file needs to be pushed
+            debugLogger.log("Starting pushing " + relPath + " for " + id + ", local change was made");
+            push(contents, newHash)
+          } else {
+            // If the hashes are equal then no changes were made so the file
+            // doesn't need to be pushed
+
+            // TODO check errors
+            webdavGet(id, relPath, function(err, body) {
+              if (err || !body) {
+                // Then there might be issues with the remote file so push the local one
+                debugLogger.log("Starting pushing " + relPath + " for " + id + ", error with remote copy");
+                push(contents, newHash)
+              } else {
+                var remoteHash = makeDxsyncHash(body.toString());
+                if (remoteHash != newHash) {
+                  // Then the remote file is different than the local copy
+                  // so push the local file
+                  debugLogger.log("Starting pushing " + relPath + " for " + id + ", remote copy is different");
+                  push(contents, newHash)
+                } else {
+                  debugLogger.log("Cancelling pushing " + relPath + " for " + id + ", no changes found");
+                  done(null, 'No changes found, done pushing "' + relPath + '" for theme: ' + id);
+                }
+              }
+            });
+          }
+        });
       });
     };
 
-    var makeHash = function(str) {
+    /**
+     * Converts a relative path to the format used in .hashes file by dxsync
+     */
+    var toDxsyncHashPath = function(relPath, id) {
+      return "/" + relPath.trim().replace(/\\|\\\\/g, "/");
+    };
+
+    $scope.broadcastDxsyncErrorModal = function(theme) {
+      $scope.$broadcast('dxsyncErrorModal', theme)
+    };
+
+    /**
+     * Hashes a string as done by dxync
+     */
+    var makeDxsyncHash = function(str) {
       return crypt.createHash("md5")
         .update(str, "utf8")
         .digest("hex");
     };
-
 
     /**
      * Decrypts dxsync passwords
@@ -362,50 +407,114 @@ dashboardControllers.controller('ThemeListController', ['$scope', '$route', '$lo
     var decryptDxsync = function(pass) {
       var password = "U6Jv]H[tf;mxE}6t*PQz?j474A7T@Vx%gcVJA#2cr2GNh96ve+";
       var decipher = crypt.createDecipher("aes-256-ctr", password)
-      var dec = decipher.update( pass, "hex", "utf8" )
+      var dec = decipher.update( pass, "hex", "utf8" );
       dec += decipher.final( "utf8" );
       return dec;
     };
 
     /**
-     * cb is a function(err, hash) where hash is possibly undefined (even if there
-     * is no error)
+     * Updates the .hashes file theme[id] with hash of the given file. The path
+     * and contents params should correspond to the same file.
+     *
+     * The path should be relative to the root of the theme directory
+     * TODO check if path is absolute
      */
-    var getDxsyncHash = function(relPath, contents, id, cb) {
+    var updateDxsyncHash = function(path, contents, id, hash, cb) {
+      if (typeof hash === 'function') {
+        cb = hash;
+        hash = null;
+      }
+      hash = hash || makeDxsyncHash(contents.toString());
+
+      if (!dxsyncHashes[id]) {
+        debugLogger.log("Can't update hshes for " + id + ", they don't exist");
+        // This shouldn't happen, todo throw an error?
+      } else {
+        debugLogger.log("Starting to updating hashes for " + path + " in " + id);
+        dxsyncHashes[id]["/" + path.replace(/\\|\\\\/g, "/")] = hash;
+        var data = JSON.stringify(dxsyncHashes[id], null, '    ');
+        fs.writeFile(dashConfig.getConfigInfo().dxThemePath + "/" + id + "/.hashes", data, function() {
+          debugLogger.log("Finished updated .hashes in " + id);
+          cb && cb();
+        });
+      }
+    };
+
+    /**
+     * Removes the hash from the .hashes file;
+     */
+    var deleteDxsyncHash = function(relPath, id, cb) {
       fs.readFile($scope.configInfo.dxThemePath + "/" + id + "/.hashes", function(err, data) {
         if (err) {
           cb && cb(err);
           return;
         }
         var hashes = JSON.parse(data.toString());
-        var hashId = relPath.replace(/\\|\\\\/g, "/");
-        hashId = "/" + hashId;
-        var hash = hashes[hashId];
-        dxsyncHashes = hashes;
-        cb && cb(null, hash, hashes);
+        var hashId = "/" + relPath.replace(/\\|\\\\/g, "/");
+        delete hashes[hashId];
+        dxsyncHashes[id] = hashes;
+        cb && cb(null, hashes);
       });
     };
 
     /**
-     * Updates the .hashes file theme[id] with hash of the given file. The path
-     * and contents params should correspond to the same file.
+     * Loads the dxsync hashes from disk
+     *
+     * @param folders: a string or array of folders that contain .hashes files.
+     *        if this parameter is not given, it will load .hashes for every
+     *        theme.
      */
-    var updateDxsyncHashes = function(path, contents, id) {
-      dxsyncHashes["/" + path] = makeHash(contents.toString());
-      var contents = JSON.stringify(dxsyncHashes, null, '    ');
-      fs.writeFile(dashConfig.getConfigInfo().dxThemePath + "/" + id + "/.hashes", contents, function(){
-        debugLogger.log("updated .hashes")
-      });
+    var loadDxsyncHashes = function(folders) {
+      if (!folders) {
+        folders = Object.keys($scope.themes);
+      } else if (typeof folders == 'string') {
+        folders = [folders]
+      }
 
-      /* var vin = new Vinyl({
-       cwd: "./",
-       base: "",
-       path:".hashes",
-       contents: new Buffer(contents)
-       });
-       uploadVinyl(vin, null, id);*/
+      folders.forEach(function(name) {
+        var base = $scope.configInfo.dxThemePath + "/" + name;
+        fs.readFile(base + "/.hashes", function(err, data) {
+          if (!err) {
+            dxsyncHashes[name] = JSON.parse(data.toString());
+          } else if (name in $scope.themes && false) {
+            // TODO should the error be handled differently?
+            // This is currently disabled with "&& false"
+
+            // Else recompute all of the hashes
+            dxsyncHashes[name] = dxsyncHashes[name] || {};
+            mapdir(base, function(filename) {
+              var dxsyncPath = toDxsyncHashPath(path.relative(base, filename));
+              fs.readFile(filename, function(contents) {
+                dxsyncHashes[name][dxsyncPath] = makeDxsyncHash(contents.toString());
+              })
+            });
+          } else {
+            debugLogger.log("No .hashes found for " + name);
+          }
+        });
+      })
     };
 
+    /**
+     * Applies the function to the path of every file in the directory (including
+     * subdirectories). The path will be absolute
+     */
+    var mapdir = function(dir, f) {
+      fs.stat(dir, function(err, stats) {
+        // In case of an error, or if the path is for a directory, don't do anything
+        if (stats.isDirectory()) {
+          fs.readdir(dir, function(files) {
+            files.forEach(function(file) { mapdir(file, f); });
+          })
+        } else {
+          f(dir);
+        }
+      });
+    };
+
+    /**
+     * Runs the build command for this theme
+     */
     var runBuildCommand = function(id, cb) {
       if ($scope.themes[id].hasBuildCommand && $scope.themes[id].buildCommand.length > 0) {
         // execute a pre-sync command if it has one
@@ -421,6 +530,9 @@ dashboardControllers.controller('ThemeListController', ['$scope', '$route', '$lo
       }
     };
 
+    /**
+     * Updates the build command for this theme from the UI.
+     */
     $scope.updateBuildCommand = function(id) {
       if ($scope.themes[id].hasBuildCommand) {
         var config = { themeBuildCommands: {}};
@@ -429,12 +541,15 @@ dashboardControllers.controller('ThemeListController', ['$scope', '$route', '$lo
       }
     };
 
+    /**
+     *
+     */
     var updateWatchSettings = function(id) {
       var config = { themeWatchIgnore: {}, themePushOnWatch: {} };
-      if (themeWatchIgnore[id]) {
+      if ($scope.themes[id].watchIgnore) {
         config.themeWatchIgnore[id] = $scope.themes[id].watchIgnore;
       }
-      if (theme.pushOnWatch !== undefined) {
+      if ($scope.themes[id].pushOnWatch !== undefined) {
         config.themePushOnWatch[id] = $scope.themes[id].pushOnWatch;
       }
       settings.setSettings(config);
@@ -471,6 +586,7 @@ dashboardControllers.controller('ThemeListController', ['$scope', '$route', '$lo
       $scope.stopWatching(id);
     };
     $scope.pushUpdated = function(id) {
+      // TODO re-implement?
       themes.pushUpdated();
     };
     $scope.refresh = function() {
@@ -665,20 +781,18 @@ dashboardControllers.controller('ThemeListController', ['$scope', '$route', '$lo
 
     /**
      * Uploads a Vinyl file object to the theme on webdav
+     *
+     * @param retries - the number of times that the request should be retried
+     *                  is set to 3 by default unless specified.
      */
     var uploadVinyl = function(vinyl, cb, id, retries) {
-      debugLogger.log("uploading: " + vinyl.relative);
-      debugLogger.log("path: " + vinyl.path);
+      debugLogger.log("uploadVinyl " + id + ": uploading: " + vinyl.relative + " in " + id);
+      debugLogger.log("uploadVinyl " + id + ": path: " + vinyl.path);
 
-      if (!vinyl.relative) {
-        debugLogger.log("not relative:" + vinyl.path);
-        cb(null, vinyl);
+      if (!vinyl.relative || retries > 3) {
+        debugLogger.log("uploadVinyl " + id + ": Error no relative path given for " + vinyl.path);
+        cb(null, vinyl); // todo error?
         return;
-      }
-
-      // TODO avoid hardcoded number
-      if (retries === undefined) {
-        retries = 3;
       }
 
       var baseUrl = getWebDavBaseUrl(id);
@@ -690,39 +804,39 @@ dashboardControllers.controller('ThemeListController', ['$scope', '$route', '$lo
         method: vinyl.isBuffer() ? "PUT" : "MKCOL" // dirs are not buffers
       };
 
-      debugLogger.log("base url: " + baseUrl);
-      consodebugLoggerle.log("url: " + url);
+      debugLogger.log("uploadVinyl " + id + ": base url: " + baseUrl);
+      debugLogger.log("uploadVinyl " + id + ": url: " + url);
 
       if (vinyl.isBuffer()) {
         options.body = vinyl.contents.toString(); // this gives 201 responses codes
       }
 
+      request = request || require("request");
       request(options, function(error, response, body) {
         if (error) {
-          console.warn(error.message);
+          cb(error);
+          return;
         } else if (response.statusCode >= 400) {
-          console.warn(vinyl.relative + ": " + response.statusCode + ", " + response.statusMessage);
-          cb(null, vinyl);
+          debugLogger.log("uploadVinyl: " + vinyl.relative + ": " + response.statusCode + ", " + response.statusMessage);
           if (response.statusCode === 408 && retries > 0) {
-            uploadVinyl(vinyl, cb, id, retries - 1);
+            uploadVinyl(vinyl, cb, id, retries + 1);
             retries = -1; // don't call the callback twice
           } else if (response.statusCode === 409) {
+            debugLogger.log("uploadVinyl " + id + ": parent collection doesn't exist for " + vinyl.relative + " sending MKCOL request");
             uploadParent(vinyl, function() {
-              uploadVinyl(vinyl, cb, id, retries - 1);
-            }, id, retries - 1);
+              uploadVinyl(vinyl, cb, id, retries + 1);
+            }, id, retries + 1);
             retries = -1; // don't call the callback twice
+          } else {
+            cb(null, vinyl);
           }
         } else {
           debugLogger.log(vinyl.relative + ": " + response.statusCode + ", " + options.method);
-        }
-
-        if (retries > -1) {
-          debugLogger.log(vinyl.relative + " done");
+          debugLogger.log("uploadVinyl " + id + ": done with " + vinyl.relative + " " + options.method + ", " + response.statusCode);
           cb && cb(null, vinyl);
         }
       });
     };
-
 
     /**
      * Uploads the parent directory of the given vinyl file
@@ -738,9 +852,32 @@ dashboardControllers.controller('ThemeListController', ['$scope', '$route', '$lo
       uploadVinyl(parent, cb, id, retries);
     };
 
+    var webdavGet = function(id, filename, cb) {
+      var options = {
+        url: "/" + filename,
+        baseUrl: getWebDavBaseUrl(id),
+        method: "GET"
+      };
+
+      request = request || require("request");
+      request(options, function(error, response, body) {
+        if (error) {
+          cb(error);
+          return;
+        } else if (response.statusCode >= 400) {
+          cb(null, null);
+        } else {
+          cb(null, body);
+        }
+      });
+    }
+
+    /**
+     * Returns the webdav url for the given theme with login credentials.
+     */
     var getWebDavBaseUrl = function(id) {
       var name = $scope.themes[id].name || id;
-      var config = dashConfig.getServerForTool(dashConfig.tools.dxTheme);
+      var config = $scope.themes[id].settings;
       var url = config.secure ? "https://" : "http://";
       url += (config.username || config.userName) + ":" + decryptDxsync(config.password) + "@";
       url += config.host + ":" + config.port;

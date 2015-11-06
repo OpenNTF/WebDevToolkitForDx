@@ -33,7 +33,7 @@
         <div ng-if="numOfThemes()===0&&configInfo.dxThemePath.length>0&&!dxThemePathNotFound">
             <br><br>No themes found in <code>{{configInfo.dxThemePath}}</code>.
         </div>
-        <div ng-repeat="theme in getThemeList() | filter: query | orderBy:'name' " class="row item-row">
+        <div ng-repeat="theme in getThemeList() | filter: query | orderBy:['name','folder']" class="row item-row">
             <div class="col-lg-12 col-md-12 col-sm-12">
                 <div style="float: left; width: 60%">
                     <div ng-click="showDetails(theme.folder)">
@@ -72,8 +72,6 @@
                         Pushed: {{theme.datePushed}}</div>
                     <div class="list-group-item-text" ng-if="theme.datePulled">
                         Pulled: {{theme.datePulled}}</div>
-                    <div class="list-group-item-text" ng-if="theme.dateSynced">
-                        Synced: {{theme.dateSynced}}</div>
                 </div>
                 <div style="padding-top: 20px; clear: both;">
                     <!--  TODO the gear button for build commands is disabled for now
@@ -98,14 +96,13 @@
                       </div>-->
                     <button type="button" ng-click="push(theme.folder)"
                             class="btn btn-default"
-                            ng-disabled="theme.syncing">
+                            ng-disabled="theme.syncing||(!theme.datePulled&&!theme.dateSynced)">
                         Push</button>
                     <button type="button" ng-click="pull(theme.folder)"
                             class="btn btn-default"
                             ng-disabled="theme.syncing">
                         Pull</button>
 
-                    <!-- Sync Button -->
                     <div class="btn-group dropdown" ng-show="!theme.waiting">
                         <button type="button"
                                 ng-click="sync(theme.folder)"
@@ -142,10 +139,11 @@
                      </div>-->
 
                     <!-- Watch Button TODO disabled for now -->
-                    <!--   <div class="btn-group dropdown">
+                       <div class="btn-group dropdown">
                            <button type="button" class="btn btn-default"
                                    ng-show="!theme.watching"
-                                   ng-click="watchButton(theme.folder)">
+                                   ng-click="watchButton(theme.folder)"
+                                   ng-disabled="!theme.datePulled&&!theme.dateSynced">
                                Watch
                            </button>
                            <button type="button" class="btn btn-default"
@@ -155,7 +153,8 @@
                                Watching
                            </button>
                            <button class="btn btn-default dropdown-toggle"
-                                   data-toggle="dropdown" >
+                                   data-toggle="dropdown"
+                                   ng-disabled="!theme.datePulled&&!theme.dateSynced">
                                <span class="caret"></span>
                            </button>
                            <ul class="dropdown-menu" onclick="event.stopPropagation()">
@@ -163,7 +162,7 @@
                                    <strong>Ignore</strong>
                                    <input type="text" ng-model="theme.watchIgnore">
                                </li>
-                               <li role="separator" class="divider"></li>
+                               <!--<li role="separator" class="divider"></li>
                                <li class="no-a-tag">
                                    <strong>When a file changes:</strong><br>
                                        <span ng-click="theme.pushOnWatch=true">
@@ -176,10 +175,10 @@
                                                   name="watch-sync-radio"
                                                   ng-checked="!theme.pushOnWatch"> Sync
                                        </span>
-                               </li>
+                               </li>-->
 
                            </ul>
-                       </div>-->
+                       </div>
                     <!--<button type="button" ng-click="preview(theme.folder)"
                             class="btn btn-default">
                         <span class="glyphicon glyphicon-search"></span> Preview</button>-->

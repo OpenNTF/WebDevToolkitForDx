@@ -163,12 +163,14 @@ var themes = (function() {
         mode: 'PUSH'
       };
 
-      dxsync = dxsync || require("dxsync");
-      dxsync.runSync(localDir, options, eventEmitter);
-      themes.updateThemeInfo(id, {
-        datePushed: (new Date()).toLocaleString()
-      });
-
+      // add a short delay for the UI to update
+      setTimeout(function() {
+        dxsync = dxsync || require("dxsync");
+        dxsync.runSync(localDir, options, eventEmitter);
+        themes.updateThemeInfo(id, {
+          datePushed: (new Date()).toLocaleString()
+        });
+      }, 20);
     },
     pull: function(id, eventEmitter) {
       notifier.notify({
@@ -184,11 +186,14 @@ var themes = (function() {
         debug: true,
         mode: 'PULL'
       };
-      dxsync = dxsync || require("dxsync");
-      dxsync.runSync(localDir, options, eventEmitter);
-      themes.updateThemeInfo(id, {
-        datePulled: (new Date()).toLocaleString()
-      });
+      // add a short delay for the UI to update
+      setTimeout(function() {
+        dxsync = dxsync || require("dxsync");
+        dxsync.runSync(localDir, options, eventEmitter);
+        themes.updateThemeInfo(id, {
+          datePulled: (new Date()).toLocaleString()
+        });
+      }, 20);
     },
     preview: function(id) {
       alert('not implemented');

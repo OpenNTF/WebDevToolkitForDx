@@ -28,20 +28,24 @@ for (var i = 0; i < length; i++) {
 
 console.log("watching " + directory);
 
-var run = function(path) {
+var run = function(event, path) {
   if (path.match(/^\.hashes|\.conflict$/) // dxsync changes this file
-      || anymatch(toIgnore, path)) {
+    || anymatch(toIgnore, path)) {
     return;
   }
 
-  console.log("path_changed:" + path);
+  if (event === "change" || event === "add" || event === "addDir") {
+    console.log("path_changed:" + path);
+  } else if (event === "unlink") {
+    console.log("unlink:" + path);
+  }
 
   if (buildCommand.length) {
     exec(buildCommand, function() {
-      console.log("waiting")
+     // console.log("waiting")
     });
   } else {
-    console.log("waiting");
+   // console.log("waiting");
   }
 };
 
@@ -50,9 +54,8 @@ var watcher = chokidar.watch(directory, {
   ignoreInitial: true,
   cwd: directory
 });
-watcher.on("add", run);
-watcher.on("change", run);
-watcher.on("unlink", run);
+watcher.on("all", run);
+//watcher.on("unlinkDir", run);
 
 process.on("SIGTERM", function() { watcher.close() });
 process.on("exit", function() { watcher.close() });
