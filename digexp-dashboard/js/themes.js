@@ -124,6 +124,7 @@ var themes = (function() {
           themeObjects[file].dateSynced = parseDate(themeInfo.dateSynced);
 
           themeObjects[file].syncing = themeObjects[file].syncing || 0;
+          themeObjects[file].pushingFiles = themeObjects[file].pushingFiles || 0;
 
           if (themeObjects[file].needsToBeSynced ||
             (!themeObjects[file].datePulled && !themeObjects[file].dateSynced)) {

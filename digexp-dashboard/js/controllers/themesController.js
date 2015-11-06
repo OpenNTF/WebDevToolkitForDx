@@ -100,7 +100,6 @@ dashboardControllers.controller('ThemeListController', ['$scope', '$route', '$lo
       $scope.themes[id].dxsync.error = false;
       $scope.themes[id].syncing++; // for the UI to update immediately
       $scope.themes[id].needsToBeSynced = false;
-      $scope.themes[id].pulling = true;
       themes.pull(id, getEventEmitter(id));
     };
 
@@ -179,7 +178,6 @@ dashboardControllers.controller('ThemeListController', ['$scope', '$route', '$lo
               $scope.themes[id].syncing = 0;
               loadDxsyncHashes(id);
               $scope.$apply();
-              $scope.themes[id].pulling = false;
               break;
             case "error":
               console.warn(substatus);
@@ -188,7 +186,6 @@ dashboardControllers.controller('ThemeListController', ['$scope', '$route', '$lo
               $scope.themes[id].syncing = 0;
               $scope.cancel(id); // stop watching
               $scope.$apply();
-              $scope.themes[id].pulling = false;
               break;
             case "conflict_recognized":
               if (!substatus.local.match(/\.conflict$/)) {
@@ -245,6 +242,12 @@ dashboardControllers.controller('ThemeListController', ['$scope', '$route', '$lo
 
         watchProcesses[id] = ch.spawn(command, args);
         watchProcesses[id].stdout.on("data", function(data) {
+          if ($scope.themes[id].syncing > 0) {
+            // If dxsync has an operation in progress, don't push
+            // TODO queue push operation for when dxsync is finished?
+            return;
+          }
+
           data = data.toString();
           debugLogger.log("theme (%s) watch process stdout: " + data, id);
 
@@ -286,13 +289,13 @@ dashboardControllers.controller('ThemeListController', ['$scope', '$route', '$lo
       var base = $scope.configInfo.dxThemePath + "/" + id;
       debugLogger.log("Pushing " + relPath + " for " + id);
 
-      $scope.themes[id].syncing++;
+      $scope.themes[id].pushingFiles++;
       $scope.$apply();
 
       // When it's done pushing
       var done = function(err, message) {
         debugLogger.log("Done pushing " + relPath + " for " + id + ", " + message);
-        $scope.themes[id].syncing--;
+        $scope.themes[id].pushingFiles--;
         $scope.$apply();
         if (err) {
           console.warn(err);

@@ -39,7 +39,7 @@
                     <div ng-click="showDetails(theme.folder)">
                         <h4 class="list-group-item-heading">{{theme.name}}
                         <span class="glyphicon glyphicon-refresh syncing-spinner"
-                              ng-show="theme.syncing"></span></h4>
+                              ng-show="theme.syncing||theme.pushingFiles"></span></h4>
                         <div class="list-group-item-text">
                             <strong>Host:</strong> {{theme.settings.host}}</div>
                     </div>
@@ -72,6 +72,8 @@
                         Pushed: {{theme.datePushed}}</div>
                     <div class="list-group-item-text" ng-if="theme.datePulled">
                         Pulled: {{theme.datePulled}}</div>
+                    <div class="list-group-item-text" ng-if="theme.dateSynced">
+                        Synced: {{theme.dateSynced}}</div>
                 </div>
                 <div style="padding-top: 20px; clear: both;">
                     <!--  TODO the gear button for build commands is disabled for now
@@ -139,46 +141,34 @@
                      </div>-->
 
                     <!-- Watch Button TODO disabled for now -->
-                       <div class="btn-group dropdown">
-                           <button type="button" class="btn btn-default"
-                                   ng-show="!theme.watching"
-                                   ng-click="watchButton(theme.folder)"
-                                   ng-disabled="!theme.datePulled&&!theme.dateSynced">
-                               Watch
-                           </button>
-                           <button type="button" class="btn btn-default"
-                                   ng-show="theme.watching"
-                                   ng-click="stopWatching(theme.folder)">
-                               <span class="glyphicon glyphicon-stop"></span>
-                               Watching
-                           </button>
-                           <button class="btn btn-default dropdown-toggle"
-                                   data-toggle="dropdown"
-                                   ng-disabled="!theme.datePulled&&!theme.dateSynced">
-                               <span class="caret"></span>
-                           </button>
-                           <ul class="dropdown-menu" onclick="event.stopPropagation()">
-                               <li class="no-a-tag">
-                                   <strong>Ignore</strong>
-                                   <input type="text" ng-model="theme.watchIgnore">
-                               </li>
-                               <!--<li role="separator" class="divider"></li>
-                               <li class="no-a-tag">
-                                   <strong>When a file changes:</strong><br>
-                                       <span ng-click="theme.pushOnWatch=true">
-                                           <input type="checkbox" name="watch-sync-radio"
-                                                   ng-checked="theme.pushOnWatch"> Push
-                                       </span>
-                                       <span ng-click="theme.pushOnWatch=false">
-                                           <input style="margin-left: 10px"
-                                                  type="checkbox"
-                                                  name="watch-sync-radio"
-                                                  ng-checked="!theme.pushOnWatch"> Sync
-                                       </span>
-                               </li>-->
+                    <div class="btn-group dropdown">
+                        <button type="button" class="btn btn-default"
+                                ng-show="!theme.watching"
+                                ng-click="watchButton(theme.folder)"
+                                ng-disabled="!theme.datePulled&&!theme.dateSynced">
+                            Watch
+                        </button>
+                        <button type="button" class="btn btn-default"
+                                ng-show="theme.watching"
+                                ng-click="stopWatching(theme.folder)">
+                            <span class="glyphicon glyphicon-stop"></span>
+                            Watching
+                        </button>
+                        <div class="btn-group">
+                            <button class="btn btn-default dropdown-toggle"
+                                    data-toggle="dropdown"
+                                    ng-disabled="!theme.datePulled&&!theme.dateSynced">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" onclick="event.stopPropagation()">
+                                <li class="no-a-tag">
+                                    <strong>Ignore</strong>
+                                    <input type="text" ng-model="theme.watchIgnore">
+                                </li>
 
-                           </ul>
-                       </div>
+                            </ul>
+                        </div>
+                    </div>
                     <!--<button type="button" ng-click="preview(theme.folder)"
                             class="btn btn-default">
                         <span class="glyphicon glyphicon-search"></span> Preview</button>-->
