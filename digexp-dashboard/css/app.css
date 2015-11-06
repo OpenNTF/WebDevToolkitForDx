@@ -17,6 +17,15 @@ html {
     max-height: calc(100vh - 240px);
     overflow-x: hidden;
 }
+.dashboard-list > .row {
+    margin-right: 0px
+}
+
+.dashboard-list > .row > .col-lg-12,
+.dashboard-list > .row > .col-md-12,
+.dashboard-list > .row > .col-md-12 {
+    padding-right: 0px
+}
 
 .navbar {
     margin-bottom: 10px
