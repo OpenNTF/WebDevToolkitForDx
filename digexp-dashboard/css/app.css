@@ -14,7 +14,7 @@ html {
     width: calc(100% + 15px);
     padding-right: 15px;
     padding-top: 15px;
-    max-height: calc(100vh - 230px);
+    max-height: calc(100vh - 208px);
     overflow-x: hidden;
 }
 .dashboard-list > .row {
@@ -35,6 +35,18 @@ html {
     margin-left: -15px;
     margin-right: -15px;
     border-bottom: 2px solid lightgray;
+}
+
+.view-header {
+    margin-top: 10px;
+    float: left;
+}
+
+.view-header-path {
+    color: gray;
+    float: right;
+    font-size: 18px;
+    margin-top: 10px;
 }
 
 .form-inline {

@@ -1,6 +1,9 @@
 <div class="container dashboard-view">
-    <h3 style="margin-top: 5px;">Themes</h3>
-    <h4 ng-if="configInfo.dxThemePath" style="color: gray">({{configInfo.dxThemePath}})</h4>
+    <div style="overflow-y: auto">
+        <h3 class="view-header">Themes</h3>
+        <h4 ng-if="configInfo.dxThemePath" class="view-header-path">
+            {{configInfo.dxThemePath}}</h4>
+    </div>
     <h5 ng-if="dxThemePathNotFound">
         <span style="color: firebrick" class="glyphicon glyphicon-exclamation-sign"></span> Error:
         Path <code>{{configInfo.dxThemePath}}</code> not found.

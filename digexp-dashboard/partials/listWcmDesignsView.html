@@ -1,10 +1,13 @@
 <div class="container dashboard-view">
-    <h3 style="margin-top: 5px;">WCM Design Libraries
+    <div style="overflow-y: auto">
+        <h3 class="view-header">WCM Design Libraries
     <span class="glyphicon glyphicon-repeat loading-spinner"
           ng-show="loadingNewLibraries"></span>
-    </h3>
-    <div ng-show="loadingNewLibraries">{{status}}</div>
-    <h4 ng-if="configInfo.wcmDesignsPath" style="color: gray">({{configInfo.wcmDesignsPath}})</h4>
+        </h3>
+        <h4 ng-if="configInfo.wcmDesignsPath" class="view-header-path">
+            {{configInfo.wcmDesignsPath}}</h4>
+    </div>
+    <div ng-show="loadingNewLibraries" style="padding-bottom:10px">{{status}}</div>
     <h5 ng-if="wcmPathNotFound">
         <span style="color: firebrick" class="glyphicon glyphicon-exclamation-sign"></span> Error:
         Path <code>{{configInfo.wcmDesignsPath}}</code> not found.

@@ -1,7 +1,9 @@
 <div class="container dashboard-view">
-    <h3 style="margin-top: 5px;">Script Applications</h3>
-    <h4 ng-if="configInfo.spAppPath" style="color: gray">
-        ({{configInfo.spAppPath}})</h4>
+    <div style="overflow-y: auto">
+        <h3 class="view-header">Script Applications</h3>
+        <h4 ng-if="configInfo.spAppPath" class="view-header-path">
+            {{configInfo.spAppPath}}</h4>
+    </div>
     <h5 ng-if="spAppPathNotFound">
         <span style="color: firebrick" class="glyphicon glyphicon-exclamation-sign"></span> Error:
         Path <code>{{configInfo.spAppPath}}</code> not found.
