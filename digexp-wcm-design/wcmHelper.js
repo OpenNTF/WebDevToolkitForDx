@@ -324,9 +324,10 @@ init = function(host, port, contentPath, user, password, secure, wcmDir) {
                             itemType = wcmRequests.wcmTypes.fileComponent;
                         else
                             itemType = wcmRequests.wcmTypes.metaData;
-                    } // only do file components if the user turns on trial code
-                    else if(options.trial && options.trial == true)
+                    }
+                    else  {
                         itemType = wcmRequests.wcmTypes.fileComponent;
+                    }
                     if (itemType != null && '.settings' != name && includeOption(options, itemType)) {
                         var pushedItem = {
                             itemType : itemType,
@@ -431,11 +432,7 @@ function pullType(options, type, libTitle, extension, map) {
 function pullTypeParallel(options, type, libTitle, extension, map) {
     debugLogger.trace('pullType::optioins ' + options + ' type::' + type + ' libTitle::' + libTitle + ' extension::' + extension);
     var deferred = Q.defer();
-    if((options.trial == undefined || options.trial == false) && type == wcmRequests.wcmTypes.fileComponent)
-    {
-        deferred.resolve(0); 
-    }
-    else if (includeOption(options, type)) {
+    if (includeOption(options, type)) {
         wcmRequests.getWcmItemsOfType(type, libTitle).then(function(entries) {
             var promises = [];
             progGoal += entries.length;
@@ -478,11 +475,7 @@ function pullTypeParallel(options, type, libTitle, extension, map) {
 function pullTypeSequential(options, type, libTitle, extension, map) {
     debugLogger.trace('pullType::optioins ' + options + ' type::' + type + ' libTitle::' + libTitle + ' extension::' + extension);
     var deferred = Q.defer();
-    if((options.trial == undefined || options.trial == false) && type == wcmRequests.wcmTypes.fileComponent)
-    {
-        deferred.resolve(0); 
-    }
-    else if (includeOption(options, type)) {
+    if (includeOption(options, type)) {
         wcmRequests.getWcmItemsOfType(type, libTitle).then(function(entries) {
             progGoal += entries.length;
             if (entries.length == 0) {
