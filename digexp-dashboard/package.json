@@ -8,7 +8,7 @@
   },
   "window": {
     "show": true,
-    "toolbar": true,
+    "toolbar": false,
     "frame": true,
     "position": "center",
     "title": "Web Developer Dashboard for IBM Digital Experience v0.1.2",

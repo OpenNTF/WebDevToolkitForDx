@@ -129,6 +129,47 @@ dashboardControllers.controller('ThemeListController', ['$scope', '$route', '$lo
       }, 20);
     };
 
+
+    /**
+     * Updates the dxsync settings for the given theme
+     * @param id
+     * @param settings
+     */
+    $scope.updateDxsyncBackgroundInterval = function(id, settings) {
+      settings = settings || $scope.themes[id].settings;
+
+      // clone the settinigs object
+      settings = JSON.parse(JSON.stringify(settings));
+
+      console.log(settings);
+
+      if (!settings.syncIntervalMin) {
+        return;
+      } else {
+        // Make sure that it's an int
+        settings.syncIntervalMin = +settings.syncIntervalMin;
+      }
+
+      settings.password = decryptDxsync(settings.password);
+
+      // Set a timeout for the UI thread to update first
+      setTimeout(function() {
+        dxsync = dxsync || require("dxsync");
+
+        // check if the sync interval hasn't been changed since
+        var interval = $scope.themes[id].settings.syncIntervalMin;
+        if (interval && interval != settings.syncIntervalMin) {
+          return;
+        }
+
+        var localDir = path.relative(process.cwd(), $scope.configInfo.dxThemePath + "/" + id);
+        dxsync.saveConfig(localDir, settings, function() {
+          debugLogger.log("Updated dxsync settings for " + id);
+          console.log(arguments)
+        });
+      }, 15);
+    };
+
     /**
      * Runs dxsync for the theme
      */
@@ -557,6 +598,16 @@ dashboardControllers.controller('ThemeListController', ['$scope', '$route', '$lo
         config.themeBuildCommands[id] = $scope.themes[id].buildCommand;
         settings.setSettings(config);
       }
+    };
+
+    $scope.saveBackgroundSyncTheme = function(id) {
+      console.log("SAVING THEME + id " + id + " " +  $scope.themes[id].backgroundSync );
+      var config = { backgroundSyncThemes: {}};
+
+      // The not ! is used since angular hasn't toggled the background sync property
+      // yet
+      config.backgroundSyncThemes[id] = !$scope.themes[id].backgroundSync ? true : false;
+      settings.setSettings(config);
     };
 
     /**

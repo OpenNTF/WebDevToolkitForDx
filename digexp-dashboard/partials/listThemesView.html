@@ -121,8 +121,21 @@
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" onclick="event.stopPropagation()">
-                                <li class="no-a-tag" ng-click="theme.backgroundSync=!theme.backgroundSync">
-                                    <input type="checkbox" ng-checked="theme.backgroundSync"> Background Sync
+                                <li class="no-a-tag"
+                                    ng-click="theme.backgroundSync=!theme.backgroundSync">
+                                    <input type="checkbox" ng-checked="theme.backgroundSync"
+                                           ng-model="themebackgroundSync"
+                                           ng-change="saveBackgroundSyncTheme(theme.folder)"> Background Sync
+                                </li>
+                                <li class="no-a-tag" ng-show="theme.backgroundSync">
+                                    <strong>Background Sync Interval</strong>
+                                    <br>
+                                    <input type="text"
+                                           ng-change="updateDxsyncBackgroundInterval(theme.folder)"
+                                           ng-model="theme.settings.syncIntervalMin"
+                                           class="ng-pristine ng-untouched ng-valid" style="width: 30px;">
+                                    minutes
+
                                 </li>
                             </ul>
                         </div>

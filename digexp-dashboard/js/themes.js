@@ -113,9 +113,15 @@ var themes = (function() {
           configInfo.themeBuildCommands = configInfo.themeBuildCommands || {};
           configInfo.themeWatchIgnore = configInfo.themeWatchIgnore || {};
           configInfo.themePushOnWatch = configInfo.themePushOnWatch || {};
+          configInfo.backgroundSyncThemes = configInfo.backgroundSyncThemes || {};
           themeObjects[file] = themeObjects[file] || {};
 
           themeObjects[file].settings = themeInfo;
+
+          if (typeof themeObjects[file].settings.syncIntervalMin === "undefined") {
+            themeObjects[file].settings.syncIntervalMin = 5;
+          }
+
           themeObjects[file].name = themeInfo.theme;
           themeObjects[file].folder = file;
           themeObjects[file].host = themeInfo.host;
@@ -133,7 +139,7 @@ var themes = (function() {
             themeObjects[file].needsToBeSynced = false;
           }
 
-          themeObjects[file].backgroundSync = false;
+          themeObjects[file].backgroundSync = configInfo.backgroundSyncThemes[file] ? true : false;
           themeObjects[file].buildCommand = configInfo.themeBuildCommands[file] || "";
           themeObjects[file].hasBuildCommand = themeObjects[file].buildCommand ? true : false;
           themeObjects[file].dxsync = themeObjects[file].dxsync || {}; // TODO scope for dxsync variables
