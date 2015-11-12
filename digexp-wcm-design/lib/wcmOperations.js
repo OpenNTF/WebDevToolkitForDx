@@ -22,14 +22,23 @@ cAlternate = "alternate",
 wcmExts = {
     LibraryHTMLComponent: ".html",
     HTMLComponent: ".html",
-    LibraryImageComponent: ".png",
+    LibraryImageComponent: "_img.txt",
+    ImageComponent: "_img.txt",
     LibraryTextComponent: ".txt",
     TextComponent: ".txt",
     LibraryRichTextComponent: ".rtf",
     RichTextComponent: ".rtf",
     LibraryStyleSheetComponent: ".css",
     LibraryShortTextComponent: "_st.txt",
-    ShortTextComponent: "_st.txt"
+    ShortTextComponent: "_st.txt",
+    ReferenceComponent: "_ref.txt",
+    DateComponent: "_dt.txt",
+    JSPComponent: "_jsp.txt",
+    LinkComponent: "_lnk.txt",
+    NumericComponent: "_num.txt",
+    OptionSelectionComponent: "_os.txt",
+    UserSelectionComponent: "_us.txt",
+    FileComponent: "_file.txt"
 },
 wcmTypes = {
     presentationTemplate: "PresentationTemplate"
@@ -719,6 +728,34 @@ function updateWcmItemMetaData(fileName){
 }
 
 /**
+ * Updates the specified wcm item metadata from the md file 
+ * @param FileName which contains the contents of the objects metadata 
+ * @returns a Promise that returns  the updated object
+ */
+function updateWcmElementsData(fileName){
+    var deferred = Q.defer(), doRequest = function(item , val){
+        debugLogger.trace('updateWcmItemMetaData:: fileName::' + fileName);
+        var data = fs.readFileSync(fileName, "utf8");
+        try{
+            var item = JSON.parse(data);
+            var entry = {entry: item.elements};
+            var uri = getUrlForType(wcmItem.getType(item)) + '/' +  getRawId(wcmItem.getId(item)) + '/Prototype';
+            authRequest.setJson(uri, entry, 'Put').then(function(data){
+                deferred.resolve(data);
+            },function(err){
+                debugLogger.error("SetJson::err::"+err);
+                deferred.reject(err);
+                });
+        }
+        catch(e){
+            debugLogger.error("update metadata ::err::"+e);
+            deferred.reject('bad data in md file');
+            }
+    };
+    doRequest(fileName);
+    return deferred.promise;
+}
+/**
  * Updates the specified wcm item with new content { in progress }
  * @param {Object*} a wcmItem
  * @param Type of component
@@ -792,7 +829,9 @@ function getWcmItemData(type, id) {
                     var curCount = 0;
                     var sWarn = authRequest.getWarnParallel();
                     authRequest.setWarnParallel(false);
-                    entry.elements = [];
+                    entry.elements = items;
+                    return deferred.resolve(entry);
+/*
                     items.forEach(function(item) {
                         var cRef = getContentReference(item.type, item);
                         if (cRef != undefined) {
@@ -825,6 +864,7 @@ function getWcmItemData(type, id) {
                             });
                         }
                     });
+*/
                 }, function(err) {
                     debugLogger.error("getWcmItemData::getWcmItemsForOperation::err::" + err);
                     deferred.reject(err);
@@ -1117,6 +1157,125 @@ function getJson( deffered, data){
     }
 }
 
+/**
+ * Returns the data from an elements content
+ * @param type of content
+ * @param content json object
+ * @returns the data for this type of data
+ */
+function getElementData( type, content){
+    debugLogger.trace("getElemetData:data::" + content);
+    var dataJson;
+    try{
+        switch(type){
+            case "RichTextComponent":
+            case"ShortTextComponent":
+            case"TextComponent":
+            case "HTMLComponent":{
+                dataJson = content.value;
+                break;
+            }
+            case"DateComponent":{
+                dataJson = JSON.stringify(content.date);
+                break;
+            }
+            case "NumericComponent":{
+                dataJson = content.double;
+                break;
+            }
+            case "OptionSelectionComponent":{
+                dataJson = JSON.stringify(content.optionselection);
+                break;
+            }
+            case "UserSelectionComponent":{
+                dataJson = JSON.stringify(content.userSelection);
+                break;
+            }
+            case "LinkComponent":{
+                dataJson = JSON.stringify(content.linkElement);
+                break;
+            }
+            case "JSPComponent":{
+                dataJson = JSON.stringify(content.jsp);
+                break;
+            }
+            case "ImageComponent":{
+                dataJson = JSON.stringify(content.image);
+                break;
+            }
+            case "FileComponent":{
+ //               dataJson = content.image;
+                break;
+            }
+            case "ReferenceComponent":{
+                dataJson = content.reference;
+                break;
+            }
+        }
+    } catch (e){
+    }
+    return dataJson;
+}
+/**
+ * Sets the data from an elements content
+ * @param type of content
+ * @param content json object
+ * @param data to set
+ * @returns the data for this type of data
+ */
+function setElementData( type, content, data ){
+    debugLogger.trace("setElemetData:data::" + content);
+    try{
+        switch(type){
+            case "RichTextComponent":
+            case"ShortTextComponent":
+            case"TextComponent":
+            case "HTMLComponent":{
+                content.value = data;
+                break;
+            }
+            case"DateComponent":{
+                content.date = JSON.parse(data);
+                break;
+            }
+            case "NumericComponent":{
+                content.double = data;
+                break;
+            }
+            case "OptionSelectionComponent":{
+                content.optionselection = JSON.parse(data);
+                break;
+            }
+            case "UserSelectionComponent":{
+                content.userSelection = JSON.parse(data);
+                break;
+            }
+            case "LinkComponent":{
+                content.linkElement = JSON.parse(data);
+                break;
+            }
+            case "JSPComponent":{
+                content.jsp = JSON.parse(data);
+                break;
+            }
+            case "ImageComponent":{
+                content.image = JSON.parse(data);
+                break;
+            }
+            case "FileComponent":{
+ //               dataJson = content.image;
+                break;
+            }
+            case "ReferenceComponent":{
+                content.reference = data;
+                break;
+            }
+        }
+    } catch (e){
+    }
+    return dataJson;
+}
+
 function clearFolderMap(){
     debugLogger.trace('clearFolderMap');
     libraryList = undefined;
@@ -1140,4 +1299,6 @@ exports.getWcmItem = getWcmItem;
 exports.getWcmItemData = getWcmItemData;
 exports.itemExists = itemExists;
 exports.updateWcmItemMetaData = updateWcmItemMetaData;
+exports.getElementData = getElementData;
+exports.setElementData = setElementData;
 exports.base64_decode = base64_decode;

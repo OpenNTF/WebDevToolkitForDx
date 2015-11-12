@@ -542,22 +542,21 @@ function updateLocalFile(options, libTitle, data, extension, map){
                 try{
                     var ext = wcmRequests.wcmExts[element.type];
                     if(ext != undefined)
-                        fs.writeFileSync(elPath + element.name + ext, element.data);
+                        fs.writeFileSync(elPath + element.name + ext, wcmRequests.getElementData(element.type,element.content));
                 }catch(e){
                     debugLogger.error("save Element::err::"+e);
                 }
             });
+            data.elements.forEach(function(element){
+               if(element.title)
+                delete element.title; 
+               if(element.link)
+                delete element.link;
+            });
+            var entry = { id: data.id, type: data.type, elements: data.elements};
+            fs.writeFileSync(path + elementSuffix, JSON.stringify(entry));
+            delete data.elements;
         }
-        data.elements.forEach(function(element){
-           if(element.title)
-            delete element.title; 
-           if(element.link)
-            delete element.link;
-           if(element.content)
-            delete element.content; 
-        });
-        fs.writeFileSync(path + elementSuffix, JSON.stringify(data.elements));
-        delete data.elements;
     }
     else if(cData != undefined)   // check there is data to write
         fs.writeFileSync(path + extension, cData.value);
