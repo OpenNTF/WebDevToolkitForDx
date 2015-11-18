@@ -13,7 +13,10 @@
  * @returns an String like "wcmrest:d369a759-36c4-4133-a8be-e426766a827e"
  */
 function getId(item){
-    return item.id;
+    var id = item.id;
+    if(item.pid != undefined)
+        id = item.pid;
+    return id;
 }
 
 /**
@@ -22,7 +25,10 @@ function getId(item){
  * @returns an String like "PresentationTemplate"
  */
 function getType(item){
-    return item.type;
+    var type = item.type;
+    if(item.ptype != undefined)
+        type = item.ptype;
+   return type;
 }
 /**
  * Returns the name of a wcmItem
@@ -31,16 +37,19 @@ function getType(item){
  */
 function getName(item){
     var name = "";
-    if(item.name != undefined)
-        name = item.name;
+    if(item.pname != undefined)
+        name = item.pname;
     else
-        if(item.title != undefined){
-            if(item.title instanceof Object){
-                name = item.title.value;
+        if(item.name != undefined)
+            name = item.name;
+        else
+            if(item.title != undefined){
+                if(item.title instanceof Object){
+                    name = item.title.value;
+                }
+                else
+                    name = item.title;
             }
-            else
-                name = item.title;
-        }
     return name;
 }
 
@@ -108,7 +117,13 @@ function getPath(item){
  */
 function getOperationHref(item, opName){
     var hRef = undefined;
-    var link = getLinkForRel(item.type, item.link, opName);
+    var links = item.link;
+    if(item.plink != undefined)
+        links = item.plink;
+    var type = item.type;
+    if(item.ptype != undefined)
+        type = item.ptype;
+    var link = getLinkForRel(type, links, opName);
    if(link != undefined)
        hRef = link.href;
     return hRef;

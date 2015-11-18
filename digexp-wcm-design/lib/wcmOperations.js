@@ -20,24 +20,24 @@ cEditmedia = "edit-media",
 cElements = "elements",
 cAlternate = "alternate",
 wcmExts = {
-    LibraryHTMLComponent: ".html",
-    HTMLComponent: ".html",
+    LibraryHTMLComponent: "_html.html",
+    HTMLComponent: "_html.html",
     LibraryImageComponent: "_img.txt",
     ImageComponent: "_img.txt",
-    LibraryTextComponent: ".txt",
-    TextComponent: ".txt",
-    LibraryRichTextComponent: ".rtf",
-    RichTextComponent: ".rtf",
-    LibraryStyleSheetComponent: ".css",
-    LibraryShortTextComponent: "_st.txt",
-    ShortTextComponent: "_st.txt",
-    ReferenceComponent: "_ref.txt",
-    DateComponent: "_dt.txt",
+    LibraryTextComponent: "_text.txt",
+    TextComponent: "_text.txt",
+    LibraryRichTextComponent: "_rictext.rtf",
+    RichTextComponent: "_richtext.rtf",
+    LibraryStyleSheetComponent: "_stylesheet.css",
+    LibraryShortTextComponent: "_short.txt",
+    ShortTextComponent: "_short.txt",
+    ReferenceComponent: "_reference.txt",
+    DateComponent: "_date.txt",
     JSPComponent: "_jsp.txt",
-    LinkComponent: "_lnk.txt",
-    NumericComponent: "_num.txt",
-    OptionSelectionComponent: "_os.txt",
-    UserSelectionComponent: "_us.txt",
+    LinkComponent: "_link.txt",
+    NumericComponent: "_number.txt",
+    OptionSelectionComponent: "_optionselection.txt",
+    UserSelectionComponent: "_userselecttion.txt",
     FileComponent: "_file.txt"
 },
 wcmTypes = {
@@ -46,6 +46,7 @@ wcmTypes = {
         ,referenceComponents: "ReferenceComponent"
         ,authoringToolsComponent: "LibraryAuthoringToolsComponent"
         ,metaData:"md"
+        ,element:"element"
         ,htmlComponent: "LibraryHTMLComponent"
         ,imageComponent: "LibraryImageComponent"
         ,textComponent: "LibraryTextComponent"
@@ -734,12 +735,15 @@ function updateWcmItemMetaData(fileName){
  */
 function updateWcmElementsData(fileName){
     var deferred = Q.defer(), doRequest = function(item , val){
-        debugLogger.trace('updateWcmItemMetaData:: fileName::' + fileName);
+        debugLogger.trace('updateWcmElementsData:: fileName::' + fileName);
         var data = fs.readFileSync(fileName, "utf8");
         try{
             var item = JSON.parse(data);
-            var entry = {entry: item.elements};
-            var uri = getUrlForType(wcmItem.getType(item)) + '/' +  getRawId(wcmItem.getId(item)) + '/Prototype';
+            var uri = getUriForElements(item);
+            // delete the parent info
+            delete item.ptype;
+            delete item.pid;
+            var entry ={ entry: item};
             authRequest.setJson(uri, entry, 'Put').then(function(data){
                 deferred.resolve(data);
             },function(err){
@@ -748,13 +752,14 @@ function updateWcmElementsData(fileName){
                 });
         }
         catch(e){
-            debugLogger.error("update metadata ::err::"+e);
-            deferred.reject('bad data in md file');
+            debugLogger.error("update elements ::err::"+e);
+            deferred.reject('bad data in -elements file');
             }
     };
     doRequest(fileName);
     return deferred.promise;
 }
+
 /**
  * Updates the specified wcm item with new content { in progress }
  * @param {Object*} a wcmItem
@@ -822,49 +827,12 @@ function getWcmItemData(type, id) {
             // no media check for elements
             if (editmedia == undefined) {
                 var entry = item;
-                getWcmItemsForOperation(item, cElements).then(function(items) {
-                    if(items.length == 0){
-                        return deferred.resolve(entry);
-                    }
-                    var curCount = 0;
-                    var sWarn = authRequest.getWarnParallel();
-                    authRequest.setWarnParallel(false);
-                    entry.elements = items;
-                    return deferred.resolve(entry);
-/*
-                    items.forEach(function(item) {
-                        var cRef = getContentReference(item.type, item);
-                        if (cRef != undefined) {
-                            authRequest.getContent(cRef, wcmItem.getTypeforUpdate(item)).then(function(data) {
-                                curCount++;
-                                item.data = data;
-                                entry.elements.push(item);
-                                if (curCount == items.length){
-                                    authRequest.setWarnParallel(sWarn);
-                                    return deferred.resolve(entry);
-                                }
-                            }, function(err) {
-                                curCount++;
-                                if (err.message) {
-                                    if (err.message.indexOf('400') != -1) {
-                                        item.data = undefined;
-                                        entry.elements.push(item);
-                                        if (curCount == items.length){
-                                            authRequest.setWarnParallel(sWarn);
-                                            return deferred.resolve(entry);
-                                        }
-                                    } else{
-                                        authRequest.setWarnParallel(sWarn);
-                                        return deferred.reject(err);
-                                    }
-                                } else{
-                                    authRequest.setWarnParallel(sWarn);
-                                    return deferred.reject(err);
-                                }
-                            });
-                        }
-                    });
-*/
+            var uri = getUriForElements(item);
+            wcmGetJson(uri).then(function(entry) {
+                entry.ptype = wcmItem.getType(item);
+                entry.pid = wcmItem.getId(item);
+                var rJson = { itemData: item, elements: entry};
+                deferred.resolve(rJson);
                 }, function(err) {
                     debugLogger.error("getWcmItemData::getWcmItemsForOperation::err::" + err);
                     deferred.reject(err);
@@ -1065,6 +1033,24 @@ function getFolderForType(type){
 }
 
 /**
+ * Returns the Uri for the item type for a type that has elements
+ * @param item 
+ * @returns the uri
+ */
+function getUriForElements(item){
+    var type = wcmItem.getType(item);
+    debugLogger.trace('getUriForElements::type::' + type);
+    var rVal = "";
+    switch(type){
+    case wcmTypes.contentTemplate:{
+        rVal = getUrlForType(wcmItem.getType(item)) + '/' +  getRawId(wcmItem.getId(item)) + '/Prototype';
+        break;
+        } 
+    };
+    return rVal;
+}
+
+/**
  * Returns the data needed for a specific types operations
  * @param Type of component
  * @param FileName of the contents of the items data
@@ -1204,7 +1190,7 @@ function getElementData( type, content){
                 break;
             }
             case "FileComponent":{
- //               dataJson = content.image;
+                dataJson = content.file;
                 break;
             }
             case "ReferenceComponent":{
@@ -1216,14 +1202,36 @@ function getElementData( type, content){
     }
     return dataJson;
 }
+
 /**
- * Sets the data from an elements content
+ * fiind the element in array by name
+ * @param name to look for
+ * @param element array
+ * @returns the element with this name or a new element
+ */
+function findElement( elements, name){
+    debugLogger.trace("findElement:data::" + name);
+    var rElement;
+    try{
+        elements.forEach(function(element){
+            if(element.name == name){
+                rElement = element;
+                return;
+            }
+        });
+    }
+    catch(e){
+    }
+    return rElement;
+}
+
+/**
+ * Set the data from an content
  * @param type of content
  * @param content json object
- * @param data to set
  * @returns the data for this type of data
  */
-function setElementData( type, content, data ){
+function setElementData( type, content, data){
     debugLogger.trace("setElemetData:data::" + content);
     try{
         switch(type){
@@ -1263,7 +1271,7 @@ function setElementData( type, content, data ){
                 break;
             }
             case "FileComponent":{
- //               dataJson = content.image;
+                content.file = data;
                 break;
             }
             case "ReferenceComponent":{
@@ -1273,7 +1281,6 @@ function setElementData( type, content, data ){
         }
     } catch (e){
     }
-    return dataJson;
 }
 
 function clearFolderMap(){
@@ -1299,6 +1306,8 @@ exports.getWcmItem = getWcmItem;
 exports.getWcmItemData = getWcmItemData;
 exports.itemExists = itemExists;
 exports.updateWcmItemMetaData = updateWcmItemMetaData;
+exports.updateWcmElementsData = updateWcmElementsData;
 exports.getElementData = getElementData;
 exports.setElementData = setElementData;
+exports.findElement = findElement;
 exports.base64_decode = base64_decode;

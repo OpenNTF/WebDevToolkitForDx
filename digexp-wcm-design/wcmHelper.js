@@ -298,14 +298,14 @@ init = function(host, port, contentPath, user, password, secure, wcmDir) {
                 if (stat.mtime > cDate  || stat.birthtime >= cDate) {
                     var ext = Path.extname(file);
                     var dir = Path.dirname(file).slice(wcmCwd.length);
-                    if(dir.indexOf(Path.sep) == -1 ||
-                     dir.indexOf(cElementsDir) != -1 || 
-                     dir.indexOf(cAuthoringTemplates) != -1 ||
-                     dir.indexOf(elementSuffix) != -1)
+                    if(dir.indexOf(Path.sep) == -1)
                         return;
                     var name = Path.basename(file, ext);
                     var itemType = null;
-                    if (ext == ".htm" || ext == ".html") {
+                    if(dir.indexOf(cElementsDir) != -1){
+                        itemType = wcmRequests.wcmTypes.element;
+                    }
+                    else if (ext == ".htm" || ext == ".html") {
                         if (dir.indexOf(libTitle + Path.sep + "Presentation Templates") != -1)
                             itemType = wcmRequests.wcmTypes.presentationTemplate;
                         else
@@ -320,10 +320,13 @@ init = function(host, port, contentPath, user, password, secure, wcmDir) {
                         itemType = wcmRequests.wcmTypes.imageComponent;
                     } else if (ext == ".json") {
                         // skip metadata files which end with md-jsom
-                        if(file.indexOf(metadataSuffix) == -1)
-                            itemType = wcmRequests.wcmTypes.fileComponent;
-                        else
+                        if(file.indexOf(metadataSuffix) != -1)
                             itemType = wcmRequests.wcmTypes.metaData;
+                        else
+                            if(file.indexOf(elementSuffix) != -1)
+                                itemType = wcmRequests.wcmTypes.contentTemplate;
+                            else
+                                itemType = wcmRequests.wcmTypes.fileComponent;
                     }
                     else  {
                         itemType = wcmRequests.wcmTypes.fileComponent;
@@ -404,9 +407,13 @@ function pushFiles(fileList, libTitle) {
         return soFar.then(function() {
             progCounter++;
             eventEmitter.emit("pushed", libTitle || "", itemToPush);
-            if(itemToPush.itemType != wcmRequests.wcmTypes.metaData)
-                return wcmRequests.updateWcmItemFromPath(itemToPush.itemType, itemToPush.dir + Path.sep + itemToPush.name, itemToPush.file);
-            return wcmRequests.updateWcmItemMetaData(itemToPush.file);
+            if(itemToPush.itemType == wcmRequests.wcmTypes.metaData)
+                return wcmRequests.updateWcmItemMetaData(itemToPush.file);
+            if(itemToPush.itemType == wcmRequests.wcmTypes.element)
+                return updateWcmElementsfromFile(itemToPush);
+            if(itemToPush.itemType == wcmRequests.wcmTypes.contentTemplate)
+                return wcmRequests.updateWcmElementsData(itemToPush.file);
+            return wcmRequests.updateWcmItemFromPath(itemToPush.itemType, itemToPush.dir + Path.sep + itemToPush.name, itemToPush.file);
         }, function(err){
             debugLogger.error("pushType::err::"+err);
             eventEmitter.emit("error", err, "pushLibrary::err::"+err);
@@ -508,11 +515,15 @@ function pullTypeSequential(options, type, libTitle, extension, map) {
 }
 
 function updateLocalFile(options, libTitle, data, extension, map){
-    var libPath = wcmRequests.getPath(libTitle, data, map);
+    var item = data;
+    // for object with elements the data and item are returned in a json {tremData: item, elements: elements}
+    if(data.itemData)
+        item = data.itemData;
+    var libPath = wcmRequests.getPath(libTitle, item, map);
     var path = wcmCwd + libPath;
     debugLogger.log('pullType::pulled: ' + path);
-    var cData = wcmItem.getContent(data);
-    var wtype = wcmItem.getType(data);
+    var cData = wcmItem.getContent(item);
+    var wtype = wcmItem.getType(item);
     if (options != undefined && (options.filterComponentId == undefined || options.filterComponentId == true)) {
        if (wtype == wcmRequests.wcmTypes.presentationTemplate || wtype == wcmRequests.wcmTypes.htmlComponent)
             cData.value = cData.value.replace(/Component id="(.*?)"/g, "Component");
@@ -535,27 +546,26 @@ function updateLocalFile(options, libTitle, data, extension, map){
         fs.writeFileSync(path + extension, cData.value, "binary");
     }
     else if(wcmRequests.wcmTypes.contentTemplate == wtype){
-        if(data.elements){
+        var elements = data.elements.content.content.elements.element;
+        if(elements){
             var elPath = path + cElementsDir + Path.sep;
             createFolder( elPath );
-            data.elements.forEach(function(element){
+            elements.forEach(function(element){
                 try{
                     var ext = wcmRequests.wcmExts[element.type];
                     if(ext != undefined)
-                        fs.writeFileSync(elPath + element.name + ext, wcmRequests.getElementData(element.type,element.content));
+                        fs.writeFileSync(elPath + element.name + ext, wcmRequests.getElementData(element.type,element.data));
                 }catch(e){
                     debugLogger.error("save Element::err::"+e);
                 }
             });
-            data.elements.forEach(function(element){
+            elements.forEach(function(element){
                if(element.title)
                 delete element.title; 
                if(element.link)
                 delete element.link;
             });
-            var entry = { id: data.id, type: data.type, elements: data.elements};
-            fs.writeFileSync(path + elementSuffix, JSON.stringify(entry));
-            delete data.elements;
+            fs.writeFileSync(path + elementSuffix, JSON.stringify(data.elements));
         }
     }
     else if(cData != undefined)   // check there is data to write
@@ -583,6 +593,31 @@ function includeOption(options, type) {
     }
     return rVal;
 }
+/**
+ * Updates the specified wcm item metadata from the md file 
+ * @param FileName which contains the contents of the objects metadata 
+ * @returns a Promise that returns  the updated object
+ */
+function updateWcmElementsfromFile(itemToPush){
+       debugLogger.trace('updateWcmElementsData:: fileName::' + itemToPush.toString());
+        try{
+            var pfName = wcmCwd + itemToPush.dir + '.json';
+            var parent = fs.readFileSync(pfName, "utf8");
+            var pItem = JSON.parse(parent);
+            var value = fs.readFileSync(itemToPush.file, "utf8");
+            var elements = pItem.content.content.elements.element;
+            var fname = itemToPush.name;
+            var name = fname.substring(0, fname.lastIndexOf('_'));
+            var element = wcmRequests.findElement(elements, name);
+            wcmRequests.setElementData(element.type,element.data,value);
+            fs.writeFileSync(pfName,JSON.stringify(pItem));
+            return wcmRequests.updateWcmElementsData(pfName);
+        }
+        catch(e){
+            debugLogger.error("updateWcmElementsfromFile ::err::"+e);
+            deferred.reject('bad data in -elements file');
+            }
+ }
 
 /**
  * Returns the how far the current operation is completed but throws an error
