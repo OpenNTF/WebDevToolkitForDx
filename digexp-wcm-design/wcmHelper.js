@@ -132,7 +132,9 @@ init = function(host, port, contentPath, user, password, secure, wcmDir) {
             createFolder(wcmCwd + libTitle);
             createFolder(wcmCwd + libTitle + Path.sep + 'Presentation Templates');
             createFolder(wcmCwd + libTitle + Path.sep + 'Components');
-            createFolder(wcmCwd + libTitle + Path.sep + cAuthoringTemplates);
+            // only do content template components if the user turns on trial code
+            if(options.trial && options.trial == true)
+                createFolder(wcmCwd + libTitle + Path.sep + cAuthoringTemplates);
             progGoal++;
             var totalCount = 0;
             var libSettings = utils.getSettings(wcmCwd + libTitle + Path.sep);
@@ -439,7 +441,11 @@ function pullType(options, type, libTitle, extension, map) {
 function pullTypeParallel(options, type, libTitle, extension, map) {
     debugLogger.trace('pullType::optioins ' + options + ' type::' + type + ' libTitle::' + libTitle + ' extension::' + extension);
     var deferred = Q.defer();
-    if (includeOption(options, type)) {
+    if((options.trial == undefined || options.trial == false) && type == wcmRequests.wcmTypes.contentTemplate)
+    {
+         deferred.resolve(0);
+    }
+    else if (includeOption(options, type)) {
         wcmRequests.getWcmItemsOfType(type, libTitle).then(function(entries) {
             var promises = [];
             progGoal += entries.length;
@@ -482,7 +488,11 @@ function pullTypeParallel(options, type, libTitle, extension, map) {
 function pullTypeSequential(options, type, libTitle, extension, map) {
     debugLogger.trace('pullType::optioins ' + options + ' type::' + type + ' libTitle::' + libTitle + ' extension::' + extension);
     var deferred = Q.defer();
-    if (includeOption(options, type)) {
+    if((options.trial == undefined || options.trial == false) && type == wcmRequests.wcmTypes.contentTemplate)
+    {
+        deferred.resolve(0);
+    }
+    else if (includeOption(options, type)) {
         wcmRequests.getWcmItemsOfType(type, libTitle).then(function(entries) {
             progGoal += entries.length;
             if (entries.length == 0) {
