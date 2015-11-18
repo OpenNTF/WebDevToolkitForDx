@@ -133,8 +133,8 @@ var getLTPAToken = function(user, pass, options, postData) {
     // the post options
     // authenticate for VP uses the base portal
     var cPath = options.contentHandlerPath.split('/');
-    if (cPath.length > 3){
-        options.contentHandlerPath = cPath[1] + '/' + cPath[2];
+    if (cPath.length > 2){
+        options.contentHandlerPath = cPath[0] + '/' + cPath[1];
     };
     var optionspost = {
         host : options.host,
