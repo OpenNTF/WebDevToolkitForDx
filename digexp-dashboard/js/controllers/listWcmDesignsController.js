@@ -40,7 +40,7 @@ function($scope) {
 
         debugLogger.log(!$scope.submitted);
         if (!$scope.submitted) {
-            debugLogger.log(conf);
+ //           debugLogger.log(conf);
             debugLogger.log("starting to download list of libraries");
 
             $("#list-libraries-first-button").attr("disabled", "disabled").html("Loading ...");
