@@ -129,6 +129,9 @@ init = function(host, port, contentPath, user, password, secure, wcmDir) {
             deferred.reject(libTitle + ' is not available check for correct server');
         else{
             Q.longStackSupport = true;
+            var totalCount = 0;
+            var libSettings = utils.getSettings(wcmCwd + libTitle + Path.sep);
+            options = utils.getMergerdOptions(options || {}, libSettings);
             createFolder(wcmCwd + libTitle);
             createFolder(wcmCwd + libTitle + Path.sep + 'Presentation Templates');
             createFolder(wcmCwd + libTitle + Path.sep + 'Components');
@@ -136,9 +139,6 @@ init = function(host, port, contentPath, user, password, secure, wcmDir) {
             if(options.trial && options.trial == true)
                 createFolder(wcmCwd + libTitle + Path.sep + cAuthoringTemplates);
             progGoal++;
-            var totalCount = 0;
-            var libSettings = utils.getSettings(wcmCwd + libTitle + Path.sep);
-            options = utils.getMergerdOptions(options || {}, libSettings);
             eventEmitter.emit("pullingLib", libTitle);
             wcmRequests.getFolderMap(libTitle).then(function(map) {
                 var sVals = map.values().sort(compare);
