@@ -510,6 +510,7 @@ var globalSecure = false;
 var authCookie = null;
 
 var init = function(host, port, user, password, contentHandlerPath, secure) {
+    authCookie = null;
     if(secure == undefined)
         secure = false;
     http = secure ? require('https') : require('http');

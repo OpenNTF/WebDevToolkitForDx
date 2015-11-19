@@ -619,8 +619,10 @@ function updateWcmElementsfromFile(itemToPush){
             var fname = itemToPush.name;
             var name = fname.substring(0, fname.lastIndexOf('_'));
             var element = wcmRequests.findElement(elements, name);
-            wcmRequests.setElementData(element.type,element.data,value);
-            fs.writeFileSync(pfName,JSON.stringify(pItem));
+            if(element != undefined){
+                wcmRequests.setElementData(element.type,element.data,value);
+                fs.writeFileSync(pfName,JSON.stringify(pItem));
+            }
             return wcmRequests.updateWcmElementsData(pfName);
         }
         catch(e){

@@ -711,12 +711,13 @@ function updateWcmItemMetaData(fileName){
             var item = JSON.parse(data);
             data = '{"entry":' + data + '}';
             var entry = JSON.parse(data);
+            delete entry.entry.path;
             var uri = getUrlForType(wcmItem.getType(item)) + '/' +  getRawId(wcmItem.getId(item));
             authRequest.setJson(uri, entry, 'Put').then(function(data){
                 deferred.resolve(data);
             },function(err){
-                debugLogger.error("SetJson::err::"+err);
-                deferred.reject(err);
+                debugLogger.error("updateWcmItemMetaData: " + uri + " :Item ::name::"+ item.name);
+                deferred.resolve(item);
                 });
         }
         catch(e){
@@ -747,8 +748,8 @@ function updateWcmElementsData(fileName){
             authRequest.setJson(uri, entry, 'Put').then(function(data){
                 deferred.resolve(data);
             },function(err){
-                debugLogger.error("SetJson::err::"+err);
-                deferred.reject(err);
+                debugLogger.error("updateWcmElementsData " + uri +  " :Item ::name::"+ item.name);
+                deferred.resolve(item);
                 });
         }
         catch(e){
