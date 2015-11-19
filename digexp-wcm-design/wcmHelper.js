@@ -47,6 +47,7 @@ var authRequest = require('./lib/wcm-authenticated-request'),
  curSecure = false,
  curPullLibrary = undefined,
  cElementsDir = '-elements',
+ cFile = '-file',
  cAuthoringTemplates = 'Authoring Templates';
  
 /**
@@ -307,6 +308,10 @@ init = function(host, port, contentPath, user, password, secure, wcmDir) {
                     if(dir.indexOf(cElementsDir) != -1){
                         itemType = wcmRequests.wcmTypes.element;
                     }
+                    else if (name.indexOf(cFile) != -1){
+                        name = name.substring(0, name.indexOf(cFile));
+                        itemType = wcmRequests.wcmTypes.fileComponent;    
+                    }
                     else if (ext == ".htm" || ext == ".html") {
                         if (dir.indexOf(libTitle + Path.sep + "Presentation Templates") != -1)
                             itemType = wcmRequests.wcmTypes.presentationTemplate;
@@ -550,8 +555,24 @@ function updateLocalFile(options, libTitle, data, extension, map){
         if(cData.resourceUri && cData.resourceUri.value){
             var extStart = cData.resourceUri.value.lastIndexOf('.');
             var extEnd =  cData.resourceUri.value.lastIndexOf('?');
-             if(extStart != -1 && (extEnd-extStart != 1))
+            if(extStart != -1 && (extEnd-extStart != 1))
                 extension = cData.resourceUri.value.substring(extStart,extEnd);
+            if(extension != undefined){
+                var ext = extension;
+                if (ext == ".htm" || ext == ".html") {
+                        extension = cFile + ext;
+                    } else if (ext== ".css") {
+                        extension = cFile + ext;
+                    } else if (ext == ".txt") {
+                        extension = cFile + ext;
+                    } else if (ext == ".rtf") {
+                        extension = cFile + ext;
+                    } else if (ext == ".png" || ext == ".jpg") {
+                        extension = cFile + ext;
+                    } else if (ext == ".json") {
+                        extension = cFile + ext;
+                    }
+                }
         }
         fs.writeFileSync(path + extension, cData.value, "binary");
     }
