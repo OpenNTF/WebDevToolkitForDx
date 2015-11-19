@@ -823,7 +823,7 @@ function getWcmItemData(type, id) {
         wcmGetJson(getUrlForType(type) + '/' + getRawId(id)).then(function(item) {
             var editmedia = wcmItem.getOperationHref(item, cEditmedia);
             var elements = wcmItem.getOperationHref(item, cElements);
-            if ((item.content && type != wcmTypes.imageComponent && type != wcmTypes.fileComponent) || (editmedia == undefined && elements == undefined))
+            if ((item.content && type != wcmTypes.imageComponent && type != wcmTypes.fileComponent && type != wcmTypes.styleSheetComponent) || (editmedia == undefined && elements == undefined))
                 return deferred.resolve(item);
             // no media check for elements
             if (editmedia == undefined) {
