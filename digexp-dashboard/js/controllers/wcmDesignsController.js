@@ -73,6 +73,7 @@ function($scope, $route) {
     $scope.push = function(library) {
         library.syncing = true;
         library.error = false;
+        library.err = undefined;
         $scope.status = 'Pushing Library ' + library.title;
         try {
             wcmDesign.push(library).then(function() {
@@ -90,6 +91,7 @@ function($scope, $route) {
     $scope.pull = function(library) {
         library.syncing = true;
         library.error = false;
+        library.err = undefined;
         $scope.status = 'Pulling Library ' + library.title;
         try {
             wcmDesign.pull(library).then(function() {
@@ -107,6 +109,7 @@ function($scope, $route) {
     $scope.pushAll = function(library) {
         library.syncing = true;
         library.error = false;
+        library.err = undefined;
         $scope.status = 'Pushing All Content in Library ' + library.title;
         try {
             wcmDesign.push(library, true).then(function() {

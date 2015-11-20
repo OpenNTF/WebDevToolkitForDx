@@ -446,8 +446,7 @@ var setContent = function(uri, contentType, data) {
             method : 'Put',
             headers : {
                 'ContentType' : contentType,
-                'Content-Type' : contentType,
-                'Content-Length' : putData.length
+                'Content-Type' : contentType
             }
         };
         authenticatedRequest(globalUser, globalPassword, callOptions, putData).then(function(data) {
