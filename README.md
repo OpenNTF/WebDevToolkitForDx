@@ -162,3 +162,5 @@ There are some options that can be set to control some of the behavior when down
 - pullParallel: If set to true, requests to the server for components are done in parallel wich can speed up the download of large libraries. By default components are synced sequentially.
 - trial: if set any new features that have been added but not fully testes are added
 - include: This is an array of item types that allows you to limit the types of items that will be included in the pushed/pull actions for this library, this list will only support types that are handled by default. It allows you to limit the types to a subset of the supported types.  i.e. Some one that only works on icons could limit it to "LibraryImageComponent"
+
+To turn on the trial features for all libraries you can set an environment variable DIGEXP_TRIAL=true.
