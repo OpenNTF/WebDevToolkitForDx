@@ -20,8 +20,11 @@ cEditmedia = "edit-media",
 cElements = "elements",
 cAlternate = "alternate",
 wcmExts = {
-    LibraryHTMLComponent: "_html.html",
+    LibraryHTMLComponent: ".html",
     HTMLComponent: "_html.html",
+    LibraryListPresentationComponent: "_List.json",
+    LibraryNavigatorComponent: "_nav.json",
+    LibraryMenuComponent: "_menu.json",
     LibraryImageComponent: "_img.txt",
     ImageComponent: "_img.txt",
     LibraryTextComponent: "_text.txt",
@@ -31,10 +34,15 @@ wcmExts = {
     LibraryStyleSheetComponent: "_stylesheet.css",
     LibraryShortTextComponent: "_short.txt",
     ShortTextComponent: "_short.txt",
+    LibraryReferenceComponent: "_reference.txt",
     ReferenceComponent: "_reference.txt",
+    LibraryDateComponent: "_date.txt",
     DateComponent: "_date.txt",
+    LibraryJSPComponent: "_jsp.txt",
     JSPComponent: "_jsp.txt",
+    LibraryLinkComponent: "_link.txt",
     LinkComponent: "_link.txt",
+    LibraryNumericComponent: "_number.txt",
     NumericComponent: "_number.txt",
     OptionSelectionComponent: "_optionselection.txt",
     UserSelectionComponent: "_userselecttion.txt",
@@ -43,7 +51,7 @@ wcmExts = {
 wcmTypes = {
     presentationTemplate: "PresentationTemplate"
         ,contentTemplate: "ContentTemplate"
-        ,referenceComponents: "ReferenceComponent"
+        ,referenceComponent: "LibraryReferenceComponent"
         ,authoringToolsComponent: "LibraryAuthoringToolsComponent"
         ,metaData:"md"
         ,element:"element"
@@ -55,9 +63,12 @@ wcmTypes = {
         ,styleSheetComponent: "LibraryStyleSheetComponent"
         ,fileComponent: "LibraryFileComponent"
         ,linkComponent: "LibraryLinkComponent"
+        ,numericComponent: "LibraryNumericComponent"
         ,jspComponent: "LibraryJSPComponent"
-        ,listPresetationComponent: "LibraryListPresetationComponent"
-        ,listPresetationComponent: "LibraryListPresetationComponent"
+        ,dateComponent: "LibraryDateComponent"
+        ,listPresetationComponent: "LibraryListPresentationComponent"
+        ,navigatorComponent: "LibraryNavigatorComponent"
+        ,menuComponent: "LibraryMenuComponent"
         ,folder: "Folder"
         ,library: "Library"
 };
@@ -772,11 +783,20 @@ function updateWcmItem(type, item, fileName){
     var deferred = Q.defer(), doRequest = function(item , val){
         debugLogger.trace('updateWcmItem::type::' + type + ' item::' + item + ' fileName::' + fileName);
         var cRef = getContentReference(type, item);
-        if(wcmTypes.imageComponent == type){
-            var content = wcmItem.getContent(item);
-            if(content && content.image)
-                  ;//cRef = content.image.resourceUri.value;
+        if(wcmTypes.referenceComponent == type || 
+            wcmTypes.linkComponent == type || 
+            wcmTypes.dateComponent == type||
+            wcmTypes.numericComponent == type ||
+            wcmTypes.jspComponent == type
+            ){
+            authRequest.setJson(cRef, val.value, 'Put').then(function(data){
+                deferred.resolve(data);
+            },function(err){
+                debugLogger.error("updateWcmElementsData " + uri +  " :Item ::name::"+ item.name);
+                deferred.resolve(item);
+                });
         }
+        else
         if( cRef != undefined){
             authRequest.setContent(cRef, val.type, val.value).then(function(data){
                 deferred.resolve(data);
@@ -883,10 +903,6 @@ function getContentReference(type, item){
     case wcmTypes.textComponent:
     case wcmTypes.richTextComponent:
 */  
-    case wcmTypes.referenceComponents:{
-        cRef  = wcmItem.getOperationHref(item, cAlternate);
-        break;
-    };
     case wcmTypes.fileComponent:
     case wcmTypes.imageComponent: 
     case wcmTypes.styleSheetComponent:{
@@ -1017,18 +1033,10 @@ function getFolderForType(type){
         rVal = "Authoring Templates";
         break;
     } 
-    case wcmTypes.authoringToolsComponent:
-    case wcmTypes.fileComponent:
-    case wcmTypes.htmlComponent:
-    case wcmTypes.imageComponent:
-    case wcmTypes.jspComponent:
-    case wcmTypes.linkComponent:
-    case wcmTypes.textComponent:
-    case wcmTypes.richTextComponent:
-    case wcmTypes.styleSheetComponent:{
+    default: {
         rVal = 'Components';
         break;
-    };
+        };
     };
     return rVal;
 }
@@ -1065,9 +1073,29 @@ function setUpDataForType(item, type, fileName){
         mType = 'application/vnd.ibm.wcm+xml';
     if(fileName != undefined){
         switch(type){ 
-            case wcmTypes.authoringTools:
-            case wcmTypes.jspComponent:
+            case wcmTypes.jspComponent:{
+                var data = fs.readFileSync(fileName, "utf8");
+                rVal = {value: {entry:{content: {type:  'application/vnd.ibm.wcm+xml', jsp: JSON.parse(data)}}}};
+                break;
+            }
+            case wcmTypes.referenceComponent:{
+                var data = fs.readFileSync(fileName, "utf8");
+                rVal = {value: {entry:{content: {type:  'application/vnd.ibm.wcm+xml', reference: data}}}};
+                break;
+            }
+            case wcmTypes.dateComponent:{
+                var data = fs.readFileSync(fileName, "utf8");
+                rVal = {value: {entry:{content: {type:  'application/vnd.ibm.wcm+xml', date: JSON.parse(data)}}}};
+                break;
+            }
+            case wcmTypes.numericComponent:{
+                var data = fs.readFileSync(fileName, "utf8");
+                rVal = {value: {entry:{content: {type:  'application/vnd.ibm.wcm+xml', double: data}}}};
+                break;
+            }
             case wcmTypes.linkComponent:{
+                var data = fs.readFileSync(fileName, "utf8");
+                rVal = {value: {entry:{content: {type:  'application/vnd.ibm.wcm+xml', linkElement: JSON.parse(data)}}}};
                 break;
             }
             case wcmTypes.fileComponent:{
@@ -1159,43 +1187,73 @@ function getElementData( type, content){
             case"ShortTextComponent":
             case"TextComponent":
             case "HTMLComponent":{
-                dataJson = content.value;
+                if(content.value == undefined)
+                    dataJson = "";
+                else
+                    dataJson = content.value;
                 break;
             }
             case"DateComponent":{
-                dataJson = JSON.stringify(content.date);
+                if(content.date == undefined)
+                    dataJson = "";
+                else
+                   dataJson = JSON.stringify(content.date);
                 break;
             }
             case "NumericComponent":{
-                dataJson = content.double;
+                if(content.double == undefined)
+                    dataJson = "";
+                else
+                   dataJson = content.double;
                 break;
             }
             case "OptionSelectionComponent":{
-                dataJson = JSON.stringify(content.optionselection);
+                if(content.optionselection == undefined)
+                    dataJson = "";
+                else
+                   dataJson = JSON.stringify(content.optionselection);
                 break;
             }
             case "UserSelectionComponent":{
-                dataJson = JSON.stringify(content.userSelection);
+                if(content.userSelection == undefined)
+                    dataJson = "";
+                else
+                   dataJson = JSON.stringify(content.userSelection);
                 break;
             }
             case "LinkComponent":{
-                dataJson = JSON.stringify(content.linkElement);
+                if(content.linkElement == undefined)
+                    dataJson = "";
+                else
+                   dataJson = JSON.stringify(content.linkElement);
                 break;
             }
             case "JSPComponent":{
-                dataJson = JSON.stringify(content.jsp);
+                if(content.jsp == undefined)
+                    dataJson = "";
+                else
+                   dataJson = JSON.stringify(content.jsp);
                 break;
             }
             case "ImageComponent":{
-                dataJson = JSON.stringify(content.image);
+                if(content.image == undefined)
+                    dataJson = "";
+                else
+                   dataJson = JSON.stringify(content.image);
                 break;
             }
             case "FileComponent":{
-                dataJson = content.file;
+                if(content.file == undefined)
+                    dataJson = "";
+                else
+                   dataJson = content.file;
                 break;
             }
             case "ReferenceComponent":{
-                dataJson = content.reference;
+                if(content.reference == undefined)
+                    dataJson = "";
+                else
+                   dataJson = content.reference;
                 break;
             }
         }

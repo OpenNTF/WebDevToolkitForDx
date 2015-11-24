@@ -182,6 +182,21 @@ init = function(host, port, contentPath, user, password, secure, wcmDir) {
                             eventEmitter.emit("pullingType", libTitle, wcmRequests.wcmTypes.contentTemplate);
                             pullType(options, wcmRequests.wcmTypes.contentTemplate, libTitle, ".ct", map).then(function(count) {
                                 totalCount += count;
+                            eventEmitter.emit("pullingType", libTitle, wcmRequests.wcmTypes.referenceComponent);
+                            pullType(options, wcmRequests.wcmTypes.referenceComponent, libTitle, ".ref", map).then(function(count) {
+                                totalCount += count;
+                            eventEmitter.emit("pullingType", libTitle, wcmRequests.wcmTypes.jspComponent);
+                            pullType(options, wcmRequests.wcmTypes.jspComponent, libTitle, ".jsp", map).then(function(count) {
+                                totalCount += count;
+                            eventEmitter.emit("pullingType", libTitle, wcmRequests.wcmTypes.dateComponent);
+                            pullType(options, wcmRequests.wcmTypes.dateComponent, libTitle, ".date", map).then(function(count) {
+                                totalCount += count;
+                            eventEmitter.emit("pullingType", libTitle, wcmRequests.wcmTypes.numericComponent);
+                            pullType(options, wcmRequests.wcmTypes.numericComponent, libTitle, ".num", map).then(function(count) {
+                                totalCount += count;
+                            eventEmitter.emit("pullingType", libTitle, wcmRequests.wcmTypes.linkComponent);
+                            pullType(options, wcmRequests.wcmTypes.linkComponent, libTitle, ".link", map).then(function(count) {
+                                totalCount += count;
     
                                 eventEmitter.emit("pullingType", libTitle, wcmRequests.wcmTypes.richTextComponent);
                                 pullType(options, wcmRequests.wcmTypes.richTextComponent, libTitle, ".rtf", map).then(function(count) {
@@ -207,6 +222,31 @@ init = function(host, port, contentPath, user, password, secure, wcmDir) {
                                     deferred.reject(err);
                                     eventEmitter.emit("error", err, "pullLibrary::richTextComponent::err::"+err);
                                 });
+                            }, function(err) {
+                                debugLogger.error("pullLibrary::linkComponent::err::"+err);
+                                deferred.reject(err);
+                                eventEmitter.emit("error", err, "pullLibrary::linkComponent::err::"+err);
+                            });
+                            }, function(err) {
+                                debugLogger.error("pullLibrary::numericComponent::err::"+err);
+                                deferred.reject(err);
+                                eventEmitter.emit("error", err, "pullLibrary::numericComponent::err::"+err);
+                            });
+                            }, function(err) {
+                                debugLogger.error("pullLibrary::dateComponent::err::"+err);
+                                deferred.reject(err);
+                                eventEmitter.emit("error", err, "pullLibrary::dateComponent::err::"+err);
+                            });
+                            }, function(err) {
+                                debugLogger.error("pullLibrary::jspComponent::err::"+err);
+                                deferred.reject(err);
+                                eventEmitter.emit("error", err, "pullLibrary::jspComponent::err::"+err);
+                            });
+                            }, function(err) {
+                                debugLogger.error("pullLibrary::referenceComponent::err::"+err);
+                                deferred.reject(err);
+                                eventEmitter.emit("error", err, "pullLibrary::referenceComponent::err::"+err);
+                            });
                             }, function(err) {
                                 debugLogger.error("pullLibrary::contentTemplate::err::"+err);
                                 deferred.reject(err);
@@ -320,7 +360,32 @@ init = function(host, port, contentPath, user, password, secure, wcmDir) {
                     } else if (ext== ".css") {
                         itemType = wcmRequests.wcmTypes.styleSheetComponent;
                     } else if (ext == ".txt") {
-                        itemType = wcmRequests.wcmTypes.textComponent;
+                        if(file.indexOf(wcmRequests.wcmExts.LibraryJSPComponent) != -1){
+                            name = name.substring(0, name.indexOf(wcmRequests.wcmExts.LibraryJSPComponent.substr(0,wcmRequests.wcmExts.LibraryJSPComponent.indexOf('.'))));
+                            itemType = wcmRequests.wcmTypes.jspComponent;
+                        }
+                        else
+                        if(file.indexOf(wcmRequests.wcmExts.LibraryDateComponent) != -1){
+                            name = name.substring(0, name.indexOf(wcmRequests.wcmExts.LibraryDateComponent.substr(0,wcmRequests.wcmExts.LibraryDateComponent.indexOf('.'))));
+                            itemType = wcmRequests.wcmTypes.dateComponent;
+                        }
+                        else
+                        if(file.indexOf(wcmRequests.wcmExts.LibraryReferenceComponent) != -1){
+                            name = name.substring(0, name.indexOf(wcmRequests.wcmExts.LibraryReferenceComponent.substr(0,wcmRequests.wcmExts.LibraryReferenceComponent.indexOf('.'))));
+                            itemType = wcmRequests.wcmTypes.referenceComponent;
+                        }
+                        else
+                        if(file.indexOf(wcmRequests.wcmExts.LibraryLinkComponent) != -1){
+                            name = name.substring(0, name.indexOf(wcmRequests.wcmExts.LibraryLinkComponent.substr(0,wcmRequests.wcmExts.LibraryLinkComponent.indexOf('.'))));
+                            itemType = wcmRequests.wcmTypes.linkComponent;
+                        }
+                        else
+                        if(file.indexOf(wcmRequests.wcmExts.LibraryNumericComponent) != -1){
+                            name = name.substring(0, name.indexOf(wcmRequests.wcmExts.LibraryNumericComponent.substr(0,wcmRequests.wcmExts.LibraryNumericComponent.indexOf('.'))));
+                            itemType = wcmRequests.wcmTypes.numericComponent;
+                        }
+                        else
+                            itemType = wcmRequests.wcmTypes.textComponent;
                     } else if (ext == ".rtf") {
                         itemType = wcmRequests.wcmTypes.richTextComponent;
                     } else if (ext == ".png" || ext == ".jpg") {
@@ -443,10 +508,20 @@ function pullType(options, type, libTitle, extension, map) {
     }
 }
 
+function isTrialComponent(type){
+    return (    
+    type == wcmRequests.wcmTypes.contentTemplate ||
+    type == wcmRequests.wcmTypes.referenceComponent ||
+    type == wcmRequests.wcmTypes.jspComponent ||
+    type == wcmRequests.wcmTypes.linkComponent ||
+    type == wcmRequests.wcmTypes.numericComponent ||
+    type == wcmRequests.wcmTypes.dateComponent );
+}
+
 function pullTypeParallel(options, type, libTitle, extension, map) {
     debugLogger.trace('pullType::optioins ' + options + ' type::' + type + ' libTitle::' + libTitle + ' extension::' + extension);
     var deferred = Q.defer();
-    if((options.trial == undefined || options.trial == false) && type == wcmRequests.wcmTypes.contentTemplate)
+    if((options.trial == undefined || options.trial == false) && isTrialComponent(type))
     {
          deferred.resolve(0);
     }
@@ -493,7 +568,7 @@ function pullTypeParallel(options, type, libTitle, extension, map) {
 function pullTypeSequential(options, type, libTitle, extension, map) {
     debugLogger.trace('pullType::optioins ' + options + ' type::' + type + ' libTitle::' + libTitle + ' extension::' + extension);
     var deferred = Q.defer();
-    if((options.trial == undefined || options.trial == false) && type == wcmRequests.wcmTypes.contentTemplate)
+    if((options.trial == undefined || options.trial == false) && isTrialComponent(type))
     {
         deferred.resolve(0);
     }
@@ -598,6 +673,21 @@ function updateLocalFile(options, libTitle, data, extension, map){
             });
             fs.writeFileSync(path + elementSuffix, JSON.stringify(data.elements));
         }
+    }
+    else if(wcmRequests.wcmTypes.dateComponent == wtype){
+        fs.writeFileSync(path + wcmRequests.wcmExts[wtype], JSON.stringify(cData.date));
+    }
+    else if(wcmRequests.wcmTypes.jspComponent == wtype){
+        fs.writeFileSync(path + wcmRequests.wcmExts[wtype], JSON.stringify(cData.jsp));
+    }
+    else if(wcmRequests.wcmTypes.referenceComponent == wtype){
+        fs.writeFileSync(path + wcmRequests.wcmExts[wtype], cData.reference);
+    }
+    else if(wcmRequests.wcmTypes.numericComponent == wtype){
+        fs.writeFileSync(path + wcmRequests.wcmExts[wtype], cData.double);
+    }
+    else if(wcmRequests.wcmTypes.linkComponent == wtype){
+        fs.writeFileSync(path + wcmRequests.wcmExts[wtype], JSON.stringify(cData.linkElement));
     }
     else if(cData != undefined)   // check there is data to write
         fs.writeFileSync(path + extension, cData.value);
