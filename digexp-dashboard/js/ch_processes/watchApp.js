@@ -51,11 +51,16 @@ var build = function(cb) {
     if (stderr) console.warn("watch build" + stderr);
 
     cb && cb();
-  })
+  });
 };
 
 var push = function() {
-  exec('sp push -contentRoot "' + directory + '"' + makeServerArgs(), { cwd: directory },
+      var sp = "sp";
+      if (process.platform !== "win32") {
+        sp += ".sh";
+      }
+
+  exec(sp + ' push -contentRoot "' + directory + '"' + makeServerArgs(), { cwd: directory },
     function(err, stdout, stderr) {
       if (err)    console.warn("watch push" + stderr);
       if (stdout) console.log("watch push" + stdout);
@@ -86,6 +91,6 @@ watcher.on("add", run);
 watcher.on("change", run);
 watcher.on("unlink", run);
 
-process.on("SIGTERM", function() { watcher.close() });
-process.on("exit", function() { watcher.close() });
+process.on("SIGTERM", function() { watcher.close(); });
+process.on("exit", function() { watcher.close(); });
 

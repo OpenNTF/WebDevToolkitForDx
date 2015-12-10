@@ -50,6 +50,7 @@ dashboardControllers.controller('AppsListController', ['$scope', '$route', '$loc
     $scope.server = dashConfig.getServerForTool(dashConfig.tools.spApp);
 
     $scope.refresh = function() {
+      spApp.apps = {};
       $route.reload();
     };
 
