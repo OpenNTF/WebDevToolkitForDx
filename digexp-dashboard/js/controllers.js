@@ -66,10 +66,12 @@ dashboardControllers.controller('SettingsController', ['$scope', '$location', '$
         });
     };
     $scope.updateServerName = function(index, value){
-      if($scope.selectServers[index].serverName != value){
+      if($scope.selectServers[index].ServerName != value){
+        if($scope.activeServer == $scope.selectServers[index].ServerName)
+            $scope.activeServer = value;
         var aServerOpt =  document.querySelector("#activeServer").options[index];
-        $scope.selectServers[index].serverName = aServerOpt.innerText = value;
-        $scope.selectServers[index].serverId = aServerOpt.label= value;
+        $scope.selectServers[index].ServerName = aServerOpt.innerText = value;
+        $scope.selectServers[index].ServerId = aServerOpt.label= value;
       }
     },
       $scope.disableAddButton = function(index){
