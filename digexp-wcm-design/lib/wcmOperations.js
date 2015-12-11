@@ -19,6 +19,12 @@ baseUrl = '/wcmrest/',
 cEditmedia = "edit-media",
 cElements = "elements",
 cAlternate = "alternate",
+cAuthoringTemplates = 'Authoring Templates',
+cPresentationTemplates = 'Presentation Templates',
+cComponents = 'Components',
+cWorkflowItems = 'Workflow Items',
+cWorkflowStages = 'Workflow Stages',
+cWorkflowActions = 'Workflow Actions',
 wcmExts = {
     LibraryHTMLComponent: ".html",
     HTMLComponent: "_html.html",
@@ -46,6 +52,10 @@ wcmExts = {
     NumericComponent: "_number.txt",
     OptionSelectionComponent: "_optionselection.txt",
     UserSelectionComponent: "_userselecttion.txt",
+    TaxonomyComponent: "_taxonomy.txt",
+    CustomWorkflowAction: "_customworkflowaction.txt",
+    WorkflowAction: "_workflowaction.txt",
+    WorkflowStage: "_workflowstage.txt",
     FileComponent: "_file.txt"
 },
 wcmTypes = {
@@ -69,6 +79,10 @@ wcmTypes = {
         ,listPresetationComponent: "LibraryListPresentationComponent"
         ,navigatorComponent: "LibraryNavigatorComponent"
         ,menuComponent: "LibraryMenuComponent"
+        ,taxonomyComponent: "TaxonomyComponent"
+        ,customWorkflowAction: "CustomWorkflowAction"
+        ,workflowAction: "WorkflowAction"
+        ,workflowStage: "WorkflowStage"
         ,folder: "Folder"
         ,library: "Library"
 };
@@ -786,6 +800,8 @@ function updateWcmItem(type, item, fileName){
         if(wcmTypes.referenceComponent == type || 
             wcmTypes.linkComponent == type || 
             wcmTypes.dateComponent == type||
+            wcmTypes.customWorkflowAction == type||
+            wcmTypes.workflowStage == type||
             wcmTypes.numericComponent == type ||
             wcmTypes.jspComponent == type
             ){
@@ -1026,11 +1042,19 @@ function getFolderForType(type){
     var rVal = "";
     switch(type){
     case wcmTypes.presentationTemplate:{
-        rVal = "Presentation Templates";
+        rVal = cPresentationTemplates;
         break;
     } 
     case wcmTypes.contentTemplate:{
-        rVal = "Authoring Templates";
+        rVal = cAuthoringTemplates;
+        break;
+    } 
+    case wcmTypes.workflowAction:{
+        rVal = cWorkflowItems + Path.sep + cWorkflowActions;
+        break;
+    } 
+    case wcmTypes.workflowStage:{
+        rVal = cWorkflowItems + Path.sep + cWorkflowStages;
         break;
     } 
     default: {
@@ -1088,6 +1112,16 @@ function setUpDataForType(item, type, fileName){
                 rVal = {value: {entry:{content: {type:  'application/vnd.ibm.wcm+xml', date: JSON.parse(data)}}}};
                 break;
             }
+            case wcmTypes.customWorkflowAction:{
+                var data = fs.readFileSync(fileName, "utf8");
+                rVal = {value: {entry:{content: {type:  'application/vnd.ibm.wcm+xml', customAction: JSON.parse(data)}}}};
+                break;
+            }
+            case wcmTypes.workflowStage:{
+                var data = fs.readFileSync(fileName, "utf8");
+                rVal = {value: {entry:{content: {type:  'application/vnd.ibm.wcm+xml', workflowStage: JSON.parse(data)}}}};
+                break;
+            }
             case wcmTypes.numericComponent:{
                 var data = fs.readFileSync(fileName, "utf8");
                 rVal = {value: {entry:{content: {type:  'application/vnd.ibm.wcm+xml', double: data}}}};
@@ -1113,7 +1147,6 @@ function setUpDataForType(item, type, fileName){
             } 
             case wcmTypes.imageComponent:{
                 var binaraydata = fs.readFileSync(fileName);
- 
                 var ext = Path.extname(fileName).slice(1);
                 rVal = { type: 'image/' + ext, value: binaraydata };
                 break;
@@ -1348,6 +1381,16 @@ function clearFolderMap(){
     folderMapMap = new HashMap();
 }
 
+exports.cAuthoringTemplates= cAuthoringTemplates;
+exports.cPresentationTemplates= cPresentationTemplates;
+exports.cComponents= cComponents;
+exports.cWorkflowItems= cWorkflowItems;
+exports.cWorkflowActions= cWorkflowActions;
+exports.cWorkflowStages= cWorkflowStages;
+exports.cAuthoringTemplates= cAuthoringTemplates;
+exports.cAuthoringTemplates= cAuthoringTemplates;
+exports.cAuthoringTemplates= cAuthoringTemplates;
+exports.cAuthoringTemplates= cAuthoringTemplates;
 exports.wcmTypes= wcmTypes;
 exports.wcmExts= wcmExts;
 exports.clearFolderMap = clearFolderMap;exports.getWcmItemsOfType = getWcmItemsOfType;

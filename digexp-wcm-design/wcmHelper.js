@@ -47,8 +47,8 @@ var authRequest = require('./lib/wcm-authenticated-request'),
  curSecure = false,
  curPullLibrary = undefined,
  cElementsDir = '-elements',
- cFile = '-file',
- cAuthoringTemplates = 'Authoring Templates';
+ cFile = '-file';
+
  
 /**
  * progGoal: the number of steps in progress (if more than one operation is being
@@ -134,11 +134,15 @@ init = function(host, port, contentPath, user, password, secure, wcmDir) {
             var libSettings = utils.getSettings(wcmCwd + libTitle + Path.sep);
             options = utils.getMergerdOptions(options || {}, libSettings);
             createFolder(wcmCwd + libTitle);
-            createFolder(wcmCwd + libTitle + Path.sep + 'Presentation Templates');
-            createFolder(wcmCwd + libTitle + Path.sep + 'Components');
+            createFolder(wcmCwd + libTitle + Path.sep + wcmRequests.cPresentationTemplates);
+            createFolder(wcmCwd + libTitle + Path.sep + wcmRequests.cComponents);
             // only do content template components if the user turns on trial code
-            if(options.trial && options.trial == true)
-                createFolder(wcmCwd + libTitle + Path.sep + cAuthoringTemplates);
+            if(options.trial && options.trial == true){
+                createFolder(wcmCwd + libTitle + Path.sep + wcmRequests.cAuthoringTemplates);
+                createFolder(wcmCwd + libTitle + Path.sep + wcmRequests.cWorkflowItems);
+                createFolder(wcmCwd + libTitle + Path.sep + wcmRequests.cWorkflowItems + Path.sep + wcmRequests.cWorkflowStages);
+                createFolder(wcmCwd + libTitle + Path.sep + wcmRequests.cWorkflowItems + Path.sep + wcmRequests.cWorkflowActions);
+            }
             progGoal++;
             eventEmitter.emit("pullingLib", libTitle);
             wcmRequests.getFolderMap(libTitle).then(function(map) {
@@ -197,7 +201,13 @@ init = function(host, port, contentPath, user, password, secure, wcmDir) {
                             eventEmitter.emit("pullingType", libTitle, wcmRequests.wcmTypes.linkComponent);
                             pullType(options, wcmRequests.wcmTypes.linkComponent, libTitle, ".link", map).then(function(count) {
                                 totalCount += count;
-    
+                            eventEmitter.emit("pullingType", libTitle, wcmRequests.wcmTypes.customWorkflowAction);
+                            pullType(options, wcmRequests.wcmTypes.customWorkflowAction, libTitle, ".link", map).then(function(count) {
+                                totalCount += count;
+                            eventEmitter.emit("pullingType", libTitle, wcmRequests.wcmTypes.workflowStage);
+                            pullType(options, wcmRequests.wcmTypes.workflowStage, libTitle, ".link", map).then(function(count) {
+                                totalCount += count;
+
                                 eventEmitter.emit("pullingType", libTitle, wcmRequests.wcmTypes.richTextComponent);
                                 pullType(options, wcmRequests.wcmTypes.richTextComponent, libTitle, ".rtf", map).then(function(count) {
                                     totalCount += count;
@@ -221,6 +231,16 @@ init = function(host, port, contentPath, user, password, secure, wcmDir) {
                                     debugLogger.error("pullLibrary::richTextComponent::err::"+err);
                                     deferred.reject(err);
                                     eventEmitter.emit("error", err, "pullLibrary::richTextComponent::err::"+err);
+                                });
+                            }, function(err) {
+                                debugLogger.error("pullLibrary::workflowStage::err::"+err);
+                                deferred.reject(err);
+                                eventEmitter.emit("error", err, "pullLibrary::workflowStage::err::"+err);
+                                });
+                            }, function(err) {
+                                debugLogger.error("pullLibrary::customWorkflowAction::err::"+err);
+                                deferred.reject(err);
+                                eventEmitter.emit("error", err, "pullLibrary::customWorkflowAction::err::"+err);
                                 });
                             }, function(err) {
                                 debugLogger.error("pullLibrary::linkComponent::err::"+err);
@@ -385,6 +405,16 @@ init = function(host, port, contentPath, user, password, secure, wcmDir) {
                             itemType = wcmRequests.wcmTypes.numericComponent;
                         }
                         else
+                        if(file.indexOf(wcmRequests.wcmExts.CustomWorkflowAction) != -1){
+                            name = name.substring(0, name.indexOf(wcmRequests.wcmExts.CustomWorkflowAction.substr(0,wcmRequests.wcmExts.CustomWorkflowAction.indexOf('.'))));
+                            itemType = wcmRequests.wcmTypes.customWorkflowAction;
+                        }
+                        else
+                        if(file.indexOf(wcmRequests.wcmExts.WorkflowStage) != -1){
+                            name = name.substring(0, name.indexOf(wcmRequests.wcmExts.WorkflowStage.substr(0,wcmRequests.wcmExts.WorkflowStage.indexOf('.'))));
+                            itemType = wcmRequests.wcmTypes.workflowStage;
+                        }
+                        else
                             itemType = wcmRequests.wcmTypes.textComponent;
                     } else if (ext == ".rtf") {
                         itemType = wcmRequests.wcmTypes.richTextComponent;
@@ -515,6 +545,9 @@ function isTrialComponent(type){
     type == wcmRequests.wcmTypes.jspComponent ||
     type == wcmRequests.wcmTypes.linkComponent ||
     type == wcmRequests.wcmTypes.numericComponent ||
+    type == wcmRequests.wcmTypes.numericComponent ||
+    type == wcmRequests.wcmTypes.customWorkflowAction ||
+    type == wcmRequests.wcmTypes.workflowStage ||
     type == wcmRequests.wcmTypes.dateComponent );
 }
 
@@ -688,6 +721,12 @@ function updateLocalFile(options, libTitle, data, extension, map){
     }
     else if(wcmRequests.wcmTypes.linkComponent == wtype){
         fs.writeFileSync(path + wcmRequests.wcmExts[wtype], JSON.stringify(cData.linkElement));
+    }
+    else if(wcmRequests.wcmTypes.customWorkflowAction == wtype){
+        fs.writeFileSync(path + wcmRequests.wcmExts[wtype], JSON.stringify(cData.customAction));
+    }
+    else if(wcmRequests.wcmTypes.workflowStage == wtype){
+        fs.writeFileSync(path + wcmRequests.wcmExts[wtype], JSON.stringify(cData.workflowStage));
     }
     else if(cData != undefined)   // check there is data to write
         fs.writeFileSync(path + extension, cData.value);

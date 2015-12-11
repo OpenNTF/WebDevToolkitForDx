@@ -19,7 +19,7 @@ const TEST_PORT = 10039;
 const TEST_CONTENT_HANDLER = "/wps/mycontenthandler";
 const TEST_NOT_SECURE = false;
 const TEST_SECURE = true;
-const TEST_SECURE_PORT = 10041;
+const TEST_SECURE_PORT = 10042;
 
 const BAD_USERNAME = "justfortesting";
 const BAD_PASSWORD = "alsorgangrpgaasgoijgoah842948aofwehffortesting";
