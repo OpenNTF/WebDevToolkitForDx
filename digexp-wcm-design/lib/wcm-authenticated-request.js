@@ -334,12 +334,15 @@ var authenticatedRequest = function(user, pass, options, postData) {
                     deferred.resolve(data);
                 }, function(err) {
                     checkEndRequest();
-                    debugLogger.error(err);
-                    if (err.statusCode != undefined && err.statusCode == success_http_code) {
+                    if(options.path.indexOf("Prototype") && err.indexOf("Generic_Error_0")){
+                        deferred.resolve(postData);
+                    }
+                    else if (err.statusCode != undefined && err.statusCode == success_http_code) {
                         // in this case this is an allowed success condition, so
                         // resolve this promise
                         deferred.resolve(null);
                     } else {
+                        debugLogger.error(err);
                         err = getErrorFromResponse(err);
                         debugLogger.error("authenticatedRequest::err::" + err);
                         deferred.reject(err);

@@ -517,8 +517,10 @@ function createWcmItemFromPath(type, path, fileName){
         var name =  pathComponents[compLength-1];
         var parentFolderPath =  path.slice(0,path.lastIndexOf(Path.sep));
         var libName = pathComponents[0];
-        if(compLength == 3 && type != wcmTypes.folder){
-            createNewWcmItem( type, libName, name, fileName).then(function( entry ){
+        if((compLength == 3 && type != wcmTypes.folder) ||
+           (compLength == 4 && type != wcmTypes.workflowAction)||
+           (compLength == 4 && type != wcmTypes.workflowStage)){
+                createNewWcmItem( type, libName, name, fileName).then(function( entry ){
                 deferred.resolve(entry);
             },function(err){
                 debugLogger.error("CreateNewItem::err::"+err);
@@ -712,7 +714,7 @@ function createNewWcmItem(type, libraryName, name, fileName, parent ){
                 }
             },function(err){
                 debugLogger.error("SetJson::err::"+err);
-                deferred.reject(err);
+                deferred.resolve(postData.entry);
                 });
         },function(err){
             debugLogger.error("GetLibrary::err::"+err);
@@ -773,7 +775,6 @@ function updateWcmElementsData(fileName){
             authRequest.setJson(uri, entry, 'Put').then(function(data){
                 deferred.resolve(data);
             },function(err){
-                debugLogger.error("updateWcmElementsData " + uri +  " :Item ::name::"+ item.name);
                 deferred.resolve(item);
                 });
         }
@@ -805,13 +806,16 @@ function updateWcmItem(type, item, fileName){
             wcmTypes.numericComponent == type ||
             wcmTypes.jspComponent == type
             ){
-            authRequest.setJson(cRef, val.value, 'Put').then(function(data){
-                deferred.resolve(data);
-            },function(err){
-                debugLogger.error("updateWcmElementsData " + uri +  " :Item ::name::"+ item.name);
+            if(cRef == undefined)
                 deferred.resolve(item);
-                });
-        }
+            else
+                authRequest.setJson(cRef, val.value, 'Put').then(function(data){
+                    deferred.resolve(data);
+                },function(err){
+                    debugLogger.error("updateWcmElementsData " + uri +  " :Item ::name::"+ item.name);
+                    deferred.resolve(item);
+                    });
+       }
         else
         if( cRef != undefined){
             authRequest.setContent(cRef, val.type, val.value).then(function(data){
