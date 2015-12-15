@@ -1,0 +1,1 @@
+{"destination":{"type":"external","allowClear":false,"value":"www.ibm.com"},"display":{"type":"text","value":"RBed"},"description":{"useDestination":false,"value":""},"target":"None","additionalAttributes":""}

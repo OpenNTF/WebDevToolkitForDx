@@ -1,0 +1,1 @@
+{"destination":{"type":"content","allowClear":false,"queryString":"","value":"/wps/mycontenthandler/!ut/p/digest!EGpQWGCZ6eqbjoTMX18Tng/wcmrest/LibraryImageComponent/269dbd9e-be7c-4f82-81b4-5d149e1d04db"},"display":{"type":"text","value":""},"description":{"useDestination":false,"value":""},"target":"None","additionalAttributes":""}

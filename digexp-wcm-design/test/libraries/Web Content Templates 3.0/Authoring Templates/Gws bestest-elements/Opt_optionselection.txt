@@ -1,0 +1,1 @@
+{"displaytype":"Automatic","selection":"UserDefined","options":{"mode":"Singleselect"}}

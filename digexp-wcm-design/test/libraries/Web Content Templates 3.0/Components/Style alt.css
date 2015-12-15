@@ -1,0 +1,11 @@
+#__SPNS__prefDialog {
+     display: block;
+}
+
+.hide_in_view_mode {
+     display: none;
+}
+
+.edit-mode .hide_in_view_mode {
+     display: block;
+}

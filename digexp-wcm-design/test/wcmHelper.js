@@ -31,7 +31,7 @@ const BAD_CONTENT_HANDLER_WITH_SUBFOLDER = "/wps/mycontenthandler/bad";
 const TESTING_FOLDER = process.cwd() + "/test/libraries";
 const TESTING_LIBRARY = "Web Content Templates 3.0";
 const CREATED_LIBRARY = Math.floor((Math.random() * 10000) + 1);
-const LONG_TIMEOUT = 60000;
+const LONG_TIMEOUT = 300000;
 
 const fail = should.fail.bind(null, "", " ");
 
@@ -249,7 +249,10 @@ it("should-fail-when-given-an-non-secur-port-and-secure", function() {
 
 
 describe("createLibrary-valid-server", function() {
-  it("should-succeed-when-server-is-valid", function() {
+  beforeEach(function() {
+    var wcmHelper = require("../wcmHelper.js");
+  });
+  it("should-succeed-when-library-is-created", function() {
     this.timeout(LONG_TIMEOUT);
     wcmHelper.init(TEST_HOST, TEST_PORT, TEST_CONTENT_HANDLER, TEST_USERNAME,
       TEST_PASSWORD, TEST_NOT_SECURE
@@ -263,7 +266,10 @@ describe("createLibrary-valid-server", function() {
 });
 
 describe("createLibrary-existing library", function() {
-  it("should-succeed-when-server-is-valid", function() {
+  beforeEach(function() {
+    var wcmHelper = require("../wcmHelper.js");
+  });
+  it("should-fail-when-libarary-exisits", function() {
     this.timeout(LONG_TIMEOUT);
     wcmHelper.init(TEST_HOST, TEST_PORT, TEST_CONTENT_HANDLER, TEST_USERNAME,
       TEST_PASSWORD, TEST_NOT_SECURE
@@ -275,12 +281,47 @@ describe("createLibrary-existing library", function() {
     });
   });
 });
-describe("pullLibrary-valid-server", function() {
-  it("should-succeed-when-server-is-valid", function() {
+
+describe("pullLibrary-valid-server-parallel", function() {
+  beforeEach(function() {
+    var wcmHelper = require("../wcmHelper.js");
+  });
+  before(function(done) {
     this.timeout(LONG_TIMEOUT);
     wcmHelper.init(TEST_HOST, TEST_PORT, TEST_CONTENT_HANDLER, TEST_USERNAME,
       TEST_PASSWORD, TEST_NOT_SECURE
 , TESTING_FOLDER);
+    wcmHelper.getLibraries().then(function(items) {
+      libraries = items;
+      done();
+    });
+  });
+  it("should-succeed-when-server-is-valid", function() {
+    this.timeout(LONG_TIMEOUT);
+    return wcmHelper.pullLibrary(TESTING_LIBRARY, {includeMeta: false, pullParallel: true}).then(function() {
+      // success!
+    }, function(err) {
+      expect(err).to.not.be.ok;
+    });
+  });
+});
+
+describe("pullLibrary-valid-server", function() {
+  beforeEach(function() {
+    var wcmHelper = require("../wcmHelper.js");
+  });
+  before(function(done) {
+    this.timeout(LONG_TIMEOUT);
+    wcmHelper.init(TEST_HOST, TEST_PORT, TEST_CONTENT_HANDLER, TEST_USERNAME,
+      TEST_PASSWORD, TEST_NOT_SECURE
+, TESTING_FOLDER);
+    wcmHelper.getLibraries().then(function(items) {
+      libraries = items;
+      done();
+    });
+  });
+  it("should-succeed-when-server-is-valid", function() {
+    this.timeout(LONG_TIMEOUT);
     return wcmHelper.pullLibrary(TESTING_LIBRARY, {includeMeta: false}).then(function() {
       // success!
     }, function(err) {
@@ -291,25 +332,22 @@ describe("pullLibrary-valid-server", function() {
 
 
 describe("pullLibrary-valid-secure-server", function() {
-  it("should-succeed-when-server-is-valid", function() {
+  beforeEach(function() {
+    var wcmHelper = require("../wcmHelper.js");
+  });
+  before(function(done) {
     this.timeout(LONG_TIMEOUT);
     wcmHelper.init(TEST_HOST, TEST_SECURE_PORT, TEST_CONTENT_HANDLER, TEST_USERNAME,
-      TEST_PASSWORD, TEST_SECURE, TESTING_FOLDER);
-    return wcmHelper.pullLibrary(TESTING_LIBRARY, {includeMeta: false}).then(function() {
-      // success!
-    }, function(err) {
-      expect(err).to.not.be.ok;
+      TEST_PASSWORD, TEST_SECURE
+, TESTING_FOLDER);
+    wcmHelper.getLibraries().then(function(items) {
+      libraries = items;
+      done();
     });
   });
-});
-
-describe("pullLibrary-valid-server-parallel", function() {
   it("should-succeed-when-server-is-valid", function() {
     this.timeout(LONG_TIMEOUT);
-    wcmHelper.init(TEST_HOST, TEST_PORT, TEST_CONTENT_HANDLER, TEST_USERNAME,
-      TEST_PASSWORD, TEST_NOT_SECURE
-, TESTING_FOLDER);
-    return wcmHelper.pullLibrary(TESTING_LIBRARY, {includeMeta: false, pullParallel: true}).then(function() {
+    return wcmHelper.pullLibrary(TESTING_LIBRARY, {includeMeta: false}).then(function() {
       // success!
     }, function(err) {
       expect(err).to.not.be.ok;
@@ -403,11 +441,21 @@ describe("pullLibrary-invalid-server", function() {
 });
 
 describe("pushLibrary-valid-server", function() {
-  it("should-succeed-when-server-is-valid", function(done) {
+  beforeEach(function() {
+    var wcmHelper = require("../wcmHelper.js");
+  });
+  before(function(done) {
     this.timeout(LONG_TIMEOUT);
     wcmHelper.init(TEST_HOST, TEST_PORT, TEST_CONTENT_HANDLER, TEST_USERNAME,
       TEST_PASSWORD, TEST_NOT_SECURE
 , TESTING_FOLDER);
+    wcmHelper.getLibraries().then(function(items) {
+      libraries = items;
+      done();
+    });
+  });
+  it("should-succeed-when-server-is-valid", function(done) {
+    this.timeout(LONG_TIMEOUT);
     wcmHelper.pushLibrary(TESTING_LIBRARY, true).then(function() {
       expect(true).to.equal(true);
       done();
@@ -420,10 +468,21 @@ describe("pushLibrary-valid-server", function() {
 
 
 describe("pushLibrary-valid-secure-server", function() {
-  it("should-succeed-when-server-is-valid", function(done) {
+  beforeEach(function() {
+    var wcmHelper = require("../wcmHelper.js");
+  });
+  before(function(done) {
     this.timeout(LONG_TIMEOUT);
     wcmHelper.init(TEST_HOST, TEST_SECURE_PORT, TEST_CONTENT_HANDLER, TEST_USERNAME,
-      TEST_PASSWORD, TEST_SECURE, TESTING_FOLDER);
+      TEST_PASSWORD, TEST_SECURE
+, TESTING_FOLDER);
+    wcmHelper.getLibraries().then(function(items) {
+      libraries = items;
+      done();
+    });
+  });
+  it("should-succeed-when-server-is-valid", function(done) {
+    this.timeout(LONG_TIMEOUT);
     wcmHelper.pushLibrary(TESTING_LIBRARY, true).then(function() {
       expect(true).to.equal(true);
       done();
@@ -435,11 +494,21 @@ describe("pushLibrary-valid-secure-server", function() {
 });
 
 describe("pushLibrary-valid-server-noForce", function() {
-  it("should-succeed-when-server-is-valid", function(done) {
+  beforeEach(function() {
+    var wcmHelper = require("../wcmHelper.js");
+  });
+  before(function(done) {
     this.timeout(LONG_TIMEOUT);
     wcmHelper.init(TEST_HOST, TEST_PORT, TEST_CONTENT_HANDLER, TEST_USERNAME,
       TEST_PASSWORD, TEST_NOT_SECURE
 , TESTING_FOLDER);
+    wcmHelper.getLibraries().then(function(items) {
+      libraries = items;
+      done();
+    });
+  });
+  it("should-succeed-when-server-is-valid", function(done) {
+    this.timeout(LONG_TIMEOUT);
     wcmHelper.pushLibrary(TESTING_LIBRARY, false).then(function() {
       expect(true).to.equal(true);
       done();
@@ -451,11 +520,21 @@ describe("pushLibrary-valid-server-noForce", function() {
 });
 
 describe("pushLibrary-valid-server-added file", function() {
-  it("should-succeed-when-server-is-valid", function(done) {
+  beforeEach(function() {
+    var wcmHelper = require("../wcmHelper.js");
+  });
+  before(function(done) {
     this.timeout(LONG_TIMEOUT);
     wcmHelper.init(TEST_HOST, TEST_PORT, TEST_CONTENT_HANDLER, TEST_USERNAME,
       TEST_PASSWORD, TEST_NOT_SECURE
 , TESTING_FOLDER);
+    wcmHelper.getLibraries().then(function(items) {
+      libraries = items;
+      done();
+    });
+  });
+  it("should-succeed-when-server-is-valid", function(done) {
+    this.timeout(LONG_TIMEOUT);
     var fs = require('fs');
     fs.writeFileSync(TESTING_FOLDER + '/' + TESTING_LIBRARY + '/Components/' + Math.floor((Math.random() * 10000) + 1) + 'message.txt', 'Just now, we ha');
 

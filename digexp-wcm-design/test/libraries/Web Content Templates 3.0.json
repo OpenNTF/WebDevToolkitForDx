@@ -1,0 +1,35 @@
+{
+  "id": "wcmrest:81dcc4a6-c822-4168-a9c4-64392ad43fec",
+  "title": "Web Content Templates 3.0",
+  "summary": null,
+  "type": "Library",
+  "updated": "Fri, 22 May 2015 01:49:52.610Z",
+  "lastModifier": {
+    "distinguishedName": "uid=wpsadmin,o=defaultWIMFileBasedRealm",
+    "uri": "/wps/mycontenthandler/!ut/p/digest!EGpQWGCZ6eqbjoTMX18Tng/um/users/profiles/Z9eAeP9PG3P8CMPDCMM071RD6MMG663ECJM4CJ1E4JMGC33EC3S86L1PCJS06J1",
+    "name": "wpsadmin"
+  },
+  "link": [
+    {
+      "rel": "edit",
+      "href": "/wps/mycontenthandler/!ut/p/digest!EGpQWGCZ6eqbjoTMX18Tng/wcmrest/Library/81dcc4a6-c822-4168-a9c4-64392ad43fec",
+      "lang": "en",
+      "label": "Edit"
+    },
+    {
+      "rel": "alternate",
+      "href": "/wps/mycontenthandler/!ut/p/digest!EGpQWGCZ6eqbjoTMX18Tng/wcmrest/Library/81dcc4a6-c822-4168-a9c4-64392ad43fec",
+      "lang": "en",
+      "label": "Read"
+    },
+    {
+      "rel": "library",
+      "href": "/wps/mycontenthandler/!ut/p/digest!EGpQWGCZ6eqbjoTMX18Tng/wcmrest/Library/81dcc4a6-c822-4168-a9c4-64392ad43fec",
+      "lang": "en",
+      "label": "Library"
+    }
+  ],
+  "nm": "Web_Content_Templates_3.0",
+  "$$hashKey": "object:61",
+  "datePulled": "Tue Dec 15 2015 05:43:08 GMT-0500 (Eastern Standard Time)"
+}
