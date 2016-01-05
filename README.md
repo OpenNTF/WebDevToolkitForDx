@@ -36,6 +36,7 @@ This will install the two main programs, dxdashboard (for the dashboard UI) and 
 
 If you are behind a proxy server, the nw package used by the Dashboard requires setting the http_proxy environment variable prior to running install. See this page for more information: https://www.npmjs.com/package/nw.
 
+If you want to use the dashboard to handle Script Portlets you will need to install the following if not you do not need this installed to have the dahboard work for themes and designs.  
 For the Script Portlet "Push" support, you will need to have the Script Portlet command line client support installed and configured, and you will need to have the "sp" command on your system path. See this documentation for more on installing the Script Portlet command line client: http://www-01.ibm.com/support/knowledgecenter/SSHRKX_8.5.0/script/script-portlet/cmd_line_push.dita
 
 # Upgrade 
@@ -139,9 +140,17 @@ The supported WCM types are:
 - Text Component
 - Rich Text Component
 - Presentation Template
-- File Component (with trial option enabled)
+- File Component
+- Content Template(Authoring Template) (with trial option enabled)
+- Date Component (with trial option enabled)
+- Reference Component (with trial option enabled)
+- Jsp Component (with trial option enabled)
+- Link Component  (with trial option enabled)
+- Numeric Component (with trial option enabled)
+- Custom Workflow Action (with trial option enabled)
+- Workflow Stage (with trial option enabled)
 
-Other Component types, Authoring Templates, and Content Items are not supported.
+Other Component types and Content Items are not supported.
 
 There are some options that can be set to control some of the behavior when downloading from WCM. To do this, open the ".settings" file in the folder for a library and add an "options" object. There are some options that you can set as shown here:
 ```

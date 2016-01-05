@@ -1,6 +1,6 @@
 {
   "name": "digexp-toolkit",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "devDependencies": {
     "grunt": "latest",
     "grunt-contrib-compress": "latest",

@@ -545,7 +545,6 @@ function isTrialComponent(type){
     type == wcmRequests.wcmTypes.jspComponent ||
     type == wcmRequests.wcmTypes.linkComponent ||
     type == wcmRequests.wcmTypes.numericComponent ||
-    type == wcmRequests.wcmTypes.numericComponent ||
     type == wcmRequests.wcmTypes.customWorkflowAction ||
     type == wcmRequests.wcmTypes.workflowStage ||
     type == wcmRequests.wcmTypes.dateComponent );

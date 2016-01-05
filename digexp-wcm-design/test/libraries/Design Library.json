@@ -1,0 +1,30 @@
+{
+  "id": "wcmrest:71cff676-2c3f-40b1-8a74-230ed335da67",
+  "title": "Design Library",
+  "summary": null,
+  "type": "Library",
+  "updated": "Fri, 23 Oct 2015 14:58:05.097Z",
+  "link": [
+    {
+      "rel": "edit",
+      "href": "/wps/mycontenthandler/!ut/p/digest!EGpQWGCZ6eqbjoTMX18Tng/wcmrest/Library/71cff676-2c3f-40b1-8a74-230ed335da67",
+      "lang": "en",
+      "label": "Edit"
+    },
+    {
+      "rel": "alternate",
+      "href": "/wps/mycontenthandler/!ut/p/digest!EGpQWGCZ6eqbjoTMX18Tng/wcmrest/Library/71cff676-2c3f-40b1-8a74-230ed335da67",
+      "lang": "en",
+      "label": "Read"
+    },
+    {
+      "rel": "library",
+      "href": "/wps/mycontenthandler/!ut/p/digest!EGpQWGCZ6eqbjoTMX18Tng/wcmrest/Library/71cff676-2c3f-40b1-8a74-230ed335da67",
+      "lang": "en",
+      "label": "Library"
+    }
+  ],
+  "nm": "Design_Library",
+  "$$hashKey": "object:84",
+  "datePulled": "Tue Jan 05 2016 14:10:02 GMT-0500 (Eastern Standard Time)"
+}
