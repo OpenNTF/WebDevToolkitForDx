@@ -540,7 +540,6 @@ function pullType(options, type, libTitle, extension, map) {
 
 function isTrialComponent(type){
     return (    
-    type == wcmRequests.wcmTypes.contentTemplate ||
     type == wcmRequests.wcmTypes.referenceComponent ||
     type == wcmRequests.wcmTypes.jspComponent ||
     type == wcmRequests.wcmTypes.linkComponent ||

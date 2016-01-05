@@ -19,7 +19,7 @@ The Dashboard tool uses the nw.js package to implement the user interface, and o
 # Installation
 You must first install Node.js.  Node.js version 0.12 is the minimum version and has had the most testing.
 
-Download the digexp-toolkit.zip file from here: https://github.com/OpenNTF/WebDevToolkitForDx/releases/download/v0.1.3/digexp-toolkit.zip
+Download the digexp-toolkit.zip file from here: https://github.com/OpenNTF/WebDevToolkitForDx/releases/download/v0.1.4/digexp-toolkit.zip
 
 First, extract the file on your workstation. Then if you are on Windows, run
 ```
@@ -141,7 +141,7 @@ The supported WCM types are:
 - Rich Text Component
 - Presentation Template
 - File Component
-- Content Template(Authoring Template) (with trial option enabled)
+- Content Template(Authoring Template)
 - Date Component (with trial option enabled)
 - Reference Component (with trial option enabled)
 - Jsp Component (with trial option enabled)
