@@ -9,7 +9,7 @@ This toolkit includes two main areas of functionality:
 To use these tools you will need:
 - Node.js must be installed on your workstation. Node.js version 0.12 is the minimum version and has had the most testing.
 - For the WCM support you need Portal 8.5 with CF05 or later. 
-- DX Sync (used for theme support) you need Portal 8.5.
+- For the theme support you need Portal 8.5. Under the covers, code from DX File Sync package is automatically installed when you install this Toolkit.
 - For Script Portlet "push" you will need to have the Script Portlet command line client installed, and your server must have Script Portlet installed.
 
 ## Known issues
