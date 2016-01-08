@@ -136,9 +136,9 @@ init = function(host, port, contentPath, user, password, secure, wcmDir) {
             createFolder(wcmCwd + libTitle);
             createFolder(wcmCwd + libTitle + Path.sep + wcmRequests.cPresentationTemplates);
             createFolder(wcmCwd + libTitle + Path.sep + wcmRequests.cComponents);
-            // only do content template components if the user turns on trial code
+            createFolder(wcmCwd + libTitle + Path.sep + wcmRequests.cAuthoringTemplates);
+            // only do these components if the user turns on trial code
             if(options.trial && options.trial == true){
-                createFolder(wcmCwd + libTitle + Path.sep + wcmRequests.cAuthoringTemplates);
                 createFolder(wcmCwd + libTitle + Path.sep + wcmRequests.cWorkflowItems);
                 createFolder(wcmCwd + libTitle + Path.sep + wcmRequests.cWorkflowItems + Path.sep + wcmRequests.cWorkflowStages);
                 createFolder(wcmCwd + libTitle + Path.sep + wcmRequests.cWorkflowItems + Path.sep + wcmRequests.cWorkflowActions);
