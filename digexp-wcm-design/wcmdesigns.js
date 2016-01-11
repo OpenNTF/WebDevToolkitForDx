@@ -362,7 +362,7 @@ function getInitPromptSchema(settings) {
   settings = settings || {};
   return {
     username: {
-      pattern: /^[\w\d_-]+$/,
+      pattern: /^[\w\d\._-]+$/,
       description: "Username",
       default: settings.username || "wpsadmin",
       required: true
