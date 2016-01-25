@@ -433,7 +433,7 @@ init = function(host, port, contentPath, user, password, secure, wcmDir) {
                     else  {
                         itemType = wcmRequests.wcmTypes.fileComponent;
                     }
-                    if (itemType != null && '.settings' != name && includeOption(options, itemType)) {
+                    if (itemType != null && '.settings' != name && '.DS_Store' != name && includeOption(options, itemType)) {
                         var pushedItem = {
                             itemType : itemType,
                             name : name,
