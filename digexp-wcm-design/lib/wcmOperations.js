@@ -356,6 +356,7 @@ function getPath(libName, item, map){
     var path = wcmItem.getName(item);
     // get the parent href and loop until no more parents
     var hRef = wcmItem.getOperationHref(item, "parent");
+    var typeFolderPath = getFolderForType(wcmItem.getType(item)) + Path.sep;
     if(hRef != undefined){
         var oHref = hRef;
         var folders = map.values();
@@ -364,15 +365,16 @@ function getPath(libName, item, map){
             hRef = undefined;
             folders.forEach(function (folder){
                 if(wcmItem.getOperationHref(folder,"self") === oHref){
-                    // fond the parent add it to the path and look for it's parent
+                    // found the parent add it to the path and look for it's parent
                     path =  wcmItem.getName(folder) + Path.sep + path;
                     oHref = hRef = wcmItem.getOperationHref(folder, "parent");
                 };
             });
         };
     }
-    else  // no parent is set for content in preset folders
-        path = getFolderForType(wcmItem.getType(item)) + Path.sep + path;
+    // make sure the content type path is added  
+    if(path.indexOf(typeFolderPath) != 0)
+        path = typeFolderPath + path;
     // add the library to the root of the path
     path = libName + Path.sep + path;
     return path;

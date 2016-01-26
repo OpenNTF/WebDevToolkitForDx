@@ -636,6 +636,7 @@ function pullTypeSequential(options, type, libTitle, extension, map) {
 }
 
 function updateLocalFile(options, libTitle, data, extension, map){
+	try{
     var item = data;
     // for object with elements the data and item are returned in a json {tremData: item, elements: elements}
     if(data.itemData)
@@ -734,6 +735,10 @@ function updateLocalFile(options, libTitle, data, extension, map){
         fs.writeFileSync(path + metadataSuffix, JSON.stringify(data));
     }
     eventEmitter.emit("pulled", libTitle, wtype, data, path, extension);
+    }
+    catch(e){
+    	debugLogger.error("save Element::err::"+e);
+    }
     progGoal--;
     progCounter++;
 }
