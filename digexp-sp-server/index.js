@@ -8,6 +8,7 @@
  * specific language governing permissions and limitations under the License.
  */
 var express = require('express');
+var request = require('request');
 var path = require('path');
 var fs = require('fs');
 
@@ -89,6 +90,14 @@ exports.start = function start(dir, port) {
   var app = express();
 
   console.log('server running at port ' + port + ' using root folder ' + dir);
+
+  app.get(/^\/wps\/proxy\/http/, function(req, resp) {
+    var url = req.path.substring("/wps/proxy/".length); 
+    url = url.replace(/^https?/, function(match) {
+      return match + ":/";
+    });
+    request.get(url).pipe(resp);
+  });
 
   // Special processing for HTML and JS files
   app.get(['/*.html', '/*.js'], function(req, res) {
