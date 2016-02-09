@@ -52,7 +52,11 @@ function doTagReplacement(contents) {
   var newContents = contents;
   for (var i = 0; i < tagsFound.length; i++) {
     var tag = tagsFound[i];
-    newContents = newContents.replace(tag, getMockValue(tag, tagMap));
+    if (tag.match(/Plugin:ResourceURL/)) {
+      newContents = newContents.replace(tag, getResourceURL(tag));
+    } else {
+      newContents = newContents.replace(tag, getMockValue(tag, tagMap));
+    }
   }
   for (var i = 0; i < endTagsFound.length; i++) {
     var tag = endTagsFound[i];
@@ -68,6 +72,34 @@ function getMockValue(tag, tagMap) {
     }
   }
   return "";
+}
+
+/**
+ * Replaces a Plugin:ResourceURL tag with the url being processed.
+ * NOTE: this may fail for nested tags
+ */
+function getResourceURL(tag) {
+  var url = tag.match(/url="[^"]*"/)[0] || 'url=""';
+  url = url.substring('url="'.length, url.length - 1);
+  
+  // Checks if the url has a query string but it doesn't verify correctness.
+  var hasQueryString = url.match(/\?[\w-&=]*$/);
+  var params = tag.match(/param="[^"]+"/g) || [];
+  var start = 'param="'.length;
+  params = params.map(function(param) { return param.substring(start, param.length - 1); })
+                 .join('&');
+
+  if (params) {
+    url += hasQueryString ? '&' : '?';
+    url += params;
+  }
+
+  var proxy = !tag.match(/proxy="false"/);
+  if (proxy) {
+    return "/wps/proxy/" + url.replace(":/", "");
+  } else {
+    return url;
+  }
 }
 
 function findEndTag(substr) {
