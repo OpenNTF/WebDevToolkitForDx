@@ -365,12 +365,14 @@ dashboardControllers.controller('AppsListController', ['$scope', '$route', '$loc
 
     $scope.run = function(id) {
       debugLogger.log($scope.apps[id]);
+      var config = $scope.apps[id].config || {};
+      var mainHtmlFile = config.mainHtmlFile || "index.html"
       if ($scope.apps[id].buildCommand) {
         prePush(id, function() {
-          openUrlOnLocalServer(baseServerUrl + id + "/" + ($scope.apps[id].config.mainHtmlFile || "index.html"));
+          openUrlOnLocalServer(baseServerUrl + id + "/" + mainHtmlFile);
         });
       } else {
-        openUrlOnLocalServer(baseServerUrl + id + "/" + ($scope.apps[id].config.mainHtmlFile || "index.html"));
+        openUrlOnLocalServer(baseServerUrl + id + "/" + mainHtmlFile);
       }
     };
 
