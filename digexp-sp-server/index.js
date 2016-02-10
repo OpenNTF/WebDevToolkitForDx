@@ -116,6 +116,12 @@ function findEndTag(substr) {
 
 }
 
+function unescapeCharacters(str) {
+  return str.replace(/%(\d+)/g, function(match, dec) {
+    return String.fromCharCode(parseInt(+dec, 16));
+  });
+}
+
 exports.start = function start(dir, port) {
   port = port || DEFAULT_PORT;
 
@@ -134,7 +140,7 @@ exports.start = function start(dir, port) {
   // Special processing for HTML and JS files
   app.get(['/*.html', '/*.js'], function(req, res) {
     console.log('get ' + req.path);
-    var filePath = path.join(dir, req.path);
+    var filePath = unescapeCharacters(path.join(dir, req.path));
     // read file contents
     fs.readFile(filePath, 'utf8', function(err, contents) {
       if (err) {
