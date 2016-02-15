@@ -409,7 +409,7 @@ function getWcmItemsOfType(type, libraryName){
             },function(err){
                 debugLogger.error("getWcmItemsOfType::getJson::err::"+err);
                 deferred.reject(err);
-            }).done();
+            });
         },function(err){
             debugLogger.error("getWcmItemsOfType::getLibraryId::err::"+err);
             deferred.reject(err);
@@ -520,8 +520,8 @@ function createWcmItemFromPath(type, path, fileName){
         var parentFolderPath =  path.slice(0,path.lastIndexOf(Path.sep));
         var libName = pathComponents[0];
         if((compLength == 3 && type != wcmTypes.folder) ||
-           (compLength == 4 && type != wcmTypes.workflowAction)||
-           (compLength == 4 && type != wcmTypes.workflowStage)){
+           (compLength == 4 && type == wcmTypes.workflowAction)||
+           (compLength == 4 && type == wcmTypes.workflowStage)){
                 createNewWcmItem( type, libName, name, fileName).then(function( entry ){
                 deferred.resolve(entry);
             },function(err){
@@ -640,29 +640,15 @@ function createNewWcmItem(type, libraryName, name, fileName, parent ){
             url = getUrlForType(type);
             href = wcmItem.getOperationHref(lib, "library");
 
+            links = [{
+                    rel : "library",
+                    href : href,
+            }];
             if(parent != undefined){
-//                pLink = '<link rel="parent" href="' + wcmItem.getOperationHref(parent, "self") + '"/>';
-                  links =[
-                            {
-                                "rel": "library",
-                                "href": href,
-                                "label": "Library"
-                            },
-                             {
-                                "rel": "parent",
-                                "href": wcmItem.getOperationHref(parent, "self"),
-                                "label": "Parent"
-                            }
-                        ];
-            }
-            else {
-                links = [
-                            {
-                                "rel": "library",
-                                "href": href,
-                                "label": "Library"
-                            }
-                        ];
+                links.push({
+                    rel : "parent",
+                    href : wcmItem.getOperationHref(parent, "self"),
+                });
             }
             
 //            postData = '<entry xmlns="http://www.w3.org/2005/Atom" xmlns:wcm="wcm/namespace"><title>'+

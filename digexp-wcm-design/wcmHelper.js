@@ -319,6 +319,8 @@ init = function(host, port, contentPath, user, password, secure, wcmDir) {
 }, pushLibrary = function(libTitle, bForce, options) {
     debugLogger.trace("pushLibrary::library name::"+libTitle, + " force::" + bForce);
     var deferred = Q.defer(), doRequest = function(libTitle, bForce) {
+        if(!fs.existsSync(wcmCwd + libTitle))
+            return deferred.reject('Library folder ' + wcmCwd + libTitle + ' does not exisit on client');
         libIsAvailable(libTitle).then(function(available){
         if(!available)
             deferred.reject(libTitle + ' is not available check for correct server');
@@ -463,6 +465,7 @@ init = function(host, port, contentPath, user, password, secure, wcmDir) {
                     debugLogger.trace("pushLibrary::library name::"+libTitle, + " settings::" + libSettings);
                 }, function(err) {
                     debugLogger.error("pushLibrary::err::"+err);
+	                deferred.reject(err);
                     eventEmitter.emit("error", err, "pushLibrary::err::"+err);
                 });
             });
