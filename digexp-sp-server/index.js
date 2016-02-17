@@ -130,11 +130,20 @@ exports.start = function start(dir, port) {
   console.log('server running at port ' + port + ' using root folder ' + dir);
 
   app.get(/^\/wps\/proxy\/http/, function(req, resp) {
-    var url = req.path.substring("/wps/proxy/".length); 
+    var url = req.url.substring("/wps/proxy/".length); 
     url = url.replace(/^https?/, function(match) {
       return match + ":/";
     });
-    request.get(url).pipe(resp);
+
+    // Including these headers sometimes gets 404 responses
+    req.headers["referer"] = null;
+    req.headers["host"] = null;
+    
+    request.get({
+      url: url,
+      headers: req.headers,
+      rejectUnauthorized: false
+    }).pipe(resp);
   });
 
   // Special processing for HTML and JS files
