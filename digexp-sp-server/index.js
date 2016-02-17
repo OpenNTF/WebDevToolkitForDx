@@ -136,8 +136,8 @@ exports.start = function start(dir, port) {
     });
 
     // Including these headers sometimes gets 404 responses
-    req.headers["referer"] = null;
-    req.headers["host"] = null;
+    delete req.headers["referer"];
+    delete req.headers["host"];
     
     request.get({
       url: url,
