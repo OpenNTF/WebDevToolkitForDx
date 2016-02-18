@@ -79,6 +79,33 @@ When you first run the dashboard, you should go to the "Settings" tab to configu
 - WCM Design Folder: The parent folder for WCM design libraries. Each child folder represents one WCM library, with children for Components and Presentation Templates. To get any WCM library from the server, click the “Libraries” button.
 - Servers - Name, User, Password, Host, Port, Content Handler, Secure: Set these for your Portal server. You can have multiple server configurations and select the configuration to use. If you are using a Virtual Portal, include the Virtual Portal name as part of the "Content Handler" path, like this: /wps/mycontenthandler/my_vp_name. Set the "Secure" option if the specified port is an HTTPS port.
 
+## Pushing Script Portlet Applications
+After setting a folder for Script Portlet applications in the settings tab, the
+toolkit provides a graphical interfaces for pushing script portlet applications.
+Pressing the "push" button will invoke the [`sp` command](http://www-01.ibm.com/support/knowledgecenter/SSHRKX_8.5.0/script/script-portlet/cmd_line_push_ovr.dita?lang=en) and push the 
+application to the active server specified in the settings. If a `sp-config.json`
+file exists, it will be used when pushing the application. Pressing Tthe gear button
+will open a dialog for editing the application's `sp_config.json` file.
+
+In the same dialog box (at the bottom), there is an option to set a pre-push command
+which can be used for minifying javascript, transpiling coffeescript, SASS, etc., 
+running a gulp or grunt build process, or launching other tools. This command will
+be run from the application's directory and will be run when pressing the push button
+or when the application's folder is being watched.
+
+## Testing and Linting Script Portlet Applications
+Pressing the "SP Lint" button will run a linting utility for Script Portlet that
+will analyze the script portlet application and detect possible issues in the 
+code where it is recommended to follow best practices.
+
+Pressing the run button will runt the script portlet on a test server and open it
+in your browser. Although not complete, the test server locally simulates a Portal environment:
+- Common WCM tags are replaced with mock data. A complete list of tags that replaced
+  with mock data can be found [here](https://github.com/OpenNTF/WebDevToolkitForDx/blob/master/digexp-sp-server/tag-replacements.json)
+- AJAX requests that use Portal's Ajax proxy will be sent through a local proxy.
+  The test server supports the ResourceURL tag and URLs that use "/wps/proxy/"
+- Other tags are removed and won't appear in the html.
+
 # Using the"dxwcmdesigns"  command line utility
 Note that all the functionality for push/pull of WCM design files is available from the Dashboard user interface. For the command line support, use:
 ```
