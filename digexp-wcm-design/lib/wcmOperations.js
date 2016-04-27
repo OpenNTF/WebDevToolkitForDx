@@ -1,5 +1,5 @@
 /*
- * Copyright 2015  IBM Corp.
+ * Copyright 2015-2016  IBM Corp.
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * http://www.apache.org/licenses/LICENSE-2.0 
@@ -1048,8 +1048,12 @@ function getFolderForType(type){
     case wcmTypes.workflowStage:{
         rVal = cWorkflowItems + Path.sep + cWorkflowStages;
         break;
-    } 
-    default: {
+    }
+        case wcmTypes.folder:{
+            rVal = "";
+            break;
+        }
+        default: {
         rVal = 'Components';
         break;
         };
@@ -1088,39 +1092,40 @@ function setUpDataForType(item, type, fileName){
     if(mType == undefined)
         mType = 'application/vnd.ibm.wcm+xml';
     if(fileName != undefined){
+        var data;
         switch(type){ 
             case wcmTypes.jspComponent:{
-                var data = fs.readFileSync(fileName, "utf8");
+                data = fs.readFileSync(fileName, "utf8");
                 rVal = {value: {entry:{content: {type:  'application/vnd.ibm.wcm+xml', jsp: JSON.parse(data)}}}};
                 break;
             }
             case wcmTypes.referenceComponent:{
-                var data = fs.readFileSync(fileName, "utf8");
+                data = fs.readFileSync(fileName, "utf8");
                 rVal = {value: {entry:{content: {type:  'application/vnd.ibm.wcm+xml', reference: data}}}};
                 break;
             }
             case wcmTypes.dateComponent:{
-                var data = fs.readFileSync(fileName, "utf8");
+                data = fs.readFileSync(fileName, "utf8");
                 rVal = {value: {entry:{content: {type:  'application/vnd.ibm.wcm+xml', date: JSON.parse(data)}}}};
                 break;
             }
             case wcmTypes.customWorkflowAction:{
-                var data = fs.readFileSync(fileName, "utf8");
+                data = fs.readFileSync(fileName, "utf8");
                 rVal = {value: {entry:{content: {type:  'application/vnd.ibm.wcm+xml', customAction: JSON.parse(data)}}}};
                 break;
             }
             case wcmTypes.workflowStage:{
-                var data = fs.readFileSync(fileName, "utf8");
+                data = fs.readFileSync(fileName, "utf8");
                 rVal = {value: {entry:{content: {type:  'application/vnd.ibm.wcm+xml', workflowStage: JSON.parse(data)}}}};
                 break;
             }
             case wcmTypes.numericComponent:{
-                var data = fs.readFileSync(fileName, "utf8");
+                data = fs.readFileSync(fileName, "utf8");
                 rVal = {value: {entry:{content: {type:  'application/vnd.ibm.wcm+xml', double: data}}}};
                 break;
             }
             case wcmTypes.linkComponent:{
-                var data = fs.readFileSync(fileName, "utf8");
+                data = fs.readFileSync(fileName, "utf8");
                 rVal = {value: {entry:{content: {type:  'application/vnd.ibm.wcm+xml', linkElement: JSON.parse(data)}}}};
                 break;
             }
@@ -1133,7 +1138,7 @@ function setUpDataForType(item, type, fileName){
             case wcmTypes.presentationTemplate:
             case wcmTypes.richTextComponent:            
             case wcmTypes.htmlComponent:{
-                var data = fs.readFileSync(fileName, "utf8");
+                data = fs.readFileSync(fileName, "utf8");
                 rVal = { type: 'text/html', value: data };
                 break;
             } 
@@ -1144,12 +1149,12 @@ function setUpDataForType(item, type, fileName){
                 break;
             }
             case wcmTypes.textComponent:{
-                var data = fs.readFileSync(fileName, "utf8");
+                data = fs.readFileSync(fileName, "utf8");
                 rVal = { type: 'text/plain', value: data };
                 break;
             }
             case wcmTypes.styleSheetComponent:{
-                var data = fs.readFileSync(fileName, "utf8");
+                data = fs.readFileSync(fileName, "utf8");
                 rVal = { type: 'text/css', value: data };
                 break;
             };
