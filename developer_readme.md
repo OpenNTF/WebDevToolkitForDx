@@ -48,3 +48,16 @@ npm install -g grunt-cli
 
 then run grunt build to generate the zip in the build directory. When you are releasing copy the zip to the release directory
 
+
+## Note regarding dxsync
+A modified version of dxsync is included in the repo as TempPatch. This version
+of dxsync doesn't have any pre-compiled modules related to pathwatcher.
+
+## File Watching
+In the dashboard, separate processes are spawned for watching files (to avoid
+using the same processes as the UI of the dashboard). The code for those processes
+can be found under `digexp-dashboard/js/ch_processes/`. STDIN and STDOUT are
+used for IPC due to issues with node-channels on windows. However, in retrospect,
+there are more robust options (such as TCP sockets).
+
+
