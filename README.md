@@ -11,10 +11,13 @@ To use these tools you will need:
 - For the WCM support you need Portal 8.5 with CF05 or later. 
 - For the theme support you need Portal 8.5. Under the covers, code from DX File Sync package is automatically installed when you install this Toolkit.
 - For Script Portlet "push" you will need to have the Script Portlet command line client installed, and your server must have Script Portlet installed.
+- We have tested successfully on Mac OS X 10.11, Ubuntu 14.0x, Windows 7, and Windows 10. See below for potential issues with the required nw.js library on some operating system versions.
 
-## Known issues
+## Known issues and troubleshooting
 
-The Dashboard tool uses the nw.js package to implement the user interface, and on some versions of Linux there are issues with some of the dependency packages for nw.js.
+The Dashboard tool uses the nw.js package to implement the user interface, and on some operating system versions such as CentOS there have been issues with some of the dependency packages for nw.js. We've also had reports of issues on Windows 10. If the install fails during the nw.js installation phase, or if the Dashboard doesn't launch successfully, you can try installing and running nw.js (https://www.npmjs.com/package/nw) on its own to see it's a compatibility problem with that library.
+
+For any issues you encounter, please report them in the Issues area of this project (https://github.com/OpenNTF/WebDevToolkitForDx/issues).  We try to respond promptly to reported issues.
 
 # Installation
 You must first install Node.js.  Node.js version 0.12 is the minimum version and has had the most testing.
