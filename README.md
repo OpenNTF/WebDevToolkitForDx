@@ -15,7 +15,7 @@ To use these tools you will need:
 
 ## Known issues and troubleshooting
 
-The Dashboard tool uses the nw.js package to implement the user interface, and on some operating system versions such as CentOS there have been issues with some of the dependency packages for nw.js. We've also had reports of issues on Windows 10. If the install fails during the nw.js installation phase, or if the Dashboard doesn't launch successfully, you can try installing and running nw.js (https://www.npmjs.com/package/nw) on its own to see it's a compatibility problem with that library.
+The Dashboard tool uses the nw.js package to implement the user interface, and on some operating system versions such as CentOS there have been issues with some of the dependency packages for nw.js. We've also had reports of issues on Windows 10. If the install fails during the nw.js installation phase, or if the Dashboard doesn't launch successfully, you can try installing and running nw.js (https://www.npmjs.com/package/nw) on its own to see if it's a compatibility problem with that library.
 
 For any issues you encounter, please report them in the Issues area of this project (https://github.com/OpenNTF/WebDevToolkitForDx/issues).  We try to respond promptly to reported issues.
 
