@@ -13,6 +13,11 @@ var dashboardApp = angular.module('dashboardApp',
 var firstRoute = true;
 var digExperienceDashboard = 'Digital Experience Dashboard';
 // Configure routes for the different views
+dashboardApp.config(['$compileProvider',
+    function($compileProvider) {
+        $compileProvider.imgSrcSanitizationWhitelist(/^\s*((https?|ftp|file|blob|chrome-extension):|data:image\/)/);
+        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|file:chrome-extension):/);
+    }]);
 dashboardApp.config(['$routeProvider', function($routeProvider) {
     var redirect = '/listApps';
     if(firstRoute == true){
