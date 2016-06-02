@@ -22,7 +22,7 @@ For any issues you encounter, please report them in the Issues area of this proj
 # Installation
 You must first install Node.js.  Node.js version 0.12 is the minimum version and has had the most testing.
 
-Download the digexp-toolkit.zip file from here: https://github.com/OpenNTF/WebDevToolkitForDx/releases/download/v0.1.6/digexp-toolkit.zip
+Download the digexp-toolkit.zip file from here: https://github.com/OpenNTF/WebDevToolkitForDx/releases/download/v0.1.7/digexp-toolkit.zip
 
 First, extract the file on your workstation. Then if you are on Windows, run
 ```
@@ -203,3 +203,4 @@ There are some options that can be set to control some of the behavior when down
 - include: This is an array of item types that allows you to limit the types of items that will be included in the pushed/pull actions for this library, this list will only support types that are handled by default. It allows you to limit the types to a subset of the supported types.  i.e. Some one that only works on icons could limit it to "LibraryImageComponent"
 
 To turn on the trial features for all libraries you can set an environment variable DIGEXP_TRIAL=true.
+[]()
