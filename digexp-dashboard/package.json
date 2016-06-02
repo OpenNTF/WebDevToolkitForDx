@@ -1,7 +1,7 @@
 {
   "name": "digexp-dashboard",
   "description": "Web Developer Dashboard for IBM Digital Experience",
-  "version": "0.1.4",
+  "version": "0.1.7",
   "main": "dashboard_index.html",
   "bin": {
     "dxdashboard": "bin/dxdashboard"
@@ -11,7 +11,7 @@
     "toolbar": false,
     "frame": true,
     "position": "center",
-    "title": "Web Developer Dashboard for IBM Digital Experience v0.1.4",
+    "title": "Web Developer Dashboard for IBM Digital Experience v0.1.7",
     "width": 990,
     "height": 729,
     "min_width": 960,
