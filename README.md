@@ -64,7 +64,7 @@ This is a Node.js-based "dashboard" that runs on your laptop and lets you work w
 Key features:
 - Select any theme or WCM design library and "pull" all the files into your local file system.
 - Click to push applications, theme designs, or WCM design components to a local or remote Portal server.
-- Enable and disable "watch" or "sync" functionality, so that any updates to local files are automatically pushed to the server.
+- Enable and disable "watch" functionality, so that any updates to local files are automatically pushed to the server.
 - Work with theme modules and profiles from a simple user interface.
 - Run script applications locally on a Node.js-based test server, with dummy rendering of WCM tags.
 - Use "splint" (Script Portlet Lint) to check for potential issues with script applications.

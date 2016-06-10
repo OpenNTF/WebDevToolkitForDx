@@ -14,7 +14,7 @@ var should = require("chai").should(),
 
 const TEST_USERNAME = "wpsadmin";
 const TEST_PASSWORD = "wpsadmin";
-const TEST_HOST = "gsagerwcmdesign.rtp.raleigh.ibm.com";
+const TEST_HOST = "gsager80.rtp.raleigh.ibm.com";
 const TEST_PORT = 10039;
 const TEST_CONTENT_HANDLER = "/wps/mycontenthandler";
 const TEST_NOT_SECURE = false;

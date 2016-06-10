@@ -49,7 +49,7 @@
                 <div style="float: left; width: 40%">
                     <div ng-if="theme.needsToBeSynced">
                         <span class="glyphicon glyphicon-exclamation-sign warning"></span>
-                        Needs to be synced. Press 'Sync' or 'Pull'
+                        Needs to be synced. Press 'Pull'
                     </div>
                     <button ng-show="theme.conflictRecognized" class="btn btn-sm btn-default"
                             data-toggle="modal"
@@ -100,46 +100,14 @@
                       </div>-->
                     <button type="button" ng-click="push(theme.folder)"
                             class="btn btn-default"
+                            title="Push only items that have been changed since the last push or pull."
                             ng-disabled="theme.syncing||(!theme.datePulled&&!theme.dateSynced)">
-                        Push</button>
+                        Push Updates</button>
                     <button type="button" ng-click="pull(theme.folder)"
                             class="btn btn-default"
                             ng-disabled="theme.syncing">
                         Pull</button>
 
-                    <div class="btn-group dropdown" ng-show="!theme.waiting">
-                        <button type="button"
-                                ng-click="sync(theme.folder)"
-                                class="btn btn-default"
-                                ng-disabled="theme.syncing">
-                            Sync
-                        </button>
-                        <div class="btn-group">
-                            <button class="btn btn-default dropdown-toggle"
-                                    data-toggle="dropdown"
-                                    ng-disabled="theme.syncing">
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu" onclick="event.stopPropagation()">
-                                <li class="no-a-tag"
-                                    ng-click="theme.backgroundSync=!theme.backgroundSync">
-                                    <input type="checkbox" ng-checked="theme.backgroundSync"
-                                           ng-model="themebackgroundSync"
-                                           ng-change="saveBackgroundSyncTheme(theme.folder)"> Background Sync
-                                </li>
-                                <li class="no-a-tag" ng-show="theme.backgroundSync">
-                                    <strong>Background Sync Interval</strong>
-                                    <br>
-                                    <input type="text"
-                                           ng-change="updateDxsyncBackgroundInterval(theme.folder)"
-                                           ng-model="theme.settings.syncIntervalMin"
-                                           class="ng-pristine ng-untouched ng-valid" style="width: 30px;">
-                                    minutes
-
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
                     <div class="btn-group" ng-show="theme.waiting">
                         <button type="button"
                                 ng-click="cancel(theme.folder)"
