@@ -39,7 +39,6 @@ This will install the two main programs, dxdashboard (for the dashboard UI) and 
 
 If you are behind a proxy server, the nw package used by the Dashboard requires setting the http_proxy environment variable prior to running install. See this page for more information: https://www.npmjs.com/package/nw.
 
-If you want to use the dashboard to handle Script Portlets you will need to install the following if not you do not need this installed to have the dahboard work for themes and designs.  
 For the Script Portlet "Push" support, you will need to have the Script Portlet command line client support installed and configured, and you will need to have the "sp" command on your system path. See this documentation for more on installing the Script Portlet command line client: http://www-01.ibm.com/support/knowledgecenter/SSHRKX_8.5.0/script/script-portlet/cmd_line_push.dita
 
 # Upgrade 
@@ -86,8 +85,8 @@ When you first run the dashboard, you should go to the "Settings" tab to configu
 After setting a folder for Script Portlet applications in the settings tab, the
 toolkit provides a graphical interfaces for pushing script portlet applications.
 Pressing the "push" button will invoke the [`sp` command](http://www-01.ibm.com/support/knowledgecenter/SSHRKX_8.5.0/script/script-portlet/cmd_line_push_ovr.dita?lang=en) and push the 
-application to the active server specified in the settings. If a `sp-config.json`
-file exists, it will be used when pushing the application. Pressing Tthe gear button
+application to the active server specified in the settings. If an `sp-config.json`
+file exists, it will be used when pushing the application. Pressing the gear button
 will open a dialog for editing the application's `sp_config.json` file.
 
 In the same dialog box (at the bottom), there is an option to set a pre-push command
@@ -97,17 +96,25 @@ be run from the application's directory and will be run when pressing the push b
 or when the application's folder is being watched.
 
 ## Testing and Linting Script Portlet Applications
-Pressing the "SP Lint" button will run a linting utility for Script Portlet that
-will analyze the script portlet application and detect possible issues in the 
-code where it is recommended to follow best practices.
-
 Pressing the run button will runt the script portlet on a test server and open it
-in your browser. Although not complete, the test server locally simulates a Portal environment:
+in your browser. The test server is a small Express server that includes handling for WCM tags and Ajax Proxy requests:
 - Common WCM tags are replaced with mock data. A complete list of tags that replaced
   with mock data can be found [here](https://github.com/OpenNTF/WebDevToolkitForDx/blob/master/digexp-sp-server/tag-replacements.json)
 - AJAX requests that use Portal's Ajax proxy will be sent through a local proxy.
   The test server supports the ResourceURL tag and URLs that use "/wps/proxy/"
 - Other tags are removed and won't appear in the html.
+
+Pressing the "SP Lint" button will run a linting utility for Script Portlet that
+will analyze the script portlet application and detect possible issues in the 
+code where it is recommended to follow best practices.
+
+## Working with themes in the Dashboard
+To work with theme files locally, first click "Get Themes" followed by "View Server Themes," then you will see a list of themes on the server. For any themes you want to access, enter the name to use for the local file folder and click "Create Theme Folders." Then to download the theme files, click the "Pull" button for the theme. Once you have pulled files for a theme, the "Pull" button will download only the files that have been changed on the server. To update the server with your local changes, click "Push Updates." You can also enable "Watch" to cause a push of updated files whenever change is made in your local folder.
+
+## Working with WCM design files in the Dashboard
+To work with WCM design files locally, first click "Get Libraries" followed by "View Libraries." Then select the library or libraries you want to work with and click "Download Selected Libraries." To update the server with new or modified files, click "Push Updates" or "Push All." The "Pull" button will download all files. The "Watch" button will watch for changes to files in the local folder and push those changes automatically. Note that the "Push" commands won't delete any components on the server; for that you would need to use the WCM Authoring tools.
+
+See below for details on the components that are supported with the WCM features.
 
 # Using the"dxwcmdesigns"  command line utility
 Note that all the functionality for push/pull of WCM design files is available from the Dashboard user interface. For the command line support, use:
