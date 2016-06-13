@@ -22,7 +22,7 @@ For any issues you encounter, please report them in the Issues area of this proj
 # Installation
 You must first install Node.js.  Node.js version 0.12 is the minimum version and has had the most testing.
 
-Download the digexp-toolkit.zip file from here: https://github.com/OpenNTF/WebDevToolkitForDx/releases/download/1.7/digexp-toolkit.zip
+Download the digexp-toolkit.zip file from here: https://github.com/OpenNTF/WebDevToolkitForDx/releases/download/1.8/digexp-toolkit.zip
 
 First, extract the file on your workstation. Then if you are on Windows, run
 ```

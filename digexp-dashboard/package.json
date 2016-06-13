@@ -1,7 +1,7 @@
 {
   "name": "digexp-dashboard",
   "description": "Web Developer Dashboard for IBM Digital Experience",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "main": "dashboard_index.html",
   "bin": {
     "dxdashboard": "bin/dxdashboard"
