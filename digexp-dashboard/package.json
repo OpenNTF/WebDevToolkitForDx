@@ -11,7 +11,7 @@
     "toolbar": false,
     "frame": true,
     "position": "center",
-    "title": "Web Developer Dashboard for IBM Digital Experience v0.1.7",
+    "title": "Web Developer Dashboard for IBM Digital Experience v0.1.8",
     "width": 990,
     "height": 729,
     "min_width": 960,
@@ -20,21 +20,21 @@
   },
   "dependencies": {
     "ScriptAppServer": "file:../sp-server.tar.gz",
-    "adm-zip": "^0.4.7",
+    "adm-zip": "^0.4.11",
     "anymatch": "^1.3.0",
-    "async": "^1.3.0",
-    "chokidar": "^1.0.3",
+    "async": "^1.5.0",
+    "chokidar": "^1.7.0",
     "diff": "^1.4.0",
-    "dxsync": "https://github.com/OpenNTF/WebDevToolkitForDx/blob/master/TempPatch/dxsync-1.0.2.tar.gz?raw=true",
+    "dxsync": "https://github.com/OpenNTF/WebDevToolkitForDx/blob/master/TempPatch/dxsync-1.0.3-1.tar.gz?raw=true",
     "digexp-wcm-design": "file:../wcm-design.tar.gz",
     "findit": "",
     "map-stream": "0.0.6",
     "mkdirp": "^0.5.1",
-    "node-notifier": "^4.2.3",
+    "node-notifier": "^4.6.1",
     "open": "^0.0.5",
-    "request": "^2.58.0",
+    "request": "^2.88.0",
     "splint": "https://github.com/OpenNTF/Script-Portlet-Node-Samples/raw/master/splint.tgz",
-    "tracer": "0.8.0",
+    "tracer": "0.9.1",
     "vinyl": "^0.5.0",
     "vinyl-fs": "^1.0.0"
   },
@@ -47,7 +47,7 @@
     "postinstall": "node postinstall.js"
   },
   "engines": {
-    "node": ">=0.12"
+    "node": ">=6.13"
   },
   "engine-strict": true
 }
